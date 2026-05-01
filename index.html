@@ -3,114 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SR SOHAN - Official Support</title>
+    <title>SR SOHAN - Auto Support</title>
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            background: #050a18; 
+            color: white; 
+            font-family: 'Rajdhani', sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
         }
-
-        body {
-            background: #050a18; /* ডার্ক থিম */
-            color: white;
-            font-family: 'Rajdhani', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow: hidden;
+        .support-card { 
+            width: 90%; 
+            max-width: 380px; 
+            background: rgba(255, 255, 255, 0.05); 
+            padding: 30px; 
+            border-radius: 25px; 
+            border: 1px solid rgba(59, 130, 246, 0.3); 
+            text-align: center; 
+            backdrop-filter: blur(15px); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
-
-        /* মেইন কন্টেইনার */
-        .support-card {
-            width: 90%;
-            max-width: 380px;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 35px 25px;
-            border-radius: 30px;
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-            text-align: center;
-            backdrop-filter: blur(15px);
-            position: relative;
-        }
-
-        h1 {
-            font-family: 'Syncopate', sans-serif;
-            font-size: 18px;
-            color: #ffffff;
-            margin-bottom: 30px;
+        h1 { 
+            font-family: 'Syncopate', sans-serif; 
+            font-size: 18px; 
+            margin-bottom: 25px; 
+            text-shadow: 0 0 15px rgba(59, 130, 246, 0.6); 
             letter-spacing: 2px;
-            text-transform: uppercase;
-            text-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
         }
-
-        .form-group {
-            text-align: left;
-            margin-bottom: 20px;
-        }
-
-        label {
-            color: #94a3b8;
-            font-size: 13px;
-            margin-bottom: 8px;
-            display: block;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* ড্রপডাউন এবং ইনপুট স্টাইল */
-        select, input {
-            width: 100%;
-            padding: 15px;
-            border-radius: 12px;
-            background: #0f172a;
-            color: white;
-            border: 1px solid #3b82f6;
-            font-family: 'Rajdhani', sans-serif;
+        .form-group { text-align: left; margin-bottom: 15px; }
+        label { color: #94a3b8; font-size: 12px; display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        select, input { 
+            width: 100%; 
+            padding: 12px; 
+            border-radius: 10px; 
+            background: #0f172a; 
+            color: white; 
+            border: 1px solid #3b82f6; 
+            outline: none; 
+            font-family: 'Rajdhani', sans-serif; 
             font-size: 16px;
-            outline: none;
+        }
+        select:focus, input:focus { border-color: #60a5fa; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
+        .submit-btn { 
+            width: 100%; 
+            padding: 15px; 
+            border-radius: 12px; 
+            background: linear-gradient(45deg, #1d4ed8, #3b82f6); 
+            color: white; 
+            font-family: 'Syncopate', sans-serif; 
+            font-size: 11px; 
+            border: none; 
+            cursor: pointer; 
+            font-weight: bold; 
+            margin-top: 10px; 
             transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
         }
-
-        select:focus, input:focus {
-            border-color: #60a5fa;
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
-        }
-
-        /* সাবমিট বাটন */
-        .submit-btn {
-            width: 100%;
-            padding: 16px;
-            border-radius: 15px;
-            background: linear-gradient(45deg, #1d4ed8, #3b82f6);
-            color: white;
-            font-family: 'Syncopate', sans-serif;
-            font-size: 12px;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.4s;
-            margin-top: 10px;
-            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
-            text-transform: uppercase;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(59, 130, 246, 0.6);
-            filter: brightness(1.1);
-        }
-
-        .footer {
-            margin-top: 25px;
-            font-size: 11px;
-            color: #475569;
-            letter-spacing: 1px;
-        }
+        .submit-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
+        .submit-btn:disabled { background: #475569; cursor: not-allowed; transform: none; }
     </style>
 </head>
 <body>
@@ -121,10 +76,10 @@
     <div class="form-group">
         <label>Select Your Issue:</label>
         <select id="userIssue">
-            <option value="">-- Choose an Option --</option>
+            <option value="">-- Choose Option --</option>
             <option value="Payment Problem">Payment Problem</option>
             <option value="Login Issue">Login Issue</option>
-            <option value="Diamond Top-up Issue">Diamond Top-up Issue</option>
+            <option value="Diamond Top-up">Diamond Top-up</option>
             <option value="Admin Support">Admin Support</option>
             <option value="Others">Others</option>
         </select>
@@ -132,36 +87,50 @@
 
     <div class="form-group">
         <label>Your ID or Number:</label>
-        <input type="text" id="userIdentifier" placeholder="Type here...">
+        <input type="text" id="userIdentifier" placeholder="Enter here...">
     </div>
 
-    <button class="submit-btn" onclick="processSupport()">Submit Info ➔</button>
-
-    <div class="footer">POWERED BY SR SOHAN SUPPORT SYSTEM</div>
+    <button class="submit-btn" id="submitBtn" onclick="sendAutoMsg()">SUBMIT NOW ➔</button>
 </div>
 
 <script>
-    function processSupport() {
-        var issue = document.getElementById("userIssue").value;
-        var info = document.getElementById("userIdentifier").value;
-        var myTelegram = "SrSohan99ff"; // তোমার টেলিগ্রাম আইডি
+    async function sendAutoMsg() {
+        const issue = document.getElementById("userIssue").value;
+        const info = document.getElementById("userIdentifier").value;
+        const btn = document.getElementById("submitBtn");
+
+        // তোমার দেওয়া টোকেন এবং চ্যাট আইডি এখানে সেট করা হয়েছে
+        const botToken = "8769255178:AAFQ27UmVrDDMJ2dBHelTO5bwOH_j4Mvkbk"; 
+        const chatId = "6737871508"; 
 
         if (issue === "" || info === "") {
-            alert("Please select an issue and provide your details!");
+            alert("Please fill all fields!");
             return;
         }
 
-        // মেসেজ ফরম্যাট
-        var message = "🆘 **New Support Request**\n\n" +
-                      "📌 Issue: " + issue + "\n" +
-                      "🔑 Data: " + info + "\n" +
-                      "🌐 Source: Website Support";
+        btn.disabled = true;
+        btn.innerText = "SENDING...";
 
-        // টেলিগ্রামে রিডাইরেক্ট লিঙ্ক
-        var finalUrl = "https://t.me/" + myTelegram + "?text=" + encodeURIComponent(message);
+        // মেসেজ ফরম্যাট
+        const message = `<b>🆘 New Website Support Request</b>\n\n<b>📌 Issue:</b> ${issue}\n<b>🔑 Data:</b> ${info}\n\n<i>Sent from: SR SOHAN Web</i>`;
         
-        // নতুন ট্যাবে টেলিগ্রাম ওপেন হবে
-        window.open(finalUrl, '_blank');
+        const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}&parse_mode=HTML`;
+
+        try {
+            const response = await fetch(url);
+            if (response.ok) {
+                alert("Success! Your request has been sent to SR SOHAN.");
+                document.getElementById("userIdentifier").value = "";
+                document.getElementById("userIssue").value = "";
+            } else {
+                alert("Failed to send. Please check your internet or Bot settings.");
+            }
+        } catch (error) {
+            alert("Connection error! Please try again later.");
+        } finally {
+            btn.disabled = false;
+            btn.innerText = "SUBMIT NOW ➔";
+        }
     }
 </script>
 
