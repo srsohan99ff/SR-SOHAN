@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            text-align: center;
+            color: #38bdf8;
+            border-bottom: 2px solid #334155;
+            padding-bottom: 10px;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+        }
+        .card {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            border-left: 5px solid #38bdf8;
+        }
+        .card-header {
+            font-weight: bold;
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 5px;
+        }
+        .card-body {
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        .no-data {
+            text-align: center;
+            margin-top: 50px;
+            color: #64748b;
+        }
+        .status-badge {
+            background: #0ea5e9;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-size: 12px;
+            float: right;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>লেনদেন রেকর্ড</h2>
+    <div id="log-container">
+        <p class="no-data">ডেটা লোড হচ্ছে...</p>
+    </div>
+</div>
+
+<script>
+    // টেলিগ্রাম ওয়েব অ্যাপ ইনিশিয়েট করা
+    const tg = window.Telegram.WebApp;
+    tg.expand(); // অ্যাপটি বড় করে দেখানো
+
+    // Bots.Business থেকে পাঠানো ডেটা রিসিভ করা
+    // এখানে 'data' হলো আপনার বটের পাঠানো logs বা প্রোপার্টিজ
+    const rawData = tg.initDataUnsafe.start_param || "{}"; 
+    
+    // নোট: আসল সিস্টেমে Bots.Business WebApp.render এর মাধ্যমে ডেটা পাঠালে 
+    // তা নিচের ফাংশন দিয়ে রিসিভ করা যায়
+    
+    function renderLogs(logs) {
+        const container = document.getElementById('log-container');
+        container.innerHTML = '';
+
+        if (!logs || logs.length === 0) {
+            container.innerHTML = '<p class="no-data">কোনো লেনদেন পাওয়া যায়নি।</p>';
+            return;
+        }
+
+        logs.forEach((item, index) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <div class="card-header">রেকর্ড #${index + 1} <span class="status-badge">সেভড</span></div>
+                <div class="card-body">${item}</div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    // Bots.Business API থেকে ডেটা পাওয়ার জন্য কানেকশন
+    // আপনার বটের কমান্ড 'get_properties' থেকে আসা ডেটা এখানে আসবে
+    // প্র্যাকটিস করার জন্য নিচের ডামি ডেটা ব্যবহার করা হয়েছে
+    const dummyData = ["TxnID: ABC12345 - Amount: 500", "TxnID: XYZ98765 - Amount: 200"];
+    renderLogs(dummyData); 
+
+</script>
+
+</body>
+</html>
