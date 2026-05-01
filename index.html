@@ -3,99 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Panel</title>
+    <title>Sohan's Official Contact</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/dist/css/all.min.css">
     <style>
         body {
-            background-color: #f9fafb;
+            background-color: #f3f4f6;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
             margin: 0;
             padding: 20px;
+            font-family: sans-serif;
         }
-        .logo-container {
-            margin-top: 30px;
-            margin-bottom: 40px;
+        
+        /* উপরের গোল লোগোর ডিজাইন */
+        .main-logo-container {
+            margin-top: 40px;
+            margin-bottom: 50px;
             text-align: center;
         }
-        .logo-placeholder {
-            width: 100px;
-            height: 100px;
-            background-color: #e5e7eb;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #9ca3af;
-            border: 4px solid #fff;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        .main-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%; /* গোল করার জন্য */
             overflow: hidden;
+            border: 5px solid #fff; /* সাদা বর্ডার */
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15); /* ছায়া */
         }
-        .logo-placeholder img {
+        .main-logo img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: cover; /* ইমেজটি যেন গোল জায়গায় ঠিকমতো বসে */
         }
+
+        /* বাটনগুলোর কন্টেইনার */
         .btn-container {
             width: 100%;
-            max-width: 350px;
+            max-width: 380px;
         }
+
+        /* সাধারণ বাটন ডিজাইন */
         .contact-btn {
             display: flex;
             align-items: center;
             padding: 18px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             border-radius: 15px;
             color: white;
             font-weight: 600;
             font-size: 18px;
             text-decoration: none;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
+
+        /* ক্লিক করলে ছোট হবে */
         .contact-btn:active {
-            transform: scale(0.96);
+            transform: scale(0.97);
         }
-        .facebook { background: linear-gradient(135deg, #1877F2, #0a56b9); }
-        .whatsapp { background: linear-gradient(135deg, #25D366, #1da851); }
-        .telegram { background: linear-gradient(135deg, #0088cc, #006699); }
-        
+
+        /* বাটনের ভিতর লোগো/আইকনের ডিজাইন */
         .contact-btn i {
-            font-size: 24px;
-            margin-right: 15px;
-            width: 30px;
+            font-size: 26px;
+            margin-right: 18px;
+            width: 35px;
             text-align: center;
+        }
+
+        /* প্রতিটি বাটনের নিজস্ব কালার */
+        .facebook {
+            background: linear-gradient(135deg, #1877F2, #0e5aae); /* ফেসবুক নীল */
+        }
+        .whatsapp {
+            background: linear-gradient(135deg, #25D366, #1a9e4b); /* হোয়াটসঅ্যাপ সবুজ */
+        }
+        .telegram {
+            background: linear-gradient(135deg, #0088cc, #006699); /* টেলিগ্রাম আকাশী */
         }
     </style>
 </head>
 <body>
 
-    <div class="logo-container">
-        <div class="logo-placeholder">
-            <img src="YOUR_LOGO_URL_HERE" alt="Logo" onerror="this.src='https://via.placeholder.com/100?text=LOGO'">
+    <div class="main-logo-container">
+        <div class="main-logo">
+            <img src="https://kommodo.ai/i/fo6kORnSBmGzcthkFvxf" alt="Sohan's Logo">
         </div>
-        <h1 class="mt-4 text-xl font-bold text-gray-700">Sohan's Official</h1>
+        <h1 class="mt-5 text-2xl font-bold text-gray-800">Sohan's Official</h1>
     </div>
 
     <div class="btn-container">
-        <a href="তোমার_লিঙ্ক_এখানে" class="contact-btn facebook" target="_blank">
-            <i class="fab fa-facebook-f"></i>
-            Facebook
+        
+        <a href="তোমার_ফেসবুক_লিঙ্ক_এখানে" class="contact-btn facebook" target="_blank">
+            <i class="fab fa-facebook-f"></i> Facebook
         </a>
 
-        <a href="https://wa.me/তোমার_নাম্বার" class="contact-btn whatsapp" target="_blank">
-            <i class="fab fa-whatsapp"></i>
-            WhatsApp
+        <a href="https://wa.me/তোমার_নাম্বার_এখানে" class="contact-btn whatsapp" target="_blank">
+            <i class="fab fa-whatsapp"></i> WhatsApp
         </a>
 
-        <a href="https://t.me/তোমার_ইউজারনেম" class="contact-btn telegram" target="_blank">
-            <i class="fab fa-telegram-plane"></i>
-            Telegram
+        <a href="https://t.me/তোমার_ইউজারনেম_এখানে" class="contact-btn telegram" target="_blank">
+            <i class="fab fa-telegram-plane"></i> Telegram
         </a>
+        
     </div>
 
 </body>
