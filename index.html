@@ -3,133 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SR SOHAN - Auto Support</title>
+    <title>SR SOHAN - Smart Admin Panel</title>
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
-    
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { 
-            background: #050a18; 
-            color: white; 
-            font-family: 'Rajdhani', sans-serif; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-        }
-        .support-card { 
-            width: 90%; 
-            max-width: 380px; 
-            background: rgba(255, 255, 255, 0.05); 
-            padding: 30px; 
-            border-radius: 25px; 
-            border: 1px solid rgba(59, 130, 246, 0.3); 
-            text-align: center; 
-            backdrop-filter: blur(15px); 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-        }
-        h1 { 
-            font-family: 'Syncopate', sans-serif; 
-            font-size: 18px; 
-            margin-bottom: 25px; 
-            text-shadow: 0 0 15px rgba(59, 130, 246, 0.6); 
-            letter-spacing: 2px;
-        }
+        body { background: #050a18; color: white; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .support-card { width: 95%; max-width: 400px; background: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 25px; border: 1px solid rgba(59, 130, 246, 0.3); backdrop-filter: blur(15px); box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
+        h1 { font-family: 'Syncopate', sans-serif; font-size: 16px; margin-bottom: 25px; text-shadow: 0 0 15px rgba(59, 130, 246, 0.6); text-align: center; }
         .form-group { text-align: left; margin-bottom: 15px; }
-        label { color: #94a3b8; font-size: 12px; display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
-        select, input { 
-            width: 100%; 
-            padding: 12px; 
-            border-radius: 10px; 
-            background: #0f172a; 
-            color: white; 
-            border: 1px solid #3b82f6; 
-            outline: none; 
-            font-family: 'Rajdhani', sans-serif; 
-            font-size: 16px;
-        }
+        label { color: #94a3b8; font-size: 11px; display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        select, input { width: 100%; padding: 12px; border-radius: 10px; background: #0f172a; color: white; border: 1px solid #3b82f6; outline: none; font-family: 'Rajdhani', sans-serif; font-size: 15px; transition: 0.3s; }
         select:focus, input:focus { border-color: #60a5fa; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
-        .submit-btn { 
-            width: 100%; 
-            padding: 15px; 
-            border-radius: 12px; 
-            background: linear-gradient(45deg, #1d4ed8, #3b82f6); 
-            color: white; 
-            font-family: 'Syncopate', sans-serif; 
-            font-size: 11px; 
-            border: none; 
-            cursor: pointer; 
-            font-weight: bold; 
-            margin-top: 10px; 
-            transition: 0.3s;
-            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
-        }
-        .submit-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
-        .submit-btn:disabled { background: #475569; cursor: not-allowed; transform: none; }
+        .dynamic-fields { display: none; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
+        .submit-btn { width: 100%; padding: 15px; border-radius: 12px; background: linear-gradient(45deg, #1d4ed8, #3b82f6); color: white; font-family: 'Syncopate', sans-serif; font-size: 11px; border: none; cursor: pointer; font-weight: bold; margin-top: 20px; transition: 0.4s; }
+        .submit-btn:hover { transform: translateY(-3px); filter: brightness(1.1); }
+        .submit-btn:disabled { background: #475569; cursor: not-allowed; }
     </style>
 </head>
 <body>
 
 <div class="support-card">
-    <h1>ᏚR SOHAN INFO</h1>
+    <h1>ᏚR SOHAN PANEL</h1>
 
     <div class="form-group">
-        <label>Select Your Issue:</label>
-        <select id="userIssue">
-            <option value="">-- Choose Option --</option>
-            <option value="Payment Problem">Payment Problem</option>
-            <option value="Login Issue">Login Issue</option>
-            <option value="Diamond Top-up">Diamond Top-up</option>
-            <option value="Admin Support">Admin Support</option>
-            <option value="Others">Others</option>
+        <label>Select Issue:</label>
+        <select id="userIssue" onchange="updateFields()">
+            <option value="">-- Choose Issue --</option>
+            <option value="Payment">Payment Problem</option>
+            <option value="Order">Order Problem</option>
         </select>
     </div>
 
-    <div class="form-group">
-        <label>Your ID or Number:</label>
-        <input type="text" id="userIdentifier" placeholder="Enter here...">
+    <div id="paymentFields" class="dynamic-fields">
+        <div class="form-group">
+            <label>Payment Method:</label>
+            <select id="payMethod">
+                <option value="Bkash">Bkash</option>
+                <option value="Nagad">Nagad</option>
+                <option value="Rocket">Rocket</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Transaction ID (TrxID):</label>
+            <input type="text" id="trxId" placeholder="Enter TrxID">
+        </div>
     </div>
 
-    <button class="submit-btn" id="submitBtn" onclick="sendAutoMsg()">SUBMIT NOW ➔</button>
+    <div id="orderFields" class="dynamic-fields">
+        <div class="form-group">
+            <label>Order ID:</label>
+            <input type="text" id="orderId" placeholder="Enter Order ID">
+        </div>
+        <div class="form-group">
+            <label>Your Chat ID:</label>
+            <input type="text" id="chatIdBox" placeholder="Enter Chat ID">
+        </div>
+    </div>
+
+    <button class="submit-btn" id="submitBtn" onclick="sendAutoMsg()">SUBMIT REPORT ➔</button>
 </div>
 
 <script>
+    function updateFields() {
+        const issue = document.getElementById("userIssue").value;
+        document.getElementById("paymentFields").style.display = (issue === "Payment") ? "block" : "none";
+        document.getElementById("orderFields").style.display = (issue === "Order") ? "block" : "none";
+    }
+
     async function sendAutoMsg() {
         const issue = document.getElementById("userIssue").value;
-        const info = document.getElementById("userIdentifier").value;
         const btn = document.getElementById("submitBtn");
-
-        // তোমার দেওয়া টোকেন এবং চ্যাট আইডি এখানে সেট করা হয়েছে
+        
+        // তোমার দেওয়া সঠিক টোকেন এবং চ্যাট আইডি
         const botToken = "8769255178:AAFQ27UmVrDDMJ2dBHelTO5bwOH_j4Mvkbk"; 
         const chatId = "6737871508"; 
 
-        if (issue === "" || info === "") {
-            alert("Please fill all fields!");
-            return;
+        let details = "";
+        
+        if (issue === "Payment") {
+            const method = document.getElementById("payMethod").value;
+            const trx = document.getElementById("trxId").value;
+            if(!trx) return alert("Please enter Transaction ID!");
+            details = `<b>💳 Method:</b> ${method}\n<b>🔑 TrxID:</b> ${trx}`;
+        } else if (issue === "Order") {
+            const oId = document.getElementById("orderId").value;
+            const cId = document.getElementById("chatIdBox").value;
+            if(!oId || !cId) return alert("Please fill Order and Chat ID!");
+            details = `<b>🛒 Order ID:</b> ${oId}\n<b>💬 Chat ID:</b> ${cId}`;
+        } else {
+            return alert("Please select an issue!");
         }
 
         btn.disabled = true;
         btn.innerText = "SENDING...";
 
-        // মেসেজ ফরম্যাট
-        const message = `<b>🆘 New Website Support Request</b>\n\n<b>📌 Issue:</b> ${issue}\n<b>🔑 Data:</b> ${info}\n\n<i>Sent from: SR SOHAN Web</i>`;
-        
+        const message = `<b>🔔 NEW SUPPORT TICKET</b>\n\n<b>📌 Issue Type:</b> ${issue}\n${details}\n\n<i>SR SOHAN Smart-Panel</i>`;
         const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}&parse_mode=HTML`;
 
         try {
             const response = await fetch(url);
             if (response.ok) {
-                alert("Success! Your request has been sent to SR SOHAN.");
-                document.getElementById("userIdentifier").value = "";
-                document.getElementById("userIssue").value = "";
+                alert("Request Sent Successfully!");
+                location.reload(); 
             } else {
-                alert("Failed to send. Please check your internet or Bot settings.");
+                alert("Error sending message!");
             }
         } catch (error) {
-            alert("Connection error! Please try again later.");
+            alert("Network Error!");
         } finally {
             btn.disabled = false;
-            btn.innerText = "SUBMIT NOW ➔";
+            btn.innerText = "SUBMIT REPORT ➔";
         }
     }
 </script>
