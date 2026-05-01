@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SR SOHAN - Smart Admin Panel</title>
+    <title>SR SOHAN - Smart Support Panel</title>
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -14,7 +14,10 @@
         label { color: #94a3b8; font-size: 11px; display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
         select, input { width: 100%; padding: 12px; border-radius: 10px; background: #0f172a; color: white; border: 1px solid #3b82f6; outline: none; font-family: 'Rajdhani', sans-serif; font-size: 15px; transition: 0.3s; }
         select:focus, input:focus { border-color: #60a5fa; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
+        
+        /* ডাইনামিক ফিল্ডস শুরুতে লুকানো থাকবে */
         .dynamic-fields { display: none; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
+        
         .submit-btn { width: 100%; padding: 15px; border-radius: 12px; background: linear-gradient(45deg, #1d4ed8, #3b82f6); color: white; font-family: 'Syncopate', sans-serif; font-size: 11px; border: none; cursor: pointer; font-weight: bold; margin-top: 20px; transition: 0.4s; }
         .submit-btn:hover { transform: translateY(-3px); filter: brightness(1.1); }
         .submit-btn:disabled { background: #475569; cursor: not-allowed; }
@@ -40,12 +43,15 @@
             <select id="payMethod">
                 <option value="Bkash">Bkash</option>
                 <option value="Nagad">Nagad</option>
-                <option value="Rocket">Rocket</option>
             </select>
         </div>
         <div class="form-group">
             <label>Transaction ID (TrxID):</label>
             <input type="text" id="trxId" placeholder="Enter TrxID">
+        </div>
+        <div class="form-group">
+            <label>Your Chat ID:</label>
+            <input type="text" id="payChatId" placeholder="Enter Chat ID">
         </div>
     </div>
 
@@ -56,7 +62,7 @@
         </div>
         <div class="form-group">
             <label>Your Chat ID:</label>
-            <input type="text" id="chatIdBox" placeholder="Enter Chat ID">
+            <input type="text" id="orderChatId" placeholder="Enter Chat ID">
         </div>
     </div>
 
@@ -66,15 +72,22 @@
 <script>
     function updateFields() {
         const issue = document.getElementById("userIssue").value;
-        document.getElementById("paymentFields").style.display = (issue === "Payment") ? "block" : "none";
-        document.getElementById("orderFields").style.display = (issue === "Order") ? "block" : "none";
+        // সব লুকান
+        document.getElementById("paymentFields").style.display = "none";
+        document.getElementById("orderFields").style.display = "none";
+        
+        // সিলেক্ট অনুযায়ী দেখান
+        if(issue === "Payment") {
+            document.getElementById("paymentFields").style.display = "block";
+        } else if(issue === "Order") {
+            document.getElementById("orderFields").style.display = "block";
+        }
     }
 
     async function sendAutoMsg() {
         const issue = document.getElementById("userIssue").value;
         const btn = document.getElementById("submitBtn");
         
-        // তোমার দেওয়া সঠিক টোকেন এবং চ্যাট আইডি
         const botToken = "8769255178:AAFQ27UmVrDDMJ2dBHelTO5bwOH_j4Mvkbk"; 
         const chatId = "6737871508"; 
 
@@ -83,12 +96,13 @@
         if (issue === "Payment") {
             const method = document.getElementById("payMethod").value;
             const trx = document.getElementById("trxId").value;
-            if(!trx) return alert("Please enter Transaction ID!");
-            details = `<b>💳 Method:</b> ${method}\n<b>🔑 TrxID:</b> ${trx}`;
+            const cId = document.getElementById("payChatId").value;
+            if(!trx || !cId) return alert("Please fill all fields!");
+            details = `<b>💳 Method:</b> ${method}\n<b>🔑 TrxID:</b> ${trx}\n<b>💬 Chat ID:</b> ${cId}`;
         } else if (issue === "Order") {
             const oId = document.getElementById("orderId").value;
-            const cId = document.getElementById("chatIdBox").value;
-            if(!oId || !cId) return alert("Please fill Order and Chat ID!");
+            const cId = document.getElementById("orderChatId").value;
+            if(!oId || !cId) return alert("Please fill all fields!");
             details = `<b>🛒 Order ID:</b> ${oId}\n<b>💬 Chat ID:</b> ${cId}`;
         } else {
             return alert("Please select an issue!");
@@ -97,7 +111,7 @@
         btn.disabled = true;
         btn.innerText = "SENDING...";
 
-        const message = `<b>🔔 NEW SUPPORT TICKET</b>\n\n<b>📌 Issue Type:</b> ${issue}\n${details}\n\n<i>SR SOHAN Smart-Panel</i>`;
+        const message = `<b>🔔 NEW SUPPORT TICKET</b>\n\n<b>📌 Issue:</b> ${issue}\n${details}\n\n<i>SR SOHAN Auto-Panel</i>`;
         const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}&parse_mode=HTML`;
 
         try {
@@ -106,7 +120,7 @@
                 alert("Request Sent Successfully!");
                 location.reload(); 
             } else {
-                alert("Error sending message!");
+                alert("Error sending message! Start the bot first.");
             }
         } catch (error) {
             alert("Network Error!");
