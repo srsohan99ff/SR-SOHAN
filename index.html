@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SR SOHAN - Smart Support Panel</title>
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #050a18; color: white; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
@@ -12,10 +14,15 @@
         h1 { font-family: 'Syncopate', sans-serif; font-size: 16px; margin-bottom: 25px; text-shadow: 0 0 15px rgba(59, 130, 246, 0.6); text-align: center; }
         .form-group { text-align: left; margin-bottom: 15px; }
         label { color: #94a3b8; font-size: 11px; display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
-        select, input { width: 100%; padding: 12px; border-radius: 10px; background: #0f172a; color: white; border: 1px solid #3b82f6; outline: none; font-family: 'Rajdhani', sans-serif; font-size: 15px; transition: 0.3s; }
+        select, input { width: 100%; padding: 12px; border-radius: 10px; background: #0f172a; color: white; border: 1px solid #3b82f6; outline: none; font-family: 'Rajdhani', sans-serif; font-size: 15px; }
         .dynamic-fields { display: none; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
-        .submit-btn { width: 100%; padding: 15px; border-radius: 12px; background: linear-gradient(45deg, #1d4ed8, #3b82f6); color: white; font-family: 'Syncopate', sans-serif; font-size: 11px; border: none; cursor: pointer; font-weight: bold; margin-top: 20px; transition: 0.4s; }
-        .submit-btn:disabled { background: #475569; cursor: not-allowed; }
+        .submit-btn { width: 100%; padding: 15px; border-radius: 12px; background: linear-gradient(45deg, #1d4ed8, #3b82f6); color: white; font-family: 'Syncopate', sans-serif; font-size: 11px; border: none; cursor: pointer; font-weight: bold; margin-top: 20px; transition: 0.4s; box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3); }
+        .submit-btn:hover { transform: translateY(-3px); filter: brightness(1.1); }
+        
+        /* SweetAlert কাস্টম স্টাইল */
+        .swal2-popup { background: #0f172a !important; color: white !important; border-radius: 20px !important; border: 1px solid #3b82f6 !important; font-family: 'Rajdhani', sans-serif !important; }
+        .swal2-title, .swal2-content { color: white !important; }
+        .swal2-confirm { background: linear-gradient(45deg, #1d4ed8, #3b82f6) !important; border-radius: 10px !important; }
     </style>
 </head>
 <body>
@@ -36,37 +43,19 @@
     <div id="paymentFields" class="dynamic-fields">
         <div class="form-group">
             <label>Payment Method:</label>
-            <select id="payMethod">
-                <option value="Bkash">Bkash</option>
-                <option value="Nagad">Nagad</option>
-            </select>
+            <select id="payMethod"><option value="Bkash">Bkash</option><option value="Nagad">Nagad</option></select>
         </div>
-        <div class="form-group">
-            <label>Transaction ID (TrxID):</label>
-            <input type="text" id="trxId" placeholder="Enter TrxID">
-        </div>
-        <div class="form-group">
-            <label>Your Chat ID:</label>
-            <input type="text" id="payChatId" placeholder="Enter Chat ID">
-        </div>
+        <div class="form-group"><label>Transaction ID (TrxID):</label><input type="text" id="trxId" placeholder="Enter TrxID"></div>
+        <div class="form-group"><label>Your Chat ID:</label><input type="text" id="payChatId" placeholder="Enter Chat ID"></div>
     </div>
 
     <div id="orderFields" class="dynamic-fields">
-        <div class="form-group">
-            <label>Order ID:</label>
-            <input type="text" id="orderId" placeholder="Enter Order ID">
-        </div>
-        <div class="form-group">
-            <label>Your Chat ID:</label>
-            <input type="text" id="orderChatId" placeholder="Enter Chat ID">
-        </div>
+        <div class="form-group"><label>Order ID:</label><input type="text" id="orderId" placeholder="Enter Order ID"></div>
+        <div class="form-group"><label>Your Chat ID:</label><input type="text" id="orderChatId" placeholder="Enter Chat ID"></div>
     </div>
 
     <div id="banFields" class="dynamic-fields">
-        <div class="form-group">
-            <label>Your Chat ID:</label>
-            <input type="text" id="banChatId" placeholder="Enter Chat ID for Ban Issue">
-        </div>
+        <div class="form-group"><label>Your Chat ID:</label><input type="text" id="banChatId" placeholder="Enter Chat ID"></div>
     </div>
 
     <button class="submit-btn" id="submitBtn" onclick="sendAutoMsg()">SUBMIT REPORT ➔</button>
@@ -92,19 +81,29 @@
             const method = document.getElementById("payMethod").value;
             const trx = document.getElementById("trxId").value;
             const cId = document.getElementById("payChatId").value;
-            if(!trx || !cId) return alert("Please fill all fields!");
+            if(!trx || !cId) {
+                Swal.fire({ icon: 'warning', title: 'Oops...', text: 'Please fill all payment fields!' });
+                return;
+            }
             details = `<b>💳 Method:</b> ${method}\n<b>🔑 TrxID:</b> ${trx}\n<b>💬 Chat ID:</b> ${cId}`;
         } else if (issue === "Order") {
             const oId = document.getElementById("orderId").value;
             const cId = document.getElementById("orderChatId").value;
-            if(!oId || !cId) return alert("Please fill all fields!");
+            if(!oId || !cId) {
+                Swal.fire({ icon: 'warning', title: 'Empty Box', text: 'Please fill Order ID and Chat ID!' });
+                return;
+            }
             details = `<b>🛒 Order ID:</b> ${oId}\n<b>💬 Chat ID:</b> ${cId}`;
         } else if (issue === "Ban") {
             const cId = document.getElementById("banChatId").value;
-            if(!cId) return alert("Please enter your Chat ID!");
+            if(!cId) {
+                Swal.fire({ icon: 'warning', title: 'Chat ID Missing', text: 'Please enter your Chat ID!' });
+                return;
+            }
             details = `<b>🚫 Status:</b> Ban Problem\n<b>💬 Chat ID:</b> ${cId}`;
         } else {
-            return alert("Please select an issue!");
+            Swal.fire({ icon: 'info', title: 'Selection Required', text: 'Please select an issue first!' });
+            return;
         }
 
         btn.disabled = true;
@@ -116,11 +115,15 @@
         try {
             const response = await fetch(url);
             if (response.ok) {
-                alert("Request Sent Successfully!");
-                location.reload(); 
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Your request has been sent to SR SOHAN.',
+                    confirmButtonText: 'Great!'
+                }).then(() => { location.reload(); });
             }
         } catch (error) {
-            alert("Network Error!");
+            Swal.fire({ icon: 'error', title: 'Error', text: 'Check your internet connection!' });
         } finally {
             btn.disabled = false;
             btn.innerText = "SUBMIT REPORT ➔";
