@@ -3,47 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ᏚR SOHAN - Premium Linktree</title>
+    <title>ᏚR SOHAN - Official</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/dist/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Rajdhani:wght@700&display=swap" rel="stylesheet">
     <style>
-        /* এক্সট্রিম লেভেলের গ্রেডিয়েন্ট ব্যাকগ্রাউন্ড */
         body {
-            background: linear-gradient(135deg, #1f2937 0%, #111827 50%, #111827 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center; /* পুরোপুরি মাঝখানে আনার জন্য */
+            justify-content: center;
             min-height: 100vh;
             margin: 0;
             padding: 20px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Rajdhani', sans-serif;
             color: #f9fafb;
         }
         
         .main-container {
             width: 100%;
-            max-width: 450px;
+            max-width: 420px;
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center; /* সব উপাদান মাঝখানে */
         }
 
         .main-logo-container {
-            margin-bottom: 40px;
-            display: flex;
-            justify-content: center; /* লোগো মাঝখানে */
+            margin-bottom: 30px;
         }
         
         .main-logo {
-            width: 130px;
-            height: 130px;
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
             overflow: hidden;
-            border: 5px solid #ffffff1a; /* হালকা স্বচ্ছ সাদা বর্ডার */
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            background-color: #0b1120;
+            border: 4px solid #1e293b;
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.2);
+            margin: 0 auto;
         }
         
         .main-logo img {
@@ -52,26 +47,24 @@
             object-fit: cover;
         }
 
-        /* স্টাইলিশ প্রিমিয়াম নাম ডিজাইন (আগের মতো) */
         .stylish-name {
-            font-size: 2.2rem;
+            font-family: 'Syncopate', sans-serif;
+            font-size: 1.8rem;
             font-weight: 700;
-            color: #f9fafb;
+            color: #ffffff;
             letter-spacing: 2px;
-            text-transform: uppercase;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
-        /* ডেভেলপার ট্যাগ */
         .dev-tag {
-            font-size: 1rem;
-            color: #9ca3af;
-            background-color: #ffffff0d;
-            padding: 5px 15px;
-            border-radius: 20px;
-            margin-bottom: 30px;
-            letter-spacing: 1px;
+            font-size: 0.9rem;
+            color: #94a3b8;
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 4px 15px;
+            border-radius: 50px;
+            margin-bottom: 40px;
+            display: inline-block;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .btn-container {
@@ -81,7 +74,6 @@
             gap: 15px;
         }
 
-        /* এক লাইনে দুই বাটন পাশাপাশি */
         .row-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -92,43 +84,39 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 18px;
-            border-radius: 16px;
+            padding: 16px;
+            border-radius: 14px;
             color: white;
-            font-weight: 600;
-            font-size: 17px;
+            font-family: 'Syncopate', sans-serif;
+            font-size: 14px;
             text-decoration: none;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            backdrop-filter: blur(5px); /* হালকা ব্লার ইফেক্ট */
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
 
+        /* আইকন স্টাইল */
         .contact-btn i {
-            font-size: 22px;
-            margin-right: 12px;
+            font-size: 24px; /* আইকন বড় করা হয়েছে */
+            margin-right: 12px; /* টেক্সট থেকে দূরত্ব */
         }
 
-        /* টেলিগ্রাম বাটন আলাদা এবং বড় */
         .full-width-btn {
             padding: 22px;
-            font-size: 19px;
-            font-weight: 700;
-            letter-spacing: 1px;
+            font-size: 18px;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* গ্রেডিয়েন্ট বাটন কালার */
-        .facebook { background: linear-gradient(135deg, #1877F2, #0d5bb2); }
-        .whatsapp { background: linear-gradient(135deg, #25D366, #1b9b4d); }
-        .telegram { background: linear-gradient(135deg, #0088cc, #006699); }
+        .facebook { background: linear-gradient(45deg, #1d4ed8, #3b82f6); }
+        .whatsapp { background: linear-gradient(45deg, #059669, #10b981); }
+        .telegram { background: linear-gradient(45deg, #0284c7, #0ea5e9); }
 
-        /* হোভার এবং একটিভ ইফেক্ট */
         .contact-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-        }
-
-        .contact-btn:active {
-            transform: scale(0.96);
+            transform: translateY(-3px);
+            filter: brightness(1.1);
         }
     </style>
 </head>
@@ -137,30 +125,26 @@
     <div class="main-container">
         <div class="main-logo-container">
             <div class="main-logo">
-                <img src="https://i.ibb.co/Rps0fz7F/image.jpg" alt="SR SOHAN Developer Logo">
+                <img src="https://i.ibb.co/Rps0fz7F/image.jpg" alt="SR SOHAN">
             </div>
         </div>
 
         <h1 class="stylish-name">ᏚR SOHAN</h1>
-        
         <div class="dev-tag">Developer & Admin</div>
 
         <div class="btn-container">
             <div class="row-grid">
-                <a href="ফেসবুক_লিঙ্ক_এখানে" class="contact-btn facebook" target="_blank">
-                    <i class="fab fa-facebook"></i>
-                    Facebook
+                <a href="ফেসবুক_লিঙ্ক" class="contact-btn facebook" target="_blank">
+                    <i class="fab fa-facebook"></i> FACEBOOK
                 </a>
 
-                <a href="https://wa.me/নাম্বার_এখানে" class="contact-btn whatsapp" target="_blank">
-                    <i class="fab fa-whatsapp"></i>
-                    WhatsApp
+                <a href="https://wa.me/নাম্বার" class="contact-btn whatsapp" target="_blank">
+                    <i class="fab fa-whatsapp"></i> WHATSAPP
                 </a>
             </div>
 
-            <a href="https://t.me/ইউজারনেম_এখানে" class="contact-btn telegram full-width-btn" target="_blank">
-                <i class="fab fa-telegram-plane"></i>
-                TELEGRAM
+            <a href="https://t.me/ইউজারনেম" class="contact-btn telegram full-width-btn" target="_blank">
+                <i class="fab fa-telegram"></i> TELEGRAM
             </a>
         </div>
     </div>
