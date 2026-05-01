@@ -3,181 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ᏚR SOHAN - Official</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Rajdhani:wght@700&display=swap" rel="stylesheet">
+    <title>SR SOHAN - Official Support</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    
     <style>
-        body {
-            background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
+        * {
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #050a18; /* ডার্ক থিম */
+            color: white;
             font-family: 'Rajdhani', sans-serif;
-            color: #f9fafb;
-        }
-        
-        .main-container {
-            width: 100%;
-            max-width: 420px;
-            text-align: center;
-        }
-
-        .main-logo {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 4px solid #1e293b;
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
-            margin: 0 auto 30px;
-        }
-        
-        .main-logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .stylish-name {
-            font-family: 'Syncopate', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #ffffff;
-            letter-spacing: 2px;
-            margin-bottom: 8px;
-        }
-
-        .dev-tag {
-            font-size: 0.9rem;
-            color: #94a3b8;
-            background-color: rgba(255, 255, 255, 0.05);
-            padding: 4px 15px;
-            border-radius: 50px;
-            margin-bottom: 40px;
-            display: inline-block;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .btn-container {
-            width: 100%;
             display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .row-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .contact-btn {
-            display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* মেইন কন্টেইনার */
+        .support-card {
+            width: 90%;
+            max-width: 380px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 35px 25px;
+            border-radius: 30px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            text-align: center;
+            backdrop-filter: blur(15px);
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 18px;
+            color: #ffffff;
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        label {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-bottom: 8px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ড্রপডাউন এবং ইনপুট স্টাইল */
+        select, input {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            background: #0f172a;
+            color: white;
+            border: 1px solid #3b82f6;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 16px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        select:focus, input:focus {
+            border-color: #60a5fa;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+
+        /* সাবমিট বাটন */
+        .submit-btn {
+            width: 100%;
             padding: 16px;
-            border-radius: 14px;
+            border-radius: 15px;
+            background: linear-gradient(45deg, #1d4ed8, #3b82f6);
             color: white;
             font-family: 'Syncopate', sans-serif;
             font-size: 12px;
-            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.4s;
+            margin-top: 10px;
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
             text-transform: uppercase;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
 
-        /* লোগো আইকন স্টাইল */
-        .btn-icon {
-            width: 20px;
-            height: 20px;
-            margin-right: 10px;
-            fill: white;
-        }
-
-        .full-width-btn {
-            padding: 20px;
-            font-size: 18px;
-            letter-spacing: 2px;
-            grid-column: span 2;
-        }
-
-        /* বাটন কালার */
-        .facebook { background: linear-gradient(45deg, #1d4ed8, #3b82f6); }
-        .whatsapp { background: linear-gradient(45deg, #059669, #10b981); }
-        .telegram { background: linear-gradient(135deg, #0088cc, #006699); }
-
-        .contact-btn:hover {
+        .submit-btn:hover {
             transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(59, 130, 246, 0.6);
             filter: brightness(1.1);
+        }
+
+        .footer {
+            margin-top: 25px;
+            font-size: 11px;
+            color: #475569;
+            letter-spacing: 1px;
         }
     </style>
 </head>
 <body>
 
-    <div class="main-container">
-        <div class="main-logo">
-            <img src="https://i.ibb.co/Rps0fz7F/image.jpg" alt="SR SOHAN">
-        </div>
+<div class="support-card">
+    <h1>ᏚR SOHAN INFO</h1>
 
-        <h1 class="stylish-name">ᏚR SOHAN</h1>
-        <div class="dev-tag">Developer & Admin</div>
-
-        <div class="btn-container">
-            <div class="row-grid">
-                <a href="https://www.facebook.com/srsohan99ff" class="contact-btn facebook" target="_blank">
-                    <svg class="btn-icon" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                    FACEBOOK
-                </a>
-
-                <a href="javascript:void(0)" onclick="showInputBox()" class="contact-btn whatsapp">
-    <svg class="btn-icon" viewBox="0 0 24 24">...</svg> SUPPORT BOX
-</a>
-
-
-                <a href="https://t.me/srsohan99ff" class="contact-btn telegram full-width-btn" target="_blank">
-                    <svg class="btn-icon" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5.891 8.146l-2.003 9.442c-.149.659-.539.822-1.091.511l-3.051-2.25-1.47 1.417c-.163.163-.299.299-.614.299l.219-3.102 5.645-5.099c.245-.218-.054-.339-.379-.122l-6.979 4.394-3.006-.941c-.654-.204-.667-.654.137-.967l11.741-4.524c.544-.204 1.02.122.861.841z"/></svg>
-                    TELEGRAM
-                </a>
-            </div>
-        </div>
+    <div class="form-group">
+        <label>Select Your Issue:</label>
+        <select id="userIssue">
+            <option value="">-- Choose an Option --</option>
+            <option value="Payment Problem">Payment Problem</option>
+            <option value="Login Issue">Login Issue</option>
+            <option value="Diamond Top-up Issue">Diamond Top-up Issue</option>
+            <option value="Admin Support">Admin Support</option>
+            <option value="Others">Others</option>
+        </select>
     </div>
-<div id="myInputBox" style="display: none; background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 20px; border: 1px solid #3b82f6; margin-top: 20px; text-align: left; backdrop-filter: blur(10px);">
-    <label style="color: #94a3b8; font-family: 'Rajdhani', sans-serif; display: block; margin-bottom: 10px; font-size: 14px;">আপনার তথ্য (নাম্বার বা আইডি) দিন:</label>
-    <input type="text" id="userInput" placeholder="এখানে লিখুন..." style="width: 100%; padding: 14px; border-radius: 12px; background: #0f172a; color: white; border: 1px solid #3b82f6; outline: none; margin-bottom: 15px; font-family: 'Rajdhani', sans-serif;">
-    <button onclick="sendData()" style="width: 100%; padding: 15px; border-radius: 12px; background: linear-gradient(45deg, #10b981, #059669); color: white; border: none; cursor: pointer; font-family: 'Syncopate', sans-serif; font-size: 12px; font-weight: bold; box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);">
-        SUBMIT INFO ➔
-    </button>
+
+    <div class="form-group">
+        <label>Your ID or Number:</label>
+        <input type="text" id="userIdentifier" placeholder="Type here...">
+    </div>
+
+    <button class="submit-btn" onclick="processSupport()">Submit Info ➔</button>
+
+    <div class="footer">POWERED BY SR SOHAN SUPPORT SYSTEM</div>
 </div>
-    <script>
-    // বাটন ক্লিক করলে বক্সটি দেখানোর জন্য
-    function showInputBox() {
-        var box = document.getElementById("myInputBox");
-        if (box.style.display === "none") {
-            box.style.display = "block";
-            box.scrollIntoView({ behavior: 'smooth' }); // ক্লিক করলে অটোমেটিক বক্সের কাছে নিয়ে যাবে
-        } else {
-            box.style.display = "none";
-        }
-    }
 
-    // তথ্য পাঠানোর জন্য
-    function sendData() {
-        var info = document.getElementById("userInput").value;
-        var telegramUser = "SrSohan99ff"; // তোমার টেলিগ্রাম ইউজারনেম
+<script>
+    function processSupport() {
+        var issue = document.getElementById("userIssue").value;
+        var info = document.getElementById("userIdentifier").value;
+        var myTelegram = "SrSohan99ff"; // তোমার টেলিগ্রাম আইডি
 
-        if (info === "") {
-            alert("দয়া করে বক্সটিতে কিছু লিখুন!");
-        } else {
-            var message = "নতুন তথ্য জমা হয়েছে: " + info;
-            var telegramLink = "https://t.me/" + telegramUser + "?text=" + encodeURIComponent(message);
-            window.open(telegramLink, '_blank');
+        if (issue === "" || info === "") {
+            alert("Please select an issue and provide your details!");
+            return;
         }
+
+        // মেসেজ ফরম্যাট
+        var message = "🆘 **New Support Request**\n\n" +
+                      "📌 Issue: " + issue + "\n" +
+                      "🔑 Data: " + info + "\n" +
+                      "🌐 Source: Website Support";
+
+        // টেলিগ্রামে রিডাইরেক্ট লিঙ্ক
+        var finalUrl = "https://t.me/" + myTelegram + "?text=" + encodeURIComponent(message);
+        
+        // নতুন ট্যাবে টেলিগ্রাম ওপেন হবে
+        window.open(finalUrl, '_blank');
     }
-    </script>
-    
+</script>
+
 </body>
 </html>
