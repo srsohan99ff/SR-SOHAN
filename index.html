@@ -14,10 +14,14 @@
         h1 { font-family: 'Syncopate', sans-serif; font-size: 16px; margin-bottom: 25px; text-shadow: 0 0 15px rgba(59, 130, 246, 0.6); text-align: center; }
         .form-group { text-align: left; margin-bottom: 15px; }
         label { color: #94a3b8; font-size: 11px; display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
-        select, input { width: 100%; padding: 12px; border-radius: 10px; background: #0f172a; color: white; border: 1px solid #3b82f6; outline: none; font-family: 'Rajdhani', sans-serif; font-size: 15px; }
+        select, input { width: 100%; padding: 12px; border-radius: 10px; background: #0f172a; color: white; border: 1px solid #3b82f6; outline: none; font-family: 'Rajdhani', sans-serif; font-size: 15px; transition: 0.3s; }
+        select:focus, input:focus { border-color: #60a5fa; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
         .dynamic-fields { display: none; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
-        .submit-btn { width: 100%; padding: 15px; border-radius: 12px; background: linear-gradient(45deg, #1d4ed8, #3b82f6); color: white; font-family: 'Syncopate', sans-serif; font-size: 11px; border: none; cursor: pointer; font-weight: bold; margin-top: 20px; transition: 0.4s; }
-        
+        .submit-btn { width: 100%; padding: 15px; border-radius: 12px; background: linear-gradient(45deg, #1d4ed8, #3b82f6); color: white; font-family: 'Syncopate', sans-serif; font-size: 11px; border: none; cursor: pointer; font-weight: bold; margin-top: 20px; transition: 0.4s; box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2); }
+        .submit-btn:hover { transform: translateY(-3px); filter: brightness(1.1); }
+        .submit-btn:disabled { background: #475569; cursor: not-allowed; }
+
+        /* SweetAlert Custom Style */
         .swal2-popup { background: #0f172a !important; color: white !important; border-radius: 20px !important; border: 1px solid #3b82f6 !important; font-family: 'Rajdhani', sans-serif !important; }
         .swal2-title, .swal2-html-container { color: white !important; }
         .swal2-confirm { background: linear-gradient(45deg, #1d4ed8, #3b82f6) !important; border-radius: 10px !important; }
@@ -67,7 +71,7 @@
         document.getElementById("banFields").style.display = (issue === "Ban") ? "block" : "none";
     }
 
-    async function sendAutoMsg() {
+    function sendAutoMsg() {
         const issue = document.getElementById("userIssue").value;
         const btn = document.getElementById("submitBtn");
         const botToken = "8769255178:AAFQ27UmVrDDMJ2dBHelTO5bwOH_j4Mvkbk"; 
@@ -80,57 +84,58 @@
             const method = document.getElementById("payMethod").value;
             const trx = document.getElementById("trxId").value;
             userInputId = document.getElementById("payChatId").value;
-            if(!trx || !userInputId) return Swal.fire({ icon: 'warning', title: 'Fill All!', text: 'Transaction ID & Chat ID are required.' });
+            if(!trx || !userInputId) return Swal.fire({ icon: 'warning', title: 'Wait!', text: 'Transaction ID & Chat ID are required.' });
             details = `<b>💳 Method:</b> ${method}\n<b>🔑 TrxID:</b> ${trx}\n<b>💬 Chat ID:</b> ${userInputId}`;
         } else if (issue === "Order") {
             const oId = document.getElementById("orderId").value;
             userInputId = document.getElementById("orderChatId").value;
-            if(!oId || !userInputId) return Swal.fire({ icon: 'warning', title: 'Empty Boxes', text: 'Order ID & Chat ID are required.' });
+            if(!oId || !userInputId) return Swal.fire({ icon: 'warning', title: 'Incomplete!', text: 'Order ID & Chat ID are required.' });
             details = `<b>🛒 Order ID:</b> ${oId}\n<b>💬 Chat ID:</b> ${userInputId}`;
         } else if (issue === "Ban") {
             userInputId = document.getElementById("banChatId").value;
-            if(!userInputId) return Swal.fire({ icon: 'warning', title: 'Missing ID', text: 'Chat ID is required.' });
+            if(!userInputId) return Swal.fire({ icon: 'warning', title: 'Missing ID', text: 'Please enter your Chat ID.' });
             details = `<b>🚫 Issue:</b> Ban Problem\n<b>💬 Chat ID:</b> ${userInputId}`;
         } else {
-            return Swal.fire({ icon: 'info', title: 'Wait!', text: 'Please select an issue first.' });
+            return Swal.fire({ icon: 'info', title: 'Selection Needed', text: 'Please select an issue type first.' });
         }
 
         btn.disabled = true;
         btn.innerText = "SENDING...";
 
-        // Inline Keyboard Setup
-        const inlineKeyboard = {
-            inline_keyboard: [
-                [
-                    { text: "👤 View User", url: "tg://user?id=" + userInputId },
-                    { text: "🔍 Check", callback_data: "/check " + userInputId }
-                ]
-            ]
-        };
-
         const message = `<b>🔔 NEW SUPPORT TICKET</b>\n\n<b>📌 Issue Type:</b> ${issue} Problem\n${details}\n\n<i>SR SOHAN Smart-Panel</i>`;
         
-        try {
-            const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: chatId,
-                    text: message,
-                    parse_mode: 'HTML',
-                    reply_markup: inlineKeyboard
-                })
-            });
-
-            if (response.ok) {
-                Swal.fire({ icon: 'success', title: 'Sent!', text: 'Your request reached SR SOHAN.' }).then(() => location.reload());
+        const payload = {
+            chat_id: chatId,
+            text: message,
+            parse_mode: 'HTML',
+            reply_markup: {
+                inline_keyboard: [
+                    [
+                        { text: "🔍 Check: " + userInputId, callback_data: "/check " + userInputId }
+                    ]
+                ]
             }
-        } catch (e) {
-            Swal.fire({ icon: 'error', title: 'Error', text: 'Connection failed!' });
-        } finally {
+        };
+
+        fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(response => {
+            if (response.ok) {
+                Swal.fire({ icon: 'success', title: 'Sent!', text: 'Your report has been sent successfully.' }).then(() => location.reload());
+            } else {
+                Swal.fire({ icon: 'error', title: 'Error', text: 'Could not send request. Check Bot Token/ID.' });
+            }
+        })
+        .catch(() => {
+            Swal.fire({ icon: 'error', title: 'Connection Error', text: 'Check your internet connection!' });
+        })
+        .finally(() => {
             btn.disabled = false;
             btn.innerText = "SUBMIT REPORT ➔";
-        }
+        });
     }
 </script>
 
