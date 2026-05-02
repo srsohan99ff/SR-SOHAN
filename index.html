@@ -15,12 +15,12 @@
         .form-group { text-align: left; margin-bottom: 15px; }
         label { color: #94a3b8; font-size: 11px; display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
         
-        /* উন্নত সিলেক্ট ও ইনপুট ডিজাইন */
+        /* ইনপুট এবং সিলেক্ট বক্সের স্টাইল (সাদা হবে না, থিমের সাথে মিলবে) */
         select, input { 
             width: 100%; 
             padding: 12px; 
             border-radius: 10px; 
-            background: #0f172a; 
+            background: #0f172a; /* ডার্ক ব্যাকগ্রাউন্ড */
             color: white; 
             border: 1px solid #3b82f6; 
             outline: none; 
@@ -28,11 +28,22 @@
             font-size: 15px;
             transition: 0.3s;
         }
-        select:focus, input:focus { border-color: #60a5fa; box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+        
+        /* সিলেক্ট অপশনের ভেতরের লেখার কালার ঠিক করা */
+        select option {
+            background: #0f172a;
+            color: white;
+        }
+
+        select:focus, input:focus { 
+            border-color: #60a5fa; 
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); 
+        }
 
         .dynamic-fields { display: none; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
         .submit-btn { width: 100%; padding: 15px; border-radius: 12px; background: linear-gradient(45deg, #1d4ed8, #3b82f6); color: white; font-family: 'Syncopate', sans-serif; font-size: 11px; border: none; cursor: pointer; font-weight: bold; margin-top: 20px; transition: 0.4s; }
         
+        /* SweetAlert স্টাইল */
         .swal2-popup { background: #0f172a !important; color: white !important; border-radius: 20px !important; border: 1px solid #3b82f6 !important; font-family: 'Rajdhani', sans-serif !important; }
         .swal2-title, .swal2-html-container { color: white !important; }
         .swal2-confirm { background: linear-gradient(45deg, #1d4ed8, #3b82f6) !important; border-radius: 10px !important; }
@@ -55,20 +66,20 @@
 
     <div id="paymentFields" class="dynamic-fields">
         <div class="form-group">
-            <label>Order ID:</label>
-            <input type="text" id="payOrderId" placeholder="Enter Order ID">
-        </div>
-        <div class="form-group">
             <label>Select Method:</label>
             <select id="payMethod">
-                <option value="Bkash">Bkash (Personal/Agent)</option>
-                <option value="Nagad">Nagad (Personal/Agent)</option>
+                <option value="Bkash">Bkash</option>
+                <option value="Nagad">Nagad</option>
                 <option value="Rocket">Rocket</option>
             </select>
         </div>
         <div class="form-group">
             <label>Transaction ID:</label>
             <input type="text" id="trxId" placeholder="Enter TrxID">
+        </div>
+        <div class="form-group">
+            <label>Order ID:</label>
+            <input type="text" id="payOrderId" placeholder="Enter Order ID">
         </div>
         <div class="form-group">
             <label>Your Chat ID:</label>
@@ -106,12 +117,12 @@
         let userInputId = ""; 
 
         if (issue === "Payment") {
-            const pOrderId = document.getElementById("payOrderId").value;
             const method = document.getElementById("payMethod").value;
             const trx = document.getElementById("trxId").value;
+            const pOrderId = document.getElementById("payOrderId").value;
             userInputId = document.getElementById("payChatId").value;
-            if(!pOrderId || !trx || !userInputId) return Swal.fire({ icon: 'warning', title: 'Empty Box', text: 'Fill all info including Order ID!' });
-            details = `<b>🛒 Order ID:</b> ${pOrderId}\n<b>💳 Method:</b> ${method}\n<b>🔑 TrxID:</b> ${trx}\n<b>💬 Chat ID:</b> ${userInputId}`;
+            if(!trx || !userInputId || !pOrderId) return Swal.fire({ icon: 'warning', title: 'Empty Box', text: 'Please fill all info!' });
+            details = `<b>💳 Method:</b> ${method}\n<b>🔑 TrxID:</b> ${trx}\n<b>🛒 Order ID:</b> ${pOrderId}\n<b>💬 Chat ID:</b> ${userInputId}`;
         } else if (issue === "Order") {
             const oId = document.getElementById("orderId").value;
             userInputId = document.getElementById("orderChatId").value;
