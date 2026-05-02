@@ -3,91 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SR SOHAN - Smart Panel</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>SR SOHAN TOPUP SHOP</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #050a18; color: white; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .support-card { width: 95%; max-width: 400px; background: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 25px; border: 1px solid rgba(59, 130, 246, 0.3); backdrop-filter: blur(15px); box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
-        h1 { font-family: 'Syncopate', sans-serif; font-size: 16px; margin-bottom: 25px; text-shadow: 0 0 15px rgba(59, 130, 246, 0.6); text-align: center; }
-        .form-group { text-align: left; margin-bottom: 15px; }
-        label { color: #94a3b8; font-size: 11px; display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
-        select, input { width: 100%; padding: 12px; border-radius: 10px; background: #0f172a; color: white; border: 1px solid #3b82f6; outline: none; font-size: 15px; }
-        .dynamic-fields { display: none; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
-        .submit-btn { width: 100%; padding: 15px; border-radius: 12px; color: white; font-family: 'Syncopate', sans-serif; font-size: 11px; border: none; cursor: pointer; font-weight: bold; margin-top: 10px; transition: 0.4s; }
-        .report-btn { background: linear-gradient(45deg, #1d4ed8, #3b82f6); }
-        .order-btn { background: linear-gradient(45deg, #10b981, #059669); }
+        body { background: #0b0f19; color: white; font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .panel { background: #161b2c; padding: 30px; border-radius: 25px; border: 2px solid #00d2ff; text-align: center; width: 85%; box-shadow: 0 0 25px rgba(0, 210, 255, 0.3); }
+        .user-name { font-size: 16px; color: #8a99b1; margin-bottom: 5px; }
+        .balance-label { font-size: 12px; text-transform: uppercase; color: #5c6b81; letter-spacing: 1px; }
+        .balance-amount { font-size: 45px; color: #00d2ff; font-weight: bold; margin: 10px 0; }
+        .btn { background: linear-gradient(90deg, #00d2ff, #007bff); color: white; border: none; padding: 15px; width: 100%; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; box-shadow: 0 5px 15px rgba(0, 210, 255, 0.4); }
+        .footer { font-size: 11px; color: #3d475c; margin-top: 20px; }
     </style>
 </head>
 <body>
-
-<div class="support-card">
-    <h1>ᏚR SOHAN PANEL</h1>
-
-    <div class="form-group">
-        <label>Select Issue:</label>
-        <select id="userIssue" onchange="updateFields()">
-            <option value="">-- Choose Issue --</option>
-            <option value="Payment">Payment Problem</option>
-            <option value="Order">Order Problem</option>
-            <option value="Ban">Ban Problem</option>
-        </select>
+    <div class="panel">
+        <div id="user-display" class="user-name">Loading...</div>
+        <div class="balance-label">Available Balance</div>
+        <div class="balance-amount">৳ <span id="balance">0</span></div>
+        <button class="btn" onclick="orderDiamond()">BUY DIAMONDS</button>
+        <div class="footer">SSC 2026 Special Edition | SR SOHAN</div>
     </div>
 
-    <div id="paymentFields" class="dynamic-fields">
-        <div class="form-group"><label>Method:</label><select id="payMethod"><option value="Bkash">Bkash</option><option value="Nagad">Nagad</option></select></div>
-        <div class="form-group"><label>Transaction ID:</label><input type="text" id="trxId" placeholder="TrxID"></div>
-    </div>
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand(); // ফুল স্ক্রিন করার জন্য
 
-    <div id="orderFields" class="dynamic-fields">
-        <div class="form-group"><label>Order ID:</label><input type="text" id="orderId" placeholder="Order ID"></div>
-    </div>
-
-    <button class="submit-btn report-btn" onclick="sendReport()">SUBMIT REPORT ➔</button>
-    <button class="submit-btn order-btn" onclick="checkMyOrder()">MY ORDER 🔍</button>
-</div>
-
-<script>
-    function updateFields() {
-        const issue = document.getElementById("userIssue").value;
-        document.getElementById("paymentFields").style.display = (issue === "Payment") ? "block" : "none";
-        document.getElementById("orderFields").style.display = (issue === "Order") ? "block" : "none";
-    }
-
-    function checkMyOrder() {
-        // বটের ওয়েবঅ্যাপ থেকে সরাসরি ইউজার আইডি নেওয়ার উপায়
-        const uId = new URLSearchParams(window.location.search).get('user_id') || BB.chat_id;
-
-        if(!uId) {
-            return Swal.fire({ icon: 'error', text: 'Chat ID পাওয়া যায়নি! বট থেকে প্যানেলটি ওপেন করুন।' });
+        // টেলিগ্রাম থেকে ইউজারের নাম নেওয়া
+        let user = tg.initDataUnsafe?.user;
+        if (user) {
+            document.getElementById('user-display').innerText = "Hello, " + user.first_name + " 👋";
         }
 
-        const propName = "order_history" + uId;
-        const orderData = BB.getProperty(propName); 
-
-        if(orderData) {
-            Swal.fire({ 
-                title: 'Order Details', 
-                html: `<div style="text-align:left; font-size:14px; background:#1e293b; padding:15px; border-radius:10px;">${orderData}</div>`, 
-                icon: 'success' 
-            });
-        } else {
-            Swal.fire({ 
-                icon: 'info', 
-                title: 'No Order', 
-                text: 'আপনার (ID: ' + uId + ') কোনো অর্ডারের তথ্য নেই।' 
+        function orderDiamond() {
+            tg.showConfirm("আপনি কি ডায়মন্ড কিনতে চান?", function(ok) {
+                if(ok) {
+                    tg.sendData("order_diamond");
+                    tg.close();
+                }
             });
         }
-    }
-
-    function sendReport() {
-        const issue = document.getElementById("userIssue").value;
-        if(!issue) return Swal.fire({ icon: 'warning', text: 'সমস্যা সিলেক্ট করুন!' });
-
-        BB.runCommand("/report " + issue); 
-        Swal.fire({ icon: 'success', text: 'রিপোর্ট পাঠানো হয়েছে!' });
-    }
-</script>
+    </script>
 </body>
 </html>
