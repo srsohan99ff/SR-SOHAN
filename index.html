@@ -114,7 +114,7 @@
 
     function sendAutoMsg() {
         const fullIssue = document.getElementById('selectedIssue').innerText;
-        if(fullIssue.includes('--')) return Swal.fire({ icon: 'info', text: 'Please select an issue!' });
+        if (fullIssue === "Select Problem") return Swal.fire({ icon: 'info', text: 'Please select an issue!' });
 
         const btn = document.getElementById("submitBtn");
         const botToken = "8769255178:AAFQ27UmVrDDMJ2dBHelTO5bwOH_j4Mvkbk"; 
