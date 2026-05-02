@@ -11,37 +11,18 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #050a18; color: white; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        
         .support-card { width: 95%; max-width: 400px; background: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 25px; border: 1px solid rgba(59, 130, 246, 0.3); backdrop-filter: blur(15px); box-shadow: 0 20px 40px rgba(0,0,0,0.6); text-align: center; }
-        
         h1 { font-family: 'Syncopate', sans-serif; font-size: 16px; margin-bottom: 25px; text-shadow: 0 0 15px rgba(59, 130, 246, 0.6); }
-        
         .form-group { text-align: left; margin-bottom: 15px; position: relative; }
         label { color: #94a3b8; font-size: 11px; display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
-        
-        .custom-select {
-            width: 100%; padding: 12px; border-radius: 10px; background: #0f172a; color: white; border: 1px solid #3b82f6; 
-            cursor: pointer; font-size: 15px; position: relative; display: flex; align-items: center; justify-content: space-between;
-            transition: 0.3s;
-        }
-        .custom-select:hover { border-color: #60a5fa; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
-
-        .options-list {
-            display: none; position: absolute; width: 100%; background: #161b2c; border: 1px solid #3b82f6; 
-            border-radius: 10px; z-index: 99; margin-top: 5px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-        }
+        .custom-select { width: 100%; padding: 12px; border-radius: 10px; background: #0f172a; color: white; border: 1px solid #3b82f6; cursor: pointer; font-size: 15px; position: relative; display: flex; align-items: center; justify-content: space-between; transition: 0.3s; }
+        .options-list { display: none; position: absolute; width: 100%; background: #161b2c; border: 1px solid #3b82f6; border-radius: 10px; z-index: 99; margin-top: 5px; overflow: hidden; }
         .option-item { padding: 12px; transition: 0.3s; cursor: pointer; border-bottom: 1px solid rgba(59, 130, 246, 0.1); color: #e2e8f0; }
         .option-item:hover { background: #1d4ed8; color: white; }
-
         input { width: 100%; padding: 12px; border-radius: 10px; background: #0f172a; color: white; border: 1px solid #3b82f6; outline: none; font-family: 'Rajdhani', sans-serif; font-size: 15px; transition: 0.3s; }
-        input:focus { border-color: #60a5fa; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
-        
         .dynamic-fields { display: none; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; animation: fadeIn 0.4s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        
-        .submit-btn { width: 100%; padding: 15px; border-radius: 12px; background: linear-gradient(45deg, #1d4ed8, #3b82f6); color: white; font-family: 'Syncopate', sans-serif; font-size: 11px; border: none; cursor: pointer; font-weight: bold; margin-top: 20px; transition: 0.4s; box-shadow: 0 5px 15px rgba(29, 78, 216, 0.4); }
-        .submit-btn:hover { transform: scale(1.02); }
-
+        .submit-btn { width: 100%; padding: 15px; border-radius: 12px; background: linear-gradient(45deg, #1d4ed8, #3b82f6); color: white; font-family: 'Syncopate', sans-serif; font-size: 11px; border: none; cursor: pointer; font-weight: bold; margin-top: 20px; transition: 0.4s; }
         .swal2-popup { background: #0f172a !important; color: white !important; border-radius: 20px !important; border: 1px solid #3b82f6 !important; font-family: 'Rajdhani', sans-serif !important; }
     </style>
 </head>
@@ -76,17 +57,17 @@
             </div>
         </div>
         <div class="form-group"><label>Transaction ID:</label><input type="text" id="trxId" placeholder="Enter TrxID"></div>
-        <div class="form-group"><label>Order ID:</label><input type="text" id="payOrderId" placeholder="Enter Order ID"></div>
-        <div class="form-group"><label>Your Chat ID:</label><input type="text" id="payChatId" placeholder="Enter Chat ID"></div>
+        <div class="form-group"><label>Order ID (DP...):</label><input type="text" id="payOrderId" placeholder="DP8601648982"></div>
+        <div class="form-group"><label>Your Chat ID:</label><input type="text" id="payChatId" placeholder="10 Digit Chat ID"></div>
     </div>
 
     <div id="orderFields" class="dynamic-fields">
-        <div class="form-group"><label>Order ID:</label><input type="text" id="orderId" placeholder="Enter Order ID"></div>
-        <div class="form-group"><label>Your Chat ID:</label><input type="text" id="orderChatId" placeholder="Enter Chat ID"></div>
+        <div class="form-group"><label>Order ID (WD...):</label><input type="text" id="orderId" placeholder="WD8601648982"></div>
+        <div class="form-group"><label>Your Chat ID:</label><input type="text" id="orderChatId" placeholder="10 Digit Chat ID"></div>
     </div>
 
     <div id="banFields" class="dynamic-fields">
-        <div class="form-group"><label>Your Chat ID:</label><input type="text" id="banChatId" placeholder="Enter Chat ID"></div>
+        <div class="form-group"><label>Your Chat ID:</label><input type="text" id="banChatId" placeholder="10 Digit Chat ID"></div>
     </div>
 
     <button class="submit-btn" id="submitBtn" onclick="sendAutoMsg()">SUBMIT REPORT ➔</button>
@@ -106,16 +87,9 @@
     function selectIssue(val) {
         document.getElementById('selectedIssue').innerText = val;
         document.getElementById('issueOptions').style.display = 'none';
-        
-        // সব ফিল্ড আগে হাইড করে নেওয়া
-        document.getElementById("paymentFields").style.display = "none";
-        document.getElementById("orderFields").style.display = "none";
-        document.getElementById("banFields").style.display = "none";
-
-        // সিলেক্ট করা অপশন অনুযায়ী ফিল্ড শো করা
-        if (val === 'Payment Problem') document.getElementById("paymentFields").style.display = "block";
-        if (val === 'Order Problem') document.getElementById("orderFields").style.display = "block";
-        if (val === 'Ban Problem') document.getElementById("banFields").style.display = "block";
+        document.getElementById("paymentFields").style.display = (val === 'Payment Problem') ? "block" : "none";
+        document.getElementById("orderFields").style.display = (val === 'Order Problem') ? "block" : "none";
+        document.getElementById("banFields").style.display = (val === 'Ban Problem') ? "block" : "none";
     }
 
     function selectMethod(val) {
@@ -127,6 +101,15 @@
         if (!event.target.closest('.custom-select')) {
             document.querySelectorAll('.options-list').forEach(list => list.style.display = 'none');
         }
+    }
+
+    function validateId(id, prefix, length) {
+        const regex = new RegExp(`^${prefix}\\d{${length}}$`);
+        return regex.test(id);
+    }
+
+    function validateChatId(id) {
+        return /^\d{10}$/.test(id);
     }
 
     function sendAutoMsg() {
@@ -145,16 +128,23 @@
             const trx = document.getElementById("trxId").value;
             const pOrderId = document.getElementById("payOrderId").value;
             userInputId = document.getElementById("payChatId").value;
-            if(!trx || !userInputId || !pOrderId) return Swal.fire({ icon: 'warning', text: 'Fill all info!' });
+
+            if(!validateId(pOrderId, "DP", 10)) return Swal.fire({ icon: 'error', title: 'Wrong Order ID', text: 'Order ID must start with DP and followed by 10 digits!' });
+            if(!validateChatId(userInputId)) return Swal.fire({ icon: 'error', title: 'Wrong Chat ID', text: 'Chat ID must be exactly 10 digits!' });
+            if(!trx) return Swal.fire({ icon: 'warning', text: 'Enter Transaction ID!' });
+            
             details = `<b>💳 Method:</b> ${method}\n<b>🔑 TrxID:</b> ${trx}\n<b>🛒 Order ID:</b> ${pOrderId}\n<b>💬 Chat ID:</b> ${userInputId}`;
         } else if (fullIssue === "Order Problem") {
             const oId = document.getElementById("orderId").value;
             userInputId = document.getElementById("orderChatId").value;
-            if(!oId || !userInputId) return Swal.fire({ icon: 'warning', text: 'Order ID & Chat ID required!' });
+
+            if(!validateId(oId, "WD", 10)) return Swal.fire({ icon: 'error', title: 'Wrong Order ID', text: 'Order ID must start with WD and followed by 10 digits!' });
+            if(!validateChatId(userInputId)) return Swal.fire({ icon: 'error', title: 'Wrong Chat ID', text: 'Chat ID must be exactly 10 digits!' });
+            
             details = `<b>🛒 Order ID:</b> ${oId}\n<b>💬 Chat ID:</b> ${userInputId}`;
         } else if (fullIssue === "Ban Problem") {
             userInputId = document.getElementById("banChatId").value;
-            if(!userInputId) return Swal.fire({ icon: 'warning', text: 'Please enter Chat ID!' });
+            if(!validateChatId(userInputId)) return Swal.fire({ icon: 'error', title: 'Wrong Chat ID', text: 'Chat ID must be exactly 10 digits!' });
             details = `<b>🚫 Issue:</b> Ban Problem\n<b>💬 Chat ID:</b> ${userInputId}`;
         }
 
@@ -172,9 +162,7 @@
         })
         .then(res => {
             if (res.ok) {
-                Swal.fire({ icon: 'success', title: 'Sent!', text: 'Reported to SR SOHAN.' }).then(() => {
-                    tg.close(); 
-                });
+                Swal.fire({ icon: 'success', title: 'Sent!', text: 'Reported to SR SOHAN.' }).then(() => tg.close());
             } else {
                 Swal.fire({ icon: 'error', title: 'Failed', text: 'Error sending message.' });
             }
