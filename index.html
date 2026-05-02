@@ -133,7 +133,7 @@
             if(!validateChatId(userInputId)) return Swal.fire({ icon: 'error', title: 'Wrong User ID', text: 'Please Enter Vaild User ID' });
             if(!trx) return Swal.fire({ icon: 'warning', text: 'Enter Transaction ID!' });
             
-            details = `<b>💳 Method:</b> ${method}\n<b>🔑 TrxID:</b> ${trx}\n<b>🛒 Order ID:</b> ${pOrderId}\n<b>💬 Chat ID:</b> ${userInputId}`;
+            details = `<b>Pement Method:</b> ${method}\n<b>Transaction ID:</b> ${trx}\n<b>Order ID:</b> <code>${pOrderId}</code>\n<b>User ID:</b> <code>${userInputId}</code>`;
         } else if (fullIssue === "Order Problem") {
             const oId = document.getElementById("orderId").value;
             userInputId = document.getElementById("orderChatId").value;
@@ -141,11 +141,11 @@
             if(!validateId(oId, "WD", 10)) return Swal.fire({ icon: 'error', title: 'Wrong Order ID', text: 'Please Enter Vaild Order ID' });
             if(!validateChatId(userInputId)) return Swal.fire({ icon: 'error', title: 'Wrong User ID', text: 'Please Enter Vaild User ID' });
             
-            details = `<b>🛒 Order ID:</b> ${oId}\n<b>💬 Chat ID:</b> ${userInputId}`;
+            details = `<b>Order ID:</b> <code>${oId}</code>\n<b>User ID:</b> <code>${userInputId}</code>`;
         } else if (fullIssue === "Ban Problem") {
             userInputId = document.getElementById("banChatId").value;
             if(!validateChatId(userInputId)) return Swal.fire({ icon: 'error', title: 'Wrong User ID', text: 'Please Enter Vaild User ID' });
-            details = `<b>🚫 Issue:</b> Ban Problem\n<b>💬 Chat ID:</b> ${userInputId}`;
+            details = `<b>User ID:</b> <code>${userInputId}</code>`;
         }
 
         btn.disabled = true; btn.innerText = "SENDING...";
@@ -155,9 +155,9 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 chat_id: chatId,
-                text: `<b>🔔 NEW SUPPORT TICKET</b>\n\n<b>📌 Issue:</b> ${fullIssue}\n${details}`,
+                text: `<b>🔔 New support request</b>\n\n<b>Type:</b> ${fullIssue}\n${details}`,
                 parse_mode: 'HTML',
-                reply_markup: { inline_keyboard: [[{ text: "Check ID: " + userInputId, callback_data: "/help " + userInputId }]] }
+                reply_markup: { inline_keyboard: [[{ text: "Check User: " + userInputId, callback_data: "/view_user " + userInputId }]] }
             })
         })
         .then(res => {
