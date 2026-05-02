@@ -19,7 +19,6 @@
         .form-group { text-align: left; margin-bottom: 15px; position: relative; }
         label { color: #94a3b8; font-size: 11px; display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
         
-        /* কাস্টম কালারফুল সিলেক্ট বক্স */
         .custom-select {
             width: 100%; padding: 12px; border-radius: 10px; background: #0f172a; color: white; border: 1px solid #3b82f6; 
             cursor: pointer; font-size: 15px; position: relative; display: flex; align-items: center; justify-content: space-between;
@@ -58,9 +57,9 @@
             <span style="font-size: 10px;">▼</span>
         </div>
         <div id="issueOptions" class="options-list">
-            <div class="option-item" onclick="selectIssue('Payment')">Payment Problem</div>
-            <div class="option-item" onclick="selectIssue('Order')">Order Problem</div>
-            <div class="option-item" onclick="selectIssue('Ban')">Ban Problem</div>
+            <div class="option-item" onclick="selectIssue('Payment Problem')">Payment Problem</div>
+            <div class="option-item" onclick="selectIssue('Order Problem')">Order Problem</div>
+            <div class="option-item" onclick="selectIssue('Ban Problem')">Ban Problem</div>
         </div>
     </div>
 
@@ -107,9 +106,16 @@
     function selectIssue(val) {
         document.getElementById('selectedIssue').innerText = val;
         document.getElementById('issueOptions').style.display = 'none';
-        document.getElementById("paymentFields").style.display = (val === "Payment") ? "block" : "none";
-        document.getElementById("orderFields").style.display = (val === "Order") ? "block" : "none";
-        document.getElementById("banFields").style.display = (val === "Ban") ? "block" : "none";
+        
+        // সব ফিল্ড আগে হাইড করে নেওয়া
+        document.getElementById("paymentFields").style.display = "none";
+        document.getElementById("orderFields").style.display = "none";
+        document.getElementById("banFields").style.display = "none";
+
+        // সিলেক্ট করা অপশন অনুযায়ী ফিল্ড শো করা
+        if (val === 'Payment Problem') document.getElementById("paymentFields").style.display = "block";
+        if (val === 'Order Problem') document.getElementById("orderFields").style.display = "block";
+        if (val === 'Ban Problem') document.getElementById("banFields").style.display = "block";
     }
 
     function selectMethod(val) {
@@ -124,8 +130,8 @@
     }
 
     function sendAutoMsg() {
-        const issue = document.getElementById('selectedIssue').innerText;
-        if(issue.includes('--')) return Swal.fire({ icon: 'info', text: 'Please select an issue!' });
+        const fullIssue = document.getElementById('selectedIssue').innerText;
+        if(fullIssue.includes('--')) return Swal.fire({ icon: 'info', text: 'Please select an issue!' });
 
         const btn = document.getElementById("submitBtn");
         const botToken = "8769255178:AAFQ27UmVrDDMJ2dBHelTO5bwOH_j4Mvkbk"; 
@@ -134,19 +140,19 @@
         let details = "";
         let userInputId = ""; 
 
-        if (issue === "Payment") {
+        if (fullIssue === "Payment Problem") {
             const method = document.getElementById('selectedMethod').innerText;
             const trx = document.getElementById("trxId").value;
             const pOrderId = document.getElementById("payOrderId").value;
             userInputId = document.getElementById("payChatId").value;
             if(!trx || !userInputId || !pOrderId) return Swal.fire({ icon: 'warning', text: 'Fill all info!' });
             details = `<b>💳 Method:</b> ${method}\n<b>🔑 TrxID:</b> ${trx}\n<b>🛒 Order ID:</b> ${pOrderId}\n<b>💬 Chat ID:</b> ${userInputId}`;
-        } else if (issue === "Order") {
+        } else if (fullIssue === "Order Problem") {
             const oId = document.getElementById("orderId").value;
             userInputId = document.getElementById("orderChatId").value;
             if(!oId || !userInputId) return Swal.fire({ icon: 'warning', text: 'Order ID & Chat ID required!' });
             details = `<b>🛒 Order ID:</b> ${oId}\n<b>💬 Chat ID:</b> ${userInputId}`;
-        } else if (issue === "Ban") {
+        } else if (fullIssue === "Ban Problem") {
             userInputId = document.getElementById("banChatId").value;
             if(!userInputId) return Swal.fire({ icon: 'warning', text: 'Please enter Chat ID!' });
             details = `<b>🚫 Issue:</b> Ban Problem\n<b>💬 Chat ID:</b> ${userInputId}`;
@@ -159,7 +165,7 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 chat_id: chatId,
-                text: `<b>🔔 NEW SUPPORT TICKET</b>\n\n<b>📌 Issue:</b> ${issue} Problem\n${details}`,
+                text: `<b>🔔 NEW SUPPORT TICKET</b>\n\n<b>📌 Issue:</b> ${fullIssue}\n${details}`,
                 parse_mode: 'HTML',
                 reply_markup: { inline_keyboard: [[{ text: "Check ID: " + userInputId, callback_data: "/help " + userInputId }]] }
             })
@@ -167,7 +173,7 @@
         .then(res => {
             if (res.ok) {
                 Swal.fire({ icon: 'success', title: 'Sent!', text: 'Reported to SR SOHAN.' }).then(() => {
-                    tg.close(); // সাকসেস হওয়ার পর ওয়েব অ্যাপটি অটোমেটিক বন্ধ হয়ে যাবে
+                    tg.close(); 
                 });
             } else {
                 Swal.fire({ icon: 'error', title: 'Failed', text: 'Error sending message.' });
