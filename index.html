@@ -29,12 +29,12 @@
 <body>
 
 <div class="support-card">
-    <h1>ᏚR SOHAN PANEL</h1>
+    <h1>NRX TOP UP SUPPORT</h1>
 
     <div class="form-group">
-        <label>Select Issue:</label>
+        <label>Select Your Problem:</label>
         <div class="custom-select" onclick="toggleOptions('issueOptions')">
-            <span id="selectedIssue">-- Choose Issue --</span>
+            <span id="selectedIssue">Select Problem</span>
             <span style="font-size: 10px;">▼</span>
         </div>
         <div id="issueOptions" class="options-list">
@@ -157,7 +157,7 @@
                 chat_id: chatId,
                 text: `<b>🔔 New support request</b>\n\n<b>Type:</b> ${fullIssue}\n${details}`,
                 parse_mode: 'HTML',
-                reply_markup: { inline_keyboard: [[{ text: "Check User: " + userInputId, callback_data: "/view_user " + userInputId }]] }
+                reply_markup: { inline_keyboard: [[{ text: "🔍 Check User", callback_data: "/usercheck " + userInputId }]] }
             })
         })
         .then(res => {
