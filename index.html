@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SR SOHAN - Smart Panel</title>
+    <title>SR SOHAN - Auto ID Panel</title>
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
@@ -18,7 +18,6 @@
         .submit-btn { width: 100%; padding: 15px; border-radius: 12px; color: white; font-family: 'Syncopate', sans-serif; font-size: 11px; border: none; cursor: pointer; font-weight: bold; margin-top: 10px; transition: 0.4s; }
         .report-btn { background: linear-gradient(45deg, #1d4ed8, #3b82f6); }
         .order-btn { background: linear-gradient(45deg, #10b981, #059669); }
-        .swal2-popup { background: #0f172a !important; color: white !important; border: 1px solid #3b82f6 !important; }
     </style>
 </head>
 <body>
@@ -27,12 +26,7 @@
     <h1>ᏚR SOHAN PANEL</h1>
 
     <div class="form-group">
-        <label>Your Chat ID:</label>
-        <input type="text" id="userChatId" placeholder="Enter Chat ID first">
-    </div>
-
-    <div class="form-group">
-        <label>Select Issue (Optional for Order check):</label>
+        <label>Select Issue:</label>
         <select id="userIssue" onchange="updateFields()">
             <option value="">-- Choose Issue --</option>
             <option value="Payment">Payment Problem</option>
@@ -55,6 +49,9 @@
 </div>
 
 <script>
+    // বট বিজনেস থেকে ইউজারের চ্যাট আইডি অটোমেটিক নেওয়ার নিয়ম
+    const autoChatId = BB.chat_id; 
+
     function updateFields() {
         const issue = document.getElementById("userIssue").value;
         document.getElementById("paymentFields").style.display = (issue === "Payment") ? "block" : "none";
@@ -62,36 +59,31 @@
     }
 
     function checkMyOrder() {
-        const id = document.getElementById("userChatId").value;
-        if(!id) return Swal.fire({ icon: 'warning', text: 'অর্ডার দেখতে আগে Chat ID দিন!' });
+        if(!autoChatId) return Swal.fire({ icon: 'error', text: 'Chat ID পাওয়া যায়নি! বট থেকে ট্রাই করুন।' });
 
-        // প্রপার্টি গেট করার নিখুঁত লজিক: order_history + ইউজার আইডি
-        const propName = "order_history" + id;
-        let orderData = BB.getProperty(propName); 
+        const propName = "order_history" + autoChatId;
+        const orderData = BB.getProperty(propName); 
 
         if(orderData) {
             Swal.fire({ 
                 title: 'Order History', 
-                html: `<div style="text-align:left; font-size:14px; color: #fff;">${orderData}</div>`, 
+                html: `<div style="text-align:left; font-size:14px; background:#1e293b; padding:15px; border-radius:10px;">${orderData}</div>`, 
                 icon: 'success' 
             });
         } else {
-            Swal.fire({ 
-                icon: 'error', 
-                title: 'Not Found', 
-                text: 'এই আইডিতে কোনো তথ্য পাওয়া যায়নি। (প্রপার্টি: ' + propName + ')' 
-            });
+            Swal.fire({ icon: 'error', title: 'Not Found', text: 'আপনার কোনো অর্ডারের তথ্য নেই।' });
         }
     }
 
     function sendReport() {
         const issue = document.getElementById("userIssue").value;
-        const id = document.getElementById("userChatId").value;
-        if(!issue || !id) return Swal.fire({ icon: 'warning', text: 'সমস্যা এবং Chat ID—দুটোই দিন!' });
+        if(!issue) return Swal.fire({ icon: 'warning', text: 'সমস্যা সিলেক্ট করুন!' });
 
-        BB.runCommand("/report " + issue + " " + id); 
+        // অটো আইডি সহ বটের কমান্ড রান হবে
+        BB.runCommand("/report " + issue); 
         Swal.fire({ icon: 'success', text: 'রিপোর্ট পাঠানো হয়েছে!' });
     }
 </script>
 </body>
 </html>
+
