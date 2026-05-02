@@ -12,32 +12,31 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #050a18; color: white; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
         
-        /* লোগোর জন্য নতুন স্টাইল */
-        .logo-container {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        .brand-logo {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            border: 3px solid #3b82f6;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
-            object-fit: cover;
-            background: #050a18;
-        }
+        .logo-container { width: 100%; display: flex; justify-content: center; margin-bottom: 20px; }
+        .brand-logo { width: 90px; height: 90px; border-radius: 50%; border: 3px solid #3b82f6; box-shadow: 0 0 20px rgba(59, 130, 246, 0.6); object-fit: cover; background: #050a18; }
 
         .support-card { width: 95%; max-width: 400px; background: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 25px; border: 1px solid rgba(59, 130, 246, 0.3); backdrop-filter: blur(15px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5); text-align: center; }
-        h1 { font-family: 'Syncopate', sans-serif; font-size: 1.2rem; color: #3b82f6; margin-bottom: 25px; letter-spacing: 2px; text-transform: uppercase; }
+        h1 { font-family: 'Syncopate', sans-serif; font-size: 1.1rem; color: #3b82f6; margin-bottom: 25px; letter-spacing: 2px; text-transform: uppercase; }
+        
         .input-group { text-align: left; margin-bottom: 20px; position: relative; }
-        label { display: block; font-size: 0.9rem; color: #94a3b8; margin-bottom: 8px; font-weight: 700; text-transform: uppercase; }
-        select, input { width: 100%; background: rgba(15, 23, 42, 0.8); border: 1px solid #1e293b; border-radius: 12px; padding: 12px 15px; color: white; font-size: 1rem; outline: none; transition: 0.3s; }
-        select:focus, input:focus { border-color: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
-        .btn-send { width: 100%; background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; padding: 15px; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: 0.4s; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3); }
+        label { display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 8px; font-weight: 700; text-transform: uppercase; }
+
+        /* স্টাইলিশ কাস্টম ড্রপডাউন */
+        .custom-select-wrapper { position: relative; user-select: none; }
+        .custom-select-trigger { background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 12px 15px; color: white; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: 0.3s; }
+        .custom-select-trigger:after { content: '▼'; font-size: 10px; color: #3b82f6; transition: 0.3s; }
+        .custom-options { position: absolute; top: 110%; left: 0; right: 0; background: #0f172a; border: 1px solid #3b82f6; border-radius: 12px; display: none; z-index: 100; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .custom-option { padding: 12px 15px; color: #e2e8f0; cursor: pointer; transition: 0.3s; border-bottom: 1px solid rgba(59, 130, 246, 0.1); }
+        .custom-option:hover { background: #3b82f6; color: white; }
+        .custom-option.selected { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+        .open .custom-options { display: block; }
+        .open .custom-select-trigger:after { transform: rotate(180deg); }
+
+        input { width: 100%; background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 12px 15px; color: white; font-size: 1rem; outline: none; transition: 0.3s; font-family: 'Rajdhani', sans-serif; }
+        input:focus { border-color: #3b82f6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
+
+        .btn-send { width: 100%; background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; padding: 15px; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: 0.4s; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3); margin-top: 10px; }
         .btn-send:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(37, 99, 235, 0.5); }
-        .btn-send:disabled { background: #475569; cursor: not-allowed; transform: none; }
     </style>
 </head>
 <body>
@@ -51,15 +50,27 @@
 
         <div class="input-group">
             <label>Select Issue Type</label>
-            <select id="issueType" onchange="toggleInputs()">
-                <option value="none">Choose issue...</option>
-                <option value="Deposit Problem">Deposit Problem</option>
-                <option value="Order Problem">Order Problem</option>
-                <option value="Ban Problem">Ban Problem</option>
-            </select>
+            <div class="custom-select-wrapper" id="issueWrapper">
+                <div class="custom-select-trigger" onclick="toggleDropdown('issueWrapper')">Choose issue...</div>
+                <div class="custom-options">
+                    <div class="custom-option" onclick="selectItem('issueWrapper', 'Deposit Problem')">Deposit Problem</div>
+                    <div class="custom-option" onclick="selectItem('issueWrapper', 'Order Problem')">Order Problem</div>
+                    <div class="custom-option" onclick="selectItem('issueWrapper', 'Ban Problem')">Ban Problem</div>
+                </div>
+            </div>
         </div>
 
         <div id="depositFields" style="display: none;">
+            <div class="input-group">
+                <label>Payment Method</label>
+                <div class="custom-select-wrapper" id="methodWrapper">
+                    <div class="custom-select-trigger" onclick="toggleDropdown('methodWrapper')">Select Method</div>
+                    <div class="custom-options">
+                        <div class="custom-option" onclick="selectItem('methodWrapper', 'Bkash')">Bkash</div>
+                        <div class="custom-option" onclick="selectItem('methodWrapper', 'Nagad')">Nagad</div>
+                    </div>
+                </div>
+            </div>
             <div class="input-group">
                 <label>Deposit Order ID</label>
                 <input type="text" id="depOrderId" placeholder="Ex: DP1234567890">
@@ -91,61 +102,73 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        function toggleInputs() {
-            const type = document.getElementById("issueType").value;
-            document.getElementById("depositFields").style.display = type === "Deposit Problem" ? "block" : "none";
-            document.getElementById("orderFields").style.display = type === "Order Problem" ? "block" : "none";
-            document.getElementById("banFields").style.display = type === "Ban Problem" ? "block" : "none";
+        function toggleDropdown(id) {
+            document.getElementById(id).classList.toggle('open');
         }
 
-        function validateChatId(id) {
-            return /^\d{5,15}$/.test(id);
+        function selectItem(wrapperId, value) {
+            const wrapper = document.getElementById(wrapperId);
+            wrapper.querySelector('.custom-select-trigger').innerText = value;
+            wrapper.classList.remove('open');
+
+            if(wrapperId === 'issueWrapper') {
+                document.getElementById("depositFields").style.display = value === "Deposit Problem" ? "block" : "none";
+                document.getElementById("orderFields").style.display = value === "Order Problem" ? "block" : "none";
+                document.getElementById("banFields").style.display = value === "Ban Problem" ? "block" : "none";
+            }
+        }
+
+        window.onclick = function(e) {
+            if (!e.target.closest('.custom-select-wrapper')) {
+                document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open'));
+            }
         }
 
         function sendToTelegram() {
-            const botToken = "7578768078:AAH1yM6w70pYlT9LwI6hX-kQ_M6I2U6Q-M"; // Your Bot Token
-            const chatId = "6737871508"; // Your Admin ID
-            const fullIssue = document.getElementById(\"issueType\").value;
-            const btn = document.getElementById(\"sendBtn\");
+            const botToken = "7578768078:AAH1yM6w70pYlT9LwI6hX-kQ_M6I2U6Q-M";
+            const chatId = "6737871508";
+            const issue = document.querySelector('#issueWrapper .custom-select-trigger').innerText;
+            const btn = document.getElementById("sendBtn");
 
-            if (fullIssue === \"none\") return Swal.fire({ icon: 'warning', title: 'Wait!', text: 'Please select an issue type' });
+            if (issue === "Choose issue...") return Swal.fire({ icon: 'warning', text: 'Please select an issue type' });
 
-            let details = \"\";
-            let userInputId = \"\";
+            let details = "";
+            let userInputId = "";
 
-            if (fullIssue === \"Deposit Problem\") {
-                const oId = document.getElementById(\"depOrderId\").value;
-                if (!oId) return Swal.fire({ icon: 'error', title: 'Empty!', text: 'Please Enter Order ID' });
-                details = `<b>Order ID:</b> <code>${oId}</code>`;
-            } else if (fullIssue === \"Order Problem\") {
-                const oId = document.getElementById(\"orderId\").value;
-                userInputId = document.getElementById(\"orderChatId\").value;
-                if (!oId || !validateChatId(userInputId)) return Swal.fire({ icon: 'error', title: 'Wrong Data', text: 'Please check ID formats' });
-                details = `<b>Order ID:</b> <code>${oId}</code>\\n<b>User ID:</b> <code>${userInputId}</code>`;
-            } else if (fullIssue === \"Ban Problem\") {
-                userInputId = document.getElementById(\"banChatId\").value;
-                if(!validateChatId(userInputId)) return Swal.fire({ icon: 'error', title: 'Wrong User ID', text: 'Please Enter Vaild User ID' });
+            if (issue === "Deposit Problem") {
+                const method = document.querySelector('#methodWrapper .custom-select-trigger').innerText;
+                const oId = document.getElementById("depOrderId").value;
+                if (method === "Select Method" || !oId) return Swal.fire({ icon: 'error', text: 'Fill all deposit details!' });
+                details = `<b>Method:</b> ${method}\n<b>Order ID:</b> <code>${oId}</code>`;
+            } else if (issue === "Order Problem") {
+                const oId = document.getElementById("orderId").value;
+                userInputId = document.getElementById("orderChatId").value;
+                if (!oId || !userInputId) return Swal.fire({ icon: 'error', text: 'Fill all order details!' });
+                details = `<b>Order ID:</b> <code>${oId}</code>\n<b>User ID:</b> <code>${userInputId}</code>`;
+            } else if (issue === "Ban Problem") {
+                userInputId = document.getElementById("banChatId").value;
+                if(!userInputId) return Swal.fire({ icon: 'error', text: 'Enter User ID!' });
                 details = `<b>User ID:</b> <code>${userInputId}</code>`;
             }
 
-            btn.disabled = true; btn.innerText = \"SENDING...\";
+            btn.disabled = true; btn.innerText = "SENDING...";
 
             fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     chat_id: chatId,
-                    text: `<b>🔔 New support request</b>\\n\\n<b>Type:</b> ${fullIssue}\\n${details}`,
+                    text: `<b>🔔 New support request</b>\n\n<b>Type:</b> ${issue}\n${details}`,
                     parse_mode: 'HTML',
-                    reply_markup: { inline_keyboard: [[{ text: \"🔍 Check User\", callback_data: \"/usercheck \" + (userInputId || \"\") }]] }
+                    reply_markup: { inline_keyboard: [[{ text: "🔍 Check User", callback_data: "/usercheck " + (userInputId || "") }]] }
                 })
             })
             .then(res => {
                 if (res.ok) {
                     Swal.fire({ icon: 'success', title: 'Sent!', text: 'Request Send Successfully!' }).then(() => tg.close());
                 } else {
-                    Swal.fire({ icon: 'error', title: 'Failed', text: 'Error sending message.' });
-                    btn.disabled = false; btn.innerText = \"SEND REQUEST\";
+                    Swal.fire({ icon: 'error', text: 'Error sending message.' });
+                    btn.disabled = false; btn.innerText = "SEND REQUEST";
                 }
             });
         }
