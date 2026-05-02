@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SR SOHAN - Smart Support Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: #050a18; color: white; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .support-card { width: 95%; max-width: 400px; background: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 25px; border: 1px solid rgba(59, 130, 246, 0.3); backdrop-filter: blur(15px); box-shadow: 0 20px 40px rgba(0,0,0,0.6); text-align: center; }
+        h1 { font-family: 'Syncopate', sans-serif; font-size: 16px; margin-bottom: 25px; text-shadow: 0 0 15px rgba(59, 130, 246, 0.6); }
+        .form-group { text-align: left; margin-bottom: 15px; position: relative; }
+        label { color: #94a3b8; font-size: 11px; display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        .custom-select { width: 100%; padding: 12px; border-radius: 10px; background: #0f172a; color: white; border: 1px solid #3b82f6; cursor: pointer; font-size: 15px; position: relative; display: flex; align-items: center; justify-content: space-between; transition: 0.3s; }
+        .options-list { display: none; position: absolute; width: 100%; background: #161b2c; border: 1px solid #3b82f6; border-radius: 10px; z-index: 99; margin-top: 5px; overflow: hidden; }
+        .option-item { padding: 12px; transition: 0.3s; cursor: pointer; border-bottom: 1px solid rgba(59, 130, 246, 0.1); color: #e2e8f0; }
+        .option-item:hover { background: #1d4ed8; color: white; }
+        input { width: 100%; padding: 12px; border-radius: 10px; background: #0f172a; color: white; border: 1px solid #3b82f6; outline: none; font-family: 'Rajdhani', sans-serif; font-size: 15px; transition: 0.3s; }
+        .dynamic-fields { display: none; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; animation: fadeIn 0.4s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .submit-btn { width: 100%; padding: 15px; border-radius: 12px; background: linear-gradient(45deg, #1d4ed8, #3b82f6); color: white; font-family: 'Syncopate', sans-serif; font-size: 11px; border: none; cursor: pointer; font-weight: bold; margin-top: 20px; transition: 0.4s; }
+        .swal2-popup { background: #0f172a !important; color: white !important; border-radius: 20px !important; border: 1px solid #3b82f6 !important; font-family: 'Rajdhani', sans-serif !important; }
+    </style>
+</head>
+<body>
+
+<div class="support-card">
+    <h1>NRX TOP UP SUPPORT</h1>
+
+    <div class="form-group">
+        <label>Select Your Problem:</label>
+        <div class="custom-select" onclick="toggleOptions('issueOptions')">
+            <span id="selectedIssue">Select Problem</span>
+            <span style="font-size: 10px;">▼</span>
+        </div>
+        <div id="issueOptions" class="options-list">
+            <div class="option-item" onclick="selectIssue('Payment Problem')">Payment Problem</div>
+            <div class="option-item" onclick="selectIssue('Order Problem')">Order Problem</div>
+            <div class="option-item" onclick="selectIssue('Ban Problem')">Ban Problem</div>
+        </div>
+    </div>
+
+    <div id="paymentFields" class="dynamic-fields">
+        <div class="form-group">
+            <label>Payment Method:</label>
+            <div class="custom-select" onclick="toggleOptions('methodOptions')">
+                <span id="selectedMethod">Bkash</span>
+                <span style="font-size: 10px;">▼</span>
+            </div>
+            <div id="methodOptions" class="options-list">
+                <div class="option-item" onclick="selectMethod('Bkash')">Bkash</div>
+                <div class="option-item" onclick="selectMethod('Nagad')">Nagad</div>
+            </div>
+        </div>
+        <div class="form-group"><label>Transaction ID:</label><input type="text" id="trxId" placeholder="Enter TrxID"></div>
+        <div class="form-group"><label>Order ID:</label><input type="text" id="payOrderId" placeholder="Enter Order ID"></div>
+        <div class="form-group"><label>Your User ID:</label><input type="text" id="payChatId" placeholder="Enter User ID"></div>
+    </div>
+
+    <div id="orderFields" class="dynamic-fields">
+        <div class="form-group"><label>Order ID:</label><input type="text" id="orderId" placeholder="Enter Order ID"></div>
+        <div class="form-group"><label>Your User ID:</label><input type="text" id="orderChatId" placeholder="Enter User ID"></div>
+    </div>
+
+    <div id="banFields" class="dynamic-fields">
+        <div class="form-group"><label>Your User ID:</label><input type="text" id="banChatId" placeholder="Enter User ID"></div>
+    </div>
+
+    <button class="submit-btn" id="submitBtn" onclick="sendAutoMsg()">SUBMIT REPORT ➔</button>
+</div>
+
+<script>
+    let tg = window.Telegram.WebApp;
+    tg.expand();
+
+    function toggleOptions(id) {
+        const list = document.getElementById(id);
+        const allLists = document.querySelectorAll('.options-list');
+        allLists.forEach(l => { if(l.id !== id) l.style.display = 'none'; });
+        list.style.display = (list.style.display === 'block') ? 'none' : 'block';
+    }
+
+    function selectIssue(val) {
+        document.getElementById('selectedIssue').innerText = val;
+        document.getElementById('issueOptions').style.display = 'none';
+        document.getElementById("paymentFields").style.display = (val === 'Payment Problem') ? "block" : "none";
+        document.getElementById("orderFields").style.display = (val === 'Order Problem') ? "block" : "none";
+        document.getElementById("banFields").style.display = (val === 'Ban Problem') ? "block" : "none";
+    }
+
+    function selectMethod(val) {
+        document.getElementById('selectedMethod').innerText = val;
+        document.getElementById('methodOptions').style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        if (!event.target.closest('.custom-select')) {
+            document.querySelectorAll('.options-list').forEach(list => list.style.display = 'none');
+        }
+    }
+
+    function validateId(id, prefix, length) {
+        const regex = new RegExp(`^${prefix}\\d{${length}}$`);
+        return regex.test(id);
+    }
+
+    function validateChatId(id) {
+        return /^\d{10}$/.test(id);
+    }
+
+    function sendAutoMsg() {
+        const fullIssue = document.getElementById('selectedIssue').innerText;
+        if(fullIssue.includes('--')) return Swal.fire({ icon: 'info', text: 'Please select an issue!' });
+
+        const btn = document.getElementById("submitBtn");
+        const botToken = "8769255178:AAFQ27UmVrDDMJ2dBHelTO5bwOH_j4Mvkbk"; 
+        const chatId = "6737871508"; 
+
+        let details = "";
+        let userInputId = ""; 
+
+        if (fullIssue === "Payment Problem") {
+            const method = document.getElementById('selectedMethod').innerText;
+            const trx = document.getElementById("trxId").value;
+            const pOrderId = document.getElementById("payOrderId").value;
+            userInputId = document.getElementById("payChatId").value;
+
+            if(!validateId(pOrderId, "DP", 10)) return Swal.fire({ icon: 'error', title: 'Wrong Order ID', text: 'Please Enter Vaild Order ID' });
+            if(!validateChatId(userInputId)) return Swal.fire({ icon: 'error', title: 'Wrong User ID', text: 'Please Enter Vaild User ID' });
+            if(!trx) return Swal.fire({ icon: 'warning', text: 'Enter Transaction ID!' });
+            
+            details = `<b>Pement Method:</b> ${method}\n<b>Transaction ID:</b> ${trx}\n<b>Order ID:</b> <code>${pOrderId}</code>\n<b>User ID:</b> <code>${userInputId}</code>`;
+        } else if (fullIssue === "Order Problem") {
+            const oId = document.getElementById("orderId").value;
+            userInputId = document.getElementById("orderChatId").value;
+
+            if(!validateId(oId, "WD", 10)) return Swal.fire({ icon: 'error', title: 'Wrong Order ID', text: 'Please Enter Vaild Order ID' });
+            if(!validateChatId(userInputId)) return Swal.fire({ icon: 'error', title: 'Wrong User ID', text: 'Please Enter Vaild User ID' });
+            
+            details = `<b>Order ID:</b> <code>${oId}</code>\n<b>User ID:</b> <code>${userInputId}</code>`;
+        } else if (fullIssue === "Ban Problem") {
+            userInputId = document.getElementById("banChatId").value;
+            if(!validateChatId(userInputId)) return Swal.fire({ icon: 'error', title: 'Wrong User ID', text: 'Please Enter Vaild User ID' });
+            details = `<b>User ID:</b> <code>${userInputId}</code>`;
+        }
+
+        btn.disabled = true; btn.innerText = "SENDING...";
+
+        fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: chatId,
+                text: `<b>🔔 New support request</b>\n\n<b>Type:</b> ${fullIssue}\n${details}`,
+                parse_mode: 'HTML',
+                reply_markup: { inline_keyboard: [[{ text: "🔍 Check User", callback_data: "/usercheck " + userInputId }]] }
+            })
+        })
+        .then(res => {
+            if (res.ok) {
+                Swal.fire({ icon: 'success', title: 'Sent!', text: 'Request Send Successfully!' }).then(() => tg.close());
+            } else {
+                Swal.fire({ icon: 'error', title: 'Failed', text: 'Error sending message.' });
+            }
+        })
+        .finally(() => {
+            btn.disabled = false; btn.innerText = "SUBMIT REPORT ➔";
+        });
+    }
+</script>
+</body>
+</html>
