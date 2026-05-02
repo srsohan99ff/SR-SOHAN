@@ -11,6 +11,25 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #050a18; color: white; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        
+        /* লোগোর জন্য নতুন স্টাইল শুরু */
+        .logo-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .brand-logo {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 3px solid #3b82f6;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
+            object-fit: cover;
+            background: #050a18;
+        }
+        /* লোগোর জন্য নতুন স্টাইল শেষ */
+
         .support-card { width: 95%; max-width: 400px; background: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 25px; border: 1px solid rgba(59, 130, 246, 0.3); backdrop-filter: blur(15px); box-shadow: 0 20px 40px rgba(0,0,0,0.6); text-align: center; }
         h1 { font-family: 'Syncopate', sans-serif; font-size: 16px; margin-bottom: 25px; text-shadow: 0 0 15px rgba(59, 130, 246, 0.6); }
         .form-group { text-align: left; margin-bottom: 15px; position: relative; }
@@ -29,6 +48,10 @@
 <body>
 
 <div class="support-card">
+    
+    <div class="logo-container">
+        <img src="https://i.ibb.co.com/7JgstZMV/logo.png" alt="Logo" class="brand-logo">
+    </div>
     <h1>NRX TOP UP SUPPORT</h1>
 
     <div class="form-group">
