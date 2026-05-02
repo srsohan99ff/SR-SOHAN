@@ -129,8 +129,8 @@
             const pOrderId = document.getElementById("payOrderId").value;
             userInputId = document.getElementById("payChatId").value;
 
-            if(!validateId(pOrderId, "DP", 10)) return Swal.fire({ icon: 'error', title: 'Wrong Order ID', text: 'Order ID must start with DP and followed by 10 digits!' });
-            if(!validateChatId(userInputId)) return Swal.fire({ icon: 'error', title: 'Wrong Chat ID', text: 'Chat ID must be exactly 10 digits!' });
+            if(!validateId(pOrderId, "DP", 10)) return Swal.fire({ icon: 'error', title: 'Wrong Order ID', text: 'Please Enter Vaild Order ID' });
+            if(!validateChatId(userInputId)) return Swal.fire({ icon: 'error', title: 'Wrong User ID', text: 'Please Enter Vaild User ID' });
             if(!trx) return Swal.fire({ icon: 'warning', text: 'Enter Transaction ID!' });
             
             details = `<b>💳 Method:</b> ${method}\n<b>🔑 TrxID:</b> ${trx}\n<b>🛒 Order ID:</b> ${pOrderId}\n<b>💬 Chat ID:</b> ${userInputId}`;
@@ -138,13 +138,13 @@
             const oId = document.getElementById("orderId").value;
             userInputId = document.getElementById("orderChatId").value;
 
-            if(!validateId(oId, "WD", 10)) return Swal.fire({ icon: 'error', title: 'Wrong Order ID', text: 'Order ID must start with WD and followed by 10 digits!' });
-            if(!validateChatId(userInputId)) return Swal.fire({ icon: 'error', title: 'Wrong Chat ID', text: 'Chat ID must be exactly 10 digits!' });
+            if(!validateId(oId, "WD", 10)) return Swal.fire({ icon: 'error', title: 'Wrong Order ID', text: 'Please Enter Vaild Order ID' });
+            if(!validateChatId(userInputId)) return Swal.fire({ icon: 'error', title: 'Wrong User ID', text: 'Please Enter Vaild User ID' });
             
             details = `<b>🛒 Order ID:</b> ${oId}\n<b>💬 Chat ID:</b> ${userInputId}`;
         } else if (fullIssue === "Ban Problem") {
             userInputId = document.getElementById("banChatId").value;
-            if(!validateChatId(userInputId)) return Swal.fire({ icon: 'error', title: 'Wrong Chat ID', text: 'Chat ID must be exactly 10 digits!' });
+            if(!validateChatId(userInputId)) return Swal.fire({ icon: 'error', title: 'Wrong User ID', text: 'Please Enter Vaild User ID' });
             details = `<b>🚫 Issue:</b> Ban Problem\n<b>💬 Chat ID:</b> ${userInputId}`;
         }
 
@@ -162,7 +162,7 @@
         })
         .then(res => {
             if (res.ok) {
-                Swal.fire({ icon: 'success', title: 'Sent!', text: 'Reported to SR SOHAN.' }).then(() => tg.close());
+                Swal.fire({ icon: 'success', title: 'Sent!', text: 'Request Send Successfully!' }).then(() => tg.close());
             } else {
                 Swal.fire({ icon: 'error', title: 'Failed', text: 'Error sending message.' });
             }
