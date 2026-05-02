@@ -6,47 +6,44 @@
     <title>SR SOHAN - Smart Support Panel</title>
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #050a18; color: white; font-family: 'Rajdhani', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .support-card { width: 95%; max-width: 400px; background: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 25px; border: 1px solid rgba(59, 130, 246, 0.3); backdrop-filter: blur(15px); box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
-        h1 { font-family: 'Syncopate', sans-serif; font-size: 16px; margin-bottom: 25px; text-shadow: 0 0 15px rgba(59, 130, 246, 0.6); text-align: center; }
-        .form-group { text-align: left; margin-bottom: 15px; }
+        
+        .support-card { width: 95%; max-width: 400px; background: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 25px; border: 1px solid rgba(59, 130, 246, 0.3); backdrop-filter: blur(15px); box-shadow: 0 20px 40px rgba(0,0,0,0.6); text-align: center; }
+        
+        h1 { font-family: 'Syncopate', sans-serif; font-size: 16px; margin-bottom: 25px; text-shadow: 0 0 15px rgba(59, 130, 246, 0.6); }
+        
+        .form-group { text-align: left; margin-bottom: 15px; position: relative; }
         label { color: #94a3b8; font-size: 11px; display: block; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
         
-        /* ইনপুট এবং সিলেক্ট বক্সের স্টাইল (সাদা হবে না, থিমের সাথে মিলবে) */
-        select, input { 
-            width: 100%; 
-            padding: 12px; 
-            border-radius: 10px; 
-            background: #0f172a; /* ডার্ক ব্যাকগ্রাউন্ড */
-            color: white; 
-            border: 1px solid #3b82f6; 
-            outline: none; 
-            font-family: 'Rajdhani', sans-serif; 
-            font-size: 15px;
+        /* কাস্টম কালারফুল সিলেক্ট বক্স */
+        .custom-select {
+            width: 100%; padding: 12px; border-radius: 10px; background: #0f172a; color: white; border: 1px solid #3b82f6; 
+            cursor: pointer; font-size: 15px; position: relative; display: flex; align-items: center; justify-content: space-between;
             transition: 0.3s;
         }
-        
-        /* সিলেক্ট অপশনের ভেতরের লেখার কালার ঠিক করা */
-        select option {
-            background: #0f172a;
-            color: white;
-        }
+        .custom-select:hover { border-color: #60a5fa; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
 
-        select:focus, input:focus { 
-            border-color: #60a5fa; 
-            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); 
+        .options-list {
+            display: none; position: absolute; width: 100%; background: #161b2c; border: 1px solid #3b82f6; 
+            border-radius: 10px; z-index: 99; margin-top: 5px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.5);
         }
+        .option-item { padding: 12px; transition: 0.3s; cursor: pointer; border-bottom: 1px solid rgba(59, 130, 246, 0.1); color: #e2e8f0; }
+        .option-item:hover { background: #1d4ed8; color: white; }
 
-        .dynamic-fields { display: none; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
-        .submit-btn { width: 100%; padding: 15px; border-radius: 12px; background: linear-gradient(45deg, #1d4ed8, #3b82f6); color: white; font-family: 'Syncopate', sans-serif; font-size: 11px; border: none; cursor: pointer; font-weight: bold; margin-top: 20px; transition: 0.4s; }
+        input { width: 100%; padding: 12px; border-radius: 10px; background: #0f172a; color: white; border: 1px solid #3b82f6; outline: none; font-family: 'Rajdhani', sans-serif; font-size: 15px; transition: 0.3s; }
+        input:focus { border-color: #60a5fa; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
         
-        /* SweetAlert স্টাইল */
+        .dynamic-fields { display: none; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; animation: fadeIn 0.4s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .submit-btn { width: 100%; padding: 15px; border-radius: 12px; background: linear-gradient(45deg, #1d4ed8, #3b82f6); color: white; font-family: 'Syncopate', sans-serif; font-size: 11px; border: none; cursor: pointer; font-weight: bold; margin-top: 20px; transition: 0.4s; box-shadow: 0 5px 15px rgba(29, 78, 216, 0.4); }
+        .submit-btn:hover { transform: scale(1.02); }
+
         .swal2-popup { background: #0f172a !important; color: white !important; border-radius: 20px !important; border: 1px solid #3b82f6 !important; font-family: 'Rajdhani', sans-serif !important; }
-        .swal2-title, .swal2-html-container { color: white !important; }
-        .swal2-confirm { background: linear-gradient(45deg, #1d4ed8, #3b82f6) !important; border-radius: 10px !important; }
     </style>
 </head>
 <body>
@@ -56,35 +53,32 @@
 
     <div class="form-group">
         <label>Select Issue:</label>
-        <select id="userIssue" onchange="updateFields()">
-            <option value="">-- Choose Issue --</option>
-            <option value="Payment">Payment Problem</option>
-            <option value="Order">Order Problem</option>
-            <option value="Ban">Ban Problem</option>
-        </select>
+        <div class="custom-select" onclick="toggleOptions('issueOptions')">
+            <span id="selectedIssue">-- Choose Issue --</span>
+            <span style="font-size: 10px;">▼</span>
+        </div>
+        <div id="issueOptions" class="options-list">
+            <div class="option-item" onclick="selectIssue('Payment')">Payment Problem</div>
+            <div class="option-item" onclick="selectIssue('Order')">Order Problem</div>
+            <div class="option-item" onclick="selectIssue('Ban')">Ban Problem</div>
+        </div>
     </div>
 
     <div id="paymentFields" class="dynamic-fields">
         <div class="form-group">
-            <label>Select Method:</label>
-            <select id="payMethod">
-                <option value="Bkash">Bkash</option>
-                <option value="Nagad">Nagad</option>
-                <option value="Rocket">Rocket</option>
-            </select>
+            <label>Payment Method:</label>
+            <div class="custom-select" onclick="toggleOptions('methodOptions')">
+                <span id="selectedMethod">Bkash</span>
+                <span style="font-size: 10px;">▼</span>
+            </div>
+            <div id="methodOptions" class="options-list">
+                <div class="option-item" onclick="selectMethod('Bkash')">Bkash</div>
+                <div class="option-item" onclick="selectMethod('Nagad')">Nagad</div>
+            </div>
         </div>
-        <div class="form-group">
-            <label>Transaction ID:</label>
-            <input type="text" id="trxId" placeholder="Enter TrxID">
-        </div>
-        <div class="form-group">
-            <label>Order ID:</label>
-            <input type="text" id="payOrderId" placeholder="Enter Order ID">
-        </div>
-        <div class="form-group">
-            <label>Your Chat ID:</label>
-            <input type="text" id="payChatId" placeholder="Enter Chat ID">
-        </div>
+        <div class="form-group"><label>Transaction ID:</label><input type="text" id="trxId" placeholder="Enter TrxID"></div>
+        <div class="form-group"><label>Order ID:</label><input type="text" id="payOrderId" placeholder="Enter Order ID"></div>
+        <div class="form-group"><label>Your Chat ID:</label><input type="text" id="payChatId" placeholder="Enter Chat ID"></div>
     </div>
 
     <div id="orderFields" class="dynamic-fields">
@@ -100,15 +94,39 @@
 </div>
 
 <script>
-    function updateFields() {
-        const issue = document.getElementById("userIssue").value;
-        document.getElementById("paymentFields").style.display = (issue === "Payment") ? "block" : "none";
-        document.getElementById("orderFields").style.display = (issue === "Order") ? "block" : "none";
-        document.getElementById("banFields").style.display = (issue === "Ban") ? "block" : "none";
+    let tg = window.Telegram.WebApp;
+    tg.expand();
+
+    function toggleOptions(id) {
+        const list = document.getElementById(id);
+        const allLists = document.querySelectorAll('.options-list');
+        allLists.forEach(l => { if(l.id !== id) l.style.display = 'none'; });
+        list.style.display = (list.style.display === 'block') ? 'none' : 'block';
+    }
+
+    function selectIssue(val) {
+        document.getElementById('selectedIssue').innerText = val;
+        document.getElementById('issueOptions').style.display = 'none';
+        document.getElementById("paymentFields").style.display = (val === "Payment") ? "block" : "none";
+        document.getElementById("orderFields").style.display = (val === "Order") ? "block" : "none";
+        document.getElementById("banFields").style.display = (val === "Ban") ? "block" : "none";
+    }
+
+    function selectMethod(val) {
+        document.getElementById('selectedMethod').innerText = val;
+        document.getElementById('methodOptions').style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        if (!event.target.closest('.custom-select')) {
+            document.querySelectorAll('.options-list').forEach(list => list.style.display = 'none');
+        }
     }
 
     function sendAutoMsg() {
-        const issue = document.getElementById("userIssue").value;
+        const issue = document.getElementById('selectedIssue').innerText;
+        if(issue.includes('--')) return Swal.fire({ icon: 'info', text: 'Please select an issue!' });
+
         const btn = document.getElementById("submitBtn");
         const botToken = "8769255178:AAFQ27UmVrDDMJ2dBHelTO5bwOH_j4Mvkbk"; 
         const chatId = "6737871508"; 
@@ -117,62 +135,48 @@
         let userInputId = ""; 
 
         if (issue === "Payment") {
-            const method = document.getElementById("payMethod").value;
+            const method = document.getElementById('selectedMethod').innerText;
             const trx = document.getElementById("trxId").value;
             const pOrderId = document.getElementById("payOrderId").value;
             userInputId = document.getElementById("payChatId").value;
-            if(!trx || !userInputId || !pOrderId) return Swal.fire({ icon: 'warning', title: 'Empty Box', text: 'Please fill all info!' });
+            if(!trx || !userInputId || !pOrderId) return Swal.fire({ icon: 'warning', text: 'Fill all info!' });
             details = `<b>💳 Method:</b> ${method}\n<b>🔑 TrxID:</b> ${trx}\n<b>🛒 Order ID:</b> ${pOrderId}\n<b>💬 Chat ID:</b> ${userInputId}`;
         } else if (issue === "Order") {
             const oId = document.getElementById("orderId").value;
             userInputId = document.getElementById("orderChatId").value;
-            if(!oId || !userInputId) return Swal.fire({ icon: 'warning', title: 'Empty Box', text: 'Order ID & Chat ID required!' });
+            if(!oId || !userInputId) return Swal.fire({ icon: 'warning', text: 'Order ID & Chat ID required!' });
             details = `<b>🛒 Order ID:</b> ${oId}\n<b>💬 Chat ID:</b> ${userInputId}`;
         } else if (issue === "Ban") {
             userInputId = document.getElementById("banChatId").value;
-            if(!userInputId) return Swal.fire({ icon: 'warning', title: 'Empty Box', text: 'Please enter Chat ID!' });
+            if(!userInputId) return Swal.fire({ icon: 'warning', text: 'Please enter Chat ID!' });
             details = `<b>🚫 Issue:</b> Ban Problem\n<b>💬 Chat ID:</b> ${userInputId}`;
-        } else {
-            return Swal.fire({ icon: 'info', text: 'Please select an issue first!' });
         }
 
-        btn.disabled = true;
-        btn.innerText = "SENDING...";
-
-        const message = `<b>🔔 NEW SUPPORT TICKET</b>\n\n<b>📌 Issue:</b> ${issue} Problem\n${details}\n\n<i>SR SOHAN Smart-Panel</i>`;
-        
-        const payload = {
-            chat_id: chatId,
-            text: message,
-            parse_mode: 'HTML',
-            reply_markup: {
-                inline_keyboard: [
-                    [{ text: "Check ID: " + userInputId, callback_data: "/help " + userInputId }]
-                ]
-            }
-        };
+        btn.disabled = true; btn.innerText = "SENDING...";
 
         fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: JSON.stringify({
+                chat_id: chatId,
+                text: `<b>🔔 NEW SUPPORT TICKET</b>\n\n<b>📌 Issue:</b> ${issue} Problem\n${details}`,
+                parse_mode: 'HTML',
+                reply_markup: { inline_keyboard: [[{ text: "Check ID: " + userInputId, callback_data: "/help " + userInputId }]] }
+            })
         })
-        .then(response => {
-            if (response.ok) {
-                Swal.fire({ icon: 'success', title: 'Sent!', text: 'Reported to SR SOHAN.' }).then(() => location.reload());
+        .then(res => {
+            if (res.ok) {
+                Swal.fire({ icon: 'success', title: 'Sent!', text: 'Reported to SR SOHAN.' }).then(() => {
+                    tg.close(); // সাকসেস হওয়ার পর ওয়েব অ্যাপটি অটোমেটিক বন্ধ হয়ে যাবে
+                });
             } else {
-                Swal.fire({ icon: 'error', title: 'Failed', text: 'Error in sending message.' });
+                Swal.fire({ icon: 'error', title: 'Failed', text: 'Error sending message.' });
             }
         })
-        .catch(() => {
-            Swal.fire({ icon: 'error', title: 'Error', text: 'Connection failed!' });
-        })
         .finally(() => {
-            btn.disabled = false;
-            btn.innerText = "SUBMIT REPORT ➔";
+            btn.disabled = false; btn.innerText = "SUBMIT REPORT ➔";
         });
     }
 </script>
-
 </body>
 </html>
