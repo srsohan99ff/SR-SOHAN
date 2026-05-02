@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SR SOHAN - Auto ID Panel</title>
+    <title>SR SOHAN - Smart Panel</title>
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
@@ -49,9 +49,6 @@
 </div>
 
 <script>
-    // বট বিজনেস থেকে ইউজারের চ্যাট আইডি অটোমেটিক নেওয়ার নিয়ম
-    const autoChatId = BB.chat_id; 
-
     function updateFields() {
         const issue = document.getElementById("userIssue").value;
         document.getElementById("paymentFields").style.display = (issue === "Payment") ? "block" : "none";
@@ -59,19 +56,28 @@
     }
 
     function checkMyOrder() {
-        if(!autoChatId) return Swal.fire({ icon: 'error', text: 'Chat ID পাওয়া যায়নি! বট থেকে ট্রাই করুন।' });
+        // বটের ওয়েবঅ্যাপ থেকে সরাসরি ইউজার আইডি নেওয়ার উপায়
+        const uId = new URLSearchParams(window.location.search).get('user_id') || BB.chat_id;
 
-        const propName = "order_history" + autoChatId;
+        if(!uId) {
+            return Swal.fire({ icon: 'error', text: 'Chat ID পাওয়া যায়নি! বট থেকে প্যানেলটি ওপেন করুন।' });
+        }
+
+        const propName = "order_history" + uId;
         const orderData = BB.getProperty(propName); 
 
         if(orderData) {
             Swal.fire({ 
-                title: 'Order History', 
+                title: 'Order Details', 
                 html: `<div style="text-align:left; font-size:14px; background:#1e293b; padding:15px; border-radius:10px;">${orderData}</div>`, 
                 icon: 'success' 
             });
         } else {
-            Swal.fire({ icon: 'error', title: 'Not Found', text: 'আপনার কোনো অর্ডারের তথ্য নেই।' });
+            Swal.fire({ 
+                icon: 'info', 
+                title: 'No Order', 
+                text: 'আপনার (ID: ' + uId + ') কোনো অর্ডারের তথ্য নেই।' 
+            });
         }
     }
 
@@ -79,11 +85,9 @@
         const issue = document.getElementById("userIssue").value;
         if(!issue) return Swal.fire({ icon: 'warning', text: 'সমস্যা সিলেক্ট করুন!' });
 
-        // অটো আইডি সহ বটের কমান্ড রান হবে
         BB.runCommand("/report " + issue); 
         Swal.fire({ icon: 'success', text: 'রিপোর্ট পাঠানো হয়েছে!' });
     }
 </script>
 </body>
 </html>
-
