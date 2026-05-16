@@ -9,13 +9,15 @@
     <style>
         :root {
             --primary-blue: #2563eb;
-            --dark-bg: #020617;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
+            --light-bg: #f8fafc;
+            --card-bg: #ffffff;
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --text-main: #0f172a;
+            --text-sub: #475569;
         }
 
         body {
-            background: radial-gradient(circle at top, #1e293b 0%, #020617 100%);
+            background: radial-gradient(circle at top, #e2e8f0 0%, #f1f5f9 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -24,7 +26,7 @@
             margin: 0;
             padding: 20px;
             font-family: 'Rajdhani', sans-serif;
-            color: #f9fafb;
+            color: var(--text-main);
         }
         
         .main-container { width: 100%; max-width: 400px; text-align: center; }
@@ -32,11 +34,11 @@
         .main-logo {
             width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 20px;
             border: 3px solid var(--primary-blue);
-            box-shadow: 0 0 25px rgba(37, 99, 235, 0.5);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.15);
         }
 
         .stylish-name {
-            font-family: 'Syncopate', sans-serif; font-size: 1.6rem; letter-spacing: 4px; margin-bottom: 25px;
+            font-family: 'Syncopate', sans-serif; font-size: 1.6rem; letter-spacing: 4px; margin-bottom: 25px; color: var(--text-main);
         }
 
         .btn-container { display: flex; flex-direction: column; gap: 12px; width: 100%; }
@@ -44,7 +46,7 @@
         .contact-btn {
             display: flex; align-items: center; justify-content: center;
             padding: 15px; border-radius: 12px; color: white; font-weight: 700;
-            text-decoration: none; transition: 0.3s; border: 1px solid rgba(255, 255, 255, 0.1);
+            text-decoration: none; transition: 0.3s; border: 1px solid rgba(0, 0, 0, 0.05);
         }
         
         .wallet-btn {
@@ -53,21 +55,21 @@
             box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
         }
 
-        /* গেটওয়ে মডাল */
+        /* গেটওয়ে মডাল (লাইট মোড) */
         .modal {
             display: none; position: fixed; inset: 0; 
-            background: rgba(2, 6, 23, 0.96); z-index: 100;
-            align-items: center; justify-content: center; backdrop-filter: blur(12px);
+            background: rgba(15, 23, 42, 0.3); z-index: 100;
+            align-items: center; justify-content: center; backdrop-filter: blur(8px);
         }
 
         .modal-content {
-            background: #0f172a; width: 95%; max-width: 380px;
-            padding: 22px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.05);
-            text-align: left; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            background: var(--card-bg); width: 95%; max-width: 380px;
+            padding: 22px; border-radius: 24px; border: 1px solid rgba(0,0,0,0.05);
+            text-align: left; box-shadow: 0 20px 40px rgba(0,0,0,0.08);
             display: flex; flex-direction: column;
         }
 
-        .step-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 5px; color: #fff; text-align: center; }
+        .step-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 5px; color: var(--text-main); text-align: center; }
 
         /* ড্রপডাউন UI */
         .custom-dropdown {
@@ -75,87 +77,86 @@
         }
 
         .dropdown-selected {
-            background: #0f172a; color: #fff; padding: 14px; border-radius: 12px;
+            background: #f1f5f9; color: var(--text-main); padding: 14px; border-radius: 12px;
             border: 1px solid var(--glass-border); font-weight: 600; cursor: pointer;
             display: flex; align-items: center; justify-content: space-between; transition: 0.3s;
         }
         
         .dropdown-selected.custom-disabled { 
-            opacity: 0.3 !important; 
+            opacity: 0.5 !important; 
             cursor: not-allowed !important;
-            background: #090f24 !important;
-            color: #64748b !important;
-            border-color: rgba(255,255,255,0.02) !important;
+            background: #e2e8f0 !important;
+            color: #94a3b8 !important;
+            border-color: rgba(0,0,0,0.02) !important;
         }
 
         .dropdown-selected::after {
             content: ""; border-left: 5px solid transparent; border-right: 5px solid transparent;
-            border-top: 5px solid #94a3b8; transition: 0.3s; margin-left: 10px;
+            border-top: 5px solid #64748b; transition: 0.3s; margin-left: 10px;
         }
         .dropdown-selected.open::after { transform: rotate(180deg); }
 
         .dropdown-options {
             display: none; position: absolute; top: 115%; left: 0; width: 100%;
-            background: #020617; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
-            z-index: 99999; max-height: 220px; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            background: #ffffff; border: 1px solid rgba(0,0,0,0.08); border-radius: 12px;
+            z-index: 99999; max-height: 220px; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.08);
             padding: 6px;
         }
 
         .dropdown-option {
             padding: 10px 12px; cursor: pointer; display: flex; align-items: center; gap: 14px;
-            transition: 0.2s; color: #cbd5e1; font-weight: 600; border-radius: 8px;
+            transition: 0.2s; color: var(--text-sub); font-weight: 600; border-radius: 8px;
         }
-        .dropdown-option:hover { background: rgba(255, 255, 255, 0.05); color: #fff; }
+        .dropdown-option:hover { background: #f1f5f9; color: var(--text-main); }
 
         .selected-value-container { display: flex; align-items: center; gap: 14px; width: 100%; }
         
-        /* ড্রপডাউন এবং হেডার লোগো সাইজ */
         .crypto-image-logo {
             width: 24px; height: 24px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
         }
 
         .info-tag {
-            background: rgba(59, 130, 246, 0.1); color: #60a5fa;
+            background: rgba(37, 99, 235, 0.08); color: var(--primary-blue);
             padding: 6px 12px; border-radius: 8px; font-weight: 600;
             display: inline-flex; align-items: center; gap: 6px; font-size: 0.9rem; margin-bottom: 20px;
         }
 
         .proceed-btn-style {
-            padding: 14px 20px; border-radius: 12px; font-weight: 700; color: #64748b; 
+            padding: 14px 20px; border-radius: 12px; font-weight: 700; color: #94a3b8; 
             width: 54%; display: flex; align-items: center; justify-content: center;
-            background: #1e293b; border: 1px solid rgba(255,255,255,0.03);
-            cursor: not-allowed; transition: all 0.3s ease; opacity: 0.6;
+            background: #e2e8f0; border: 1px solid rgba(0,0,0,0.02);
+            cursor: not-allowed; transition: all 0.3s ease; opacity: 0.7;
         }
         
         .proceed-btn-style.active {
             background: var(--primary-blue); color: #fff; cursor: pointer; opacity: 1;
-            border-color: transparent; box-shadow: 0 4px 20px rgba(37, 99, 235, 0.4);
+            border-color: transparent; box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
         }
 
         .payment-details-card {
-            background: #020617; border: 1px dashed rgba(255,255,255,0.15);
+            background: #f8fafc; border: 1px dashed rgba(0,0,0,0.15);
             padding: 15px; border-radius: 14px; margin-top: 5px;
         }
 
         .detail-row { margin-bottom: 12px; }
         .detail-row:last-child { margin-bottom: 0; }
-        .detail-label { font-size: 0.85rem; color: #94a3b8; font-weight: 600; margin-bottom: 4px; display: block; }
+        .detail-label { font-size: 0.85rem; color: var(--text-sub); font-weight: 600; margin-bottom: 4px; display: block; }
         
         .copy-field {
-            background: rgba(255, 255, 255, 0.02); border: 1px solid var(--glass-border);
+            background: #ffffff; border: 1px solid var(--glass-border);
             padding: 12px; border-radius: 12px; display: flex; align-items: center;
             justify-content: space-between; font-family: monospace; font-size: 0.85rem; word-break: break-all;
         }
 
         .inline-copy-btn {
             display: flex; align-items: center; justify-content: center;
-            color: #60a5fa; background: rgba(59, 130, 246, 0.08);
-            border: 1px solid rgba(59, 130, 246, 0.2);
+            color: var(--primary-blue); background: rgba(37, 99, 235, 0.05);
+            border: 1px solid rgba(37, 99, 235, 0.1);
             width: 34px; height: 34px; border-radius: 8px;
             cursor: pointer; transition: all 0.2s ease; flex-shrink: 0;
         }
         .inline-copy-btn:hover {
-            background: rgba(59, 130, 246, 0.16); border-color: rgba(59, 130, 246, 0.4); color: #93c5fd;
+            background: rgba(37, 99, 235, 0.12); border-color: rgba(37, 99, 235, 0.3);
         }
         
         .inline-copy-btn.copied {
@@ -164,53 +165,47 @@
             color: rgb(16, 185, 129) !important;
         }
 
-        /* কিউআর বক্সের জন্য ফিক্সড স্টাইল */
         .qr-box {
             margin: 5px auto 15px; width: 160px; height: 160px;
             background: white; padding: 10px; border-radius: 14px;
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
         }
         
-        .qr-box img {
-            width: 100% !important; height: 100% !important; object-fit: contain !important;
-            border-radius: 0% !important;
-        }
+        .qr-box img { width: 100% !important; height: 100% !important; object-fit: contain !important; border-radius: 0% !important; }
 
-        /* সোশ্যাল সাপোর্ট সেকশন (সবসময় নিচে দৃশ্যমান) */
         .social-support-container {
-            margin-top: 20px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px;
+            margin-top: 20px; text-align: center; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 15px;
         }
-        .support-title { font-size: 0.95rem; font-weight: 700; color: #94a3b8; margin-bottom: 12px; letter-spacing: 1px; text-transform: uppercase; }
+        .support-title { font-size: 0.95rem; font-weight: 700; color: #64748b; margin-bottom: 12px; letter-spacing: 1px; text-transform: uppercase; }
         .social-icons-row { display: flex; justify-content: center; gap: 16px; }
         
         .social-circle-btn {
-            width: 44px; height: 44px; border-radius: 50%; background: #1e293b; 
-            display: flex; align-items: center; justify-content: center; color: #fff;
-            transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.05);
+            width: 44px; height: 44px; border-radius: 50%; background: #ffffff; 
+            display: flex; align-items: center; justify-content: center; color: #475569;
+            transition: all 0.3s ease; border: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
-        /* টেলিগ্রাম হোভার কালার */
-        .social-circle-btn.telegram:hover { background: #0088cc; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 136, 204, 0.4); }
-        /* হোয়াটসঅ্যাপ হোভার কালার */
-        .social-circle-btn.whatsapp:hover { background: #22c55e; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4); }
+        .social-circle-btn.telegram:hover { background: #0088cc; color: #fff; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 136, 204, 0.3); }
+        .social-circle-btn.whatsapp:hover { background: #22c55e; color: #fff; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3); }
 
         .btn-spinner {
             display: none; width: 22px; height: 22px;
-            border: 3px solid rgba(255, 255, 255, 0.2);
-            border-left-color: #fff; border-radius: 50%;
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--primary-blue); border-radius: 50%;
             animation: btnSpin 0.7s linear infinite;
         }
         @keyframes btnSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .top-notification {
             position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
-            background: #0f172a; border: 1px solid #10b981; color: #ffffff;
+            background: #ffffff; border: 1px solid #10b981; color: #0f172a;
             padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 0.95rem;
             display: flex; align-items: center; gap: 8px; z-index: 9999;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6); opacity: 0;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); opacity: 0;
             transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
         }
-        
         .top-notification.show { top: 25px; opacity: 1; }
     </style>
 </head>
@@ -244,14 +239,14 @@
                 <div style="text-align: center;">
                     <div class="info-tag">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                        Select payment method
+                        &nbsp;Select payment method
                     </div>
                 </div>
                 
                 <label class="detail-label">Payment Method</label>
                 <div class="custom-dropdown">
                     <div class="dropdown-selected" id="assetSelected" onclick="toggleDropdown('assetDropdownOptions', event)">
-                        <span class="selected-value-container" style="color: #94a3b8;">Select Method</span>
+                        <span class="selected-value-container" style="color: #64748b;">Select Method</span>
                     </div>
                     <div class="dropdown-options" id="assetDropdownOptions"></div>
                 </div>
@@ -259,7 +254,7 @@
                 <label class="detail-label" id="subSelectLabel">Account Type / Network</label>
                 <div class="custom-dropdown">
                     <div class="dropdown-selected custom-disabled" id="networkSelected" onclick="toggleDropdown('networkDropdownOptions', event)">
-                        <span id="networkTextPlaceholder" style="color: #64748b; font-weight: 600;">Select Option</span>
+                        <span id="networkTextPlaceholder" style="color: #94a3b8; font-weight: 600;">Select Option</span>
                     </div>
                     <div class="dropdown-options" id="networkDropdownOptions"></div>
                 </div>
@@ -268,9 +263,9 @@
             <div id="displayArea" style="display: none;">
                 <div class="payment-details-card">
                     
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.04);">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px; background: #ffffff; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0;">
                         <span id="networkLogo"></span>
-                        <span id="networkNameText" style="font-weight: 700; color: #60a5fa; font-size: 0.95rem;"></span>
+                        <span id="networkNameText" style="font-weight: 700; color: var(--primary-blue); font-size: 0.95rem;"></span>
                     </div>
 
                     <div class="detail-row">
@@ -282,7 +277,7 @@
                     <div class="detail-row" style="margin-top: 10px;">
                         <span class="detail-label" id="finalDataLabel">Number / Address</span>
                         <div class="copy-field" style="margin-top: 6px;">
-                            <span id="addrText" style="width: 82%; color: #e2e8f0;">LOADING...</span>
+                            <span id="addrText" style="width: 82%; color: var(--text-main);">LOADING...</span>
                             <span id="copyBtnEl" class="inline-copy-btn" onclick="copyText('addrText')">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                             </span>
@@ -292,7 +287,7 @@
             </div>
             
             <div id="actionButtons" style="margin-top: 20px; display: flex; justify-content: space-between; gap: 10px;">
-                <button id="closeBtn" onclick="closeWallet()" style="border: 1px solid rgba(255,255,255,0.08); padding:10px 20px; border-radius:12px; font-weight: 600; color: #94a3b8; width: 40%; text-align: center;">Close</button>
+                <button id="closeBtn" onclick="closeWallet()" style="border: 1px solid rgba(0,0,0,0.08); padding:10px 20px; border-radius:12px; font-weight: 600; color: #64748b; width: 40%; text-align: center; background: #f1f5f9;">Close</button>
                 <button id="proceedBtn" onclick="startLoadingProcess()" class="proceed-btn-style" disabled>
                     <div id="btnLoader" class="btn-spinner"></div>
                     <span id="btnText">Proceed</span>
@@ -383,7 +378,7 @@
             if (event) event.stopPropagation();
             
             selectedAsset = asset;
-            document.getElementById('assetSelected').innerHTML = `<div class="selected-value-container">${logos[asset]} <span style="color: #fff;">${asset}</span></div>`;
+            document.getElementById('assetSelected').innerHTML = `<div class="selected-value-container">${logos[asset]} <span style="color: var(--text-main);">${asset}</span></div>`;
             document.getElementById('assetDropdownOptions').style.display = 'none';
             document.getElementById('assetSelected').classList.remove('open');
 
@@ -393,7 +388,7 @@
 
             const netSelected = document.getElementById('networkSelected');
             netSelected.classList.remove('custom-disabled');
-            netSelected.innerHTML = `<span id="networkTextPlaceholder" style="color: #ffffff !important; font-weight: 600;">${placeholderText}</span>`;
+            netSelected.innerHTML = `<span id="networkTextPlaceholder" style="color: var(--text-main) !important; font-weight: 600;">${placeholderText}</span>`;
             
             selectedNetworkIndex = "";
             const btn = document.getElementById('proceedBtn');
@@ -420,7 +415,7 @@
 
         function selectNetwork(index, name, logoKey) {
             selectedNetworkIndex = index;
-            document.getElementById('networkSelected').innerHTML = `<div class="selected-value-container">${logos[logoKey]} <span style="color: #fff;">${name}</span></div>`;
+            document.getElementById('networkSelected').innerHTML = `<div class="selected-value-container">${logos[logoKey]} <span style="color: var(--text-main);">${name}</span></div>`;
             document.getElementById('networkDropdownOptions').style.display = 'none';
             document.getElementById('networkSelected').classList.remove('open');
 
@@ -435,11 +430,11 @@
             document.getElementById('selectionArea').style.display = 'block';
             document.getElementById('subSelectLabel').innerText = "Account Type / Network";
             
-            document.getElementById('assetSelected').innerHTML = `<span class="selected-value-container" style="color: #94a3b8;">Select Method</span>`;
+            document.getElementById('assetSelected').innerHTML = `<span class="selected-value-container" style="color: #64748b;">Select Method</span>`;
             document.getElementById('assetSelected').classList.remove('open');
             
             const netBtn = document.getElementById('networkSelected');
-            netBtn.innerHTML = `<span id="networkTextPlaceholder" style="color: #64748b;">Select Option</span>`;
+            netBtn.innerHTML = `<span id="networkTextPlaceholder" style="color: #94a3b8;">Select Option</span>`;
             netBtn.classList.remove('open');
             netBtn.classList.add('custom-disabled');
             
@@ -447,7 +442,7 @@
             
             const actionArea = document.getElementById('actionButtons');
             actionArea.innerHTML = `
-                <button id="closeBtn" onclick="closeWallet()" style="border: 1px solid rgba(255,255,255,0.08); padding:10px 20px; border-radius:12px; font-weight: 600; color: #94a3b8; width: 40%; text-align: center;">Close</button>
+                <button id="closeBtn" onclick="closeWallet()" style="border: 1px solid rgba(0,0,0,0.08); padding:10px 20px; border-radius:12px; font-weight: 600; color: #64748b; width: 40%; text-align: center; background: #f1f5f9;">Close</button>
                 <button id="proceedBtn" onclick="startLoadingProcess()" class="proceed-btn-style" disabled>
                     <div id="btnLoader" class="btn-spinner"></div>
                     <span id="btnText">Proceed</span>
@@ -491,7 +486,7 @@
                 document.getElementById('displayArea').style.display = 'block';
                 
                 document.getElementById('actionButtons').innerHTML = `
-                    <button onclick="closeWallet()" style="background: var(--primary-blue); padding:14px 0; border-radius:12px; font-weight: 700; color: #fff; width: 100%; text-align: center; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.45);">DONE</button>
+                    <button onclick="closeWallet()" style="background: var(--primary-blue); padding:14px 0; border-radius:12px; font-weight: 700; color: #fff; width: 100%; text-align: center; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.35);">DONE</button>
                 `;
             }, 2500);
         }
