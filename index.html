@@ -47,7 +47,7 @@
             text-decoration: none; transition: 0.3s; border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
-        /* ওয়ালেট বাটন স্টাইল */
+        /* গেট অ্যাড্রেস বাটন স্টাইল */
         .wallet-btn {
             background: linear-gradient(90deg, #2563eb, #1d4ed8);
             cursor: pointer; width: 100%; margin-top: 5px;
@@ -226,7 +226,7 @@
         <div class="btn-container">
             <div onclick="openWallet()" class="contact-btn wallet-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M21 18v1c0 1.105-.895 2-2 2H5c-1.105 0-2-.895-2-2V5c0-1.105.895-2 2-2h14c1.105 0 2 .895 2 2v1h-9c-1.105 0-2 .895-2 2v8c0 1.105.895 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.828 0-1.5-.672-1.5-1.5s.672-1.5 1.5-1.5 1.5.672 1.5 1.5-.672 1.5-1.5 1.5z"/></svg>
-                &nbsp;WALLET ADDRESS
+                &nbsp;GET ADDRESS
             </div>
         </div>
     </div>
@@ -251,10 +251,10 @@
                     <div class="dropdown-options" id="assetDropdownOptions"></div>
                 </div>
 
-                <label class="detail-label">Account Type / Network</label>
+                <label class="detail-label" id="subSelectLabel">Account Type / Network</label>
                 <div class="custom-dropdown" id="networkDropdownWrapper">
                     <div class="dropdown-selected disabled" id="networkSelected" onclick="toggleDropdown('networkDropdownOptions')">
-                        <span class="selected-value-container">Select Option</span>
+                        <span class="selected-value-container" id="subSelectPlaceholder">Select Option</span>
                     </div>
                     <div class="dropdown-options" id="networkDropdownOptions"></div>
                 </div>
@@ -275,7 +275,7 @@
                     </div>
 
                     <div class="detail-row" style="margin-top: 10px;">
-                        <span class="detail-label">Number / Address</span>
+                        <span class="detail-label" id="finalDataLabel">Number / Address</span>
                         <div class="copy-field" style="margin-top: 6px;">
                             <span id="addrText" style="width: 82%; color: #e2e8f0;">LOADING...</span>
                             <span id="copyBtnEl" class="inline-copy-btn" onclick="copyText('addrText')">
@@ -298,7 +298,6 @@
     </div>
 
     <script>
-        // বিকাশ এবং নগদের ডিরেক্ট ইমেজ লিংক বসানো হয়েছে
         const logos = {
             bKash: `<img src="https://i.ibb.co.com/4g1Xr8BP/1164.jpg" class="crypto-image-logo" alt="bKash">`,
             Nagad: `<img src="https://i.ibb.co.com/ksqxHvm8/image.png" class="crypto-image-logo" alt="Nagad">`,
@@ -306,13 +305,12 @@
             LTC: `<img src="https://i.ibb.co.com/S7J570W0/1154.png" class="crypto-image-logo" alt="LTC">`
         };
 
-        // ডাটা স্ট্রাকচার (বিকাশ সবার উপরে, তারপর নগদ, তারপর ক্রিপ্টো)
         const walletData = {
             bKash: [
-                { name: "Personal Account", address: "01XXXXXXXXX", qr: "https://i.ibb.co.com/4g1Xr8BP/1164.jpg" }
+                { name: "Personal Account", address: "01329365319", qr: "https://i.ibb.co.com/4g1Xr8BP/1164.jpg" }
             ],
             Nagad: [
-                { name: "Personal Account", address: "01XXXXXXXXX", qr: "https://i.ibb.co.com/ksqxHvm8/image.png" }
+                { name: "Personal Account", address: "01329365319", qr: "https://i.ibb.co.com/ksqxHvm8/image.png" }
             ],
             USDT: [
                 { name: "BSC (BEP20)", address: "0x829f5ddbf2e7df26559a86c61837eb59fc491c13", qr: "https://i.ibb.co.com/ynCSX0Wf/1155.jpg" },
@@ -385,9 +383,20 @@
             document.getElementById('assetDropdownOptions').style.display = 'none';
             assetBtn.classList.remove('open');
 
+            const labelEl = document.getElementById('subSelectLabel');
+            const placeholderEl = document.getElementById('subSelectPlaceholder');
             const netSelected = document.getElementById('networkSelected');
+
+            // বিকাশ/নগদ বনাম ক্রিপ্টোর জন্য কন্ডিশনাল লেবেল পরিবর্তন
+            if (asset === 'bKash' || asset === 'Nagad') {
+                labelEl.innerText = "Account Type";
+                placeholderEl.innerText = "Select Account";
+            } else {
+                labelEl.innerText = "Select Network";
+                placeholderEl.innerText = "Select Network";
+            }
+
             netSelected.classList.remove('disabled', 'has-value');
-            netSelected.innerHTML = `<span class="selected-value-container">Select Option</span>`;
             
             selectedNetworkIndex = "";
             
@@ -424,6 +433,8 @@
             selectedAsset = "";
             selectedNetworkIndex = "";
             document.getElementById('selectionArea').style.display = 'block';
+            
+            document.getElementById('subSelectLabel').innerText = "Account Type / Network";
             
             const assetBtn = document.getElementById('assetSelected');
             assetBtn.innerHTML = `<span class="selected-value-container">Select Method</span>`;
@@ -468,6 +479,14 @@
             document.getElementById('networkNameText').innerText = netInfo.name;
             document.getElementById('addrText').innerText = netInfo.address;
             document.getElementById('qrImage').src = netInfo.qr;
+
+            // ফাইনাল স্ক্রিনে কন্ডিশনাল নাম/অ্যাড্রেস লেবেল সেট করা
+            const finalDataLabel = document.getElementById('finalDataLabel');
+            if (selectedAsset === 'bKash' || selectedAsset === 'Nagad') {
+                finalDataLabel.innerText = "Recipient's Number";
+            } else {
+                finalDataLabel.innerText = "Recipient's Wallet Address";
+            }
             
             setTimeout(function() {
                 document.getElementById('selectionArea').style.display = 'none';
