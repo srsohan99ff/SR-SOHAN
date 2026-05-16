@@ -74,18 +74,28 @@
         }
 
         .dropdown-selected {
-            background: #020617; color: #fff; padding: 14px; border-radius: 12px;
+            background: #0f172a; color: #fff; padding: 14px; border-radius: 12px;
             border: 1px solid var(--glass-border); font-weight: 600; cursor: pointer;
             display: flex; align-items: center; justify-content: space-between; transition: 0.3s;
         }
         
-        /* ডিসেবলড স্টেট ফিক্স */
-        .dropdown-selected.is-disabled { 
-            opacity: 0.25 !important; 
+        /* সম্পূর্ণ নতুন ও ফিক্সড একটিভ/ডিসেবলড স্টেট */
+        .dropdown-selected.custom-disabled { 
+            opacity: 0.3 !important; 
             cursor: not-allowed !important; 
+            pointer-events: none !important;
             background: #090f24 !important;
             color: #64748b !important;
-            border-color: rgba(255,255,255,0.03) !important;
+            border-color: rgba(255,255,255,0.02) !important;
+        }
+
+        .dropdown-selected.custom-active {
+            opacity: 1 !important;
+            cursor: pointer !important;
+            pointer-events: auto !important;
+            background: #020617 !important;
+            color: #ffffff !important;
+            border-color: var(--glass-border) !important;
         }
 
         .dropdown-selected::after {
@@ -97,7 +107,7 @@
         .dropdown-options {
             display: none; position: absolute; top: 115%; left: 0; width: 100%;
             background: #020617; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
-            z-index: 9999; max-height: 220px; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            z-index: 99999; max-height: 220px; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.7);
             padding: 6px;
         }
 
@@ -233,7 +243,7 @@
 
                 <label class="detail-label" id="subSelectLabel">Account Type / Network</label>
                 <div class="custom-dropdown">
-                    <div class="dropdown-selected is-disabled" id="networkSelected" onclick="toggleDropdown('networkDropdownOptions', event)">
+                    <div class="dropdown-selected custom-disabled" id="networkSelected" onclick="toggleDropdown('networkDropdownOptions', event)">
                         <span class="selected-value-container" id="subSelectPlaceholder" style="color: #64748b;">Select Option</span>
                     </div>
                     <div class="dropdown-options" id="networkDropdownOptions"></div>
@@ -308,9 +318,12 @@
             document.getElementById('walletModal').style.display = 'none';
         }
 
-        // ইভেন্ট বাবলিং ফিক্স করা টগল ড্রপডাউন ফাংশন
+        // সম্পূর্ণ ফিক্সড টগল ফাংশন
         function toggleDropdown(id, event) {
-            if (event) event.stopPropagation(); // ক্লিক করার ইভেন্টকে বাইরে ছড়াতে বাধা দেয়
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
             
             const assetOpts = document.getElementById('assetDropdownOptions');
             const netOpts = document.getElementById('networkDropdownOptions');
@@ -329,7 +342,7 @@
                     assetSel.classList.add('open');
                 }
             } else if (id === 'networkDropdownOptions') {
-                if (netSel.classList.contains('is-disabled')) return;
+                if (netSel.classList.contains('custom-disabled')) return;
                 assetOpts.style.display = 'none';
                 assetSel.classList.remove('open');
 
@@ -375,9 +388,9 @@
                 placeholderEl.innerText = "Select Network";
             }
 
-            // বাটনের ডিসেবল স্টেট সফলভাবে রিমুভ ও কালার একটিভ করা
-            netSelected.classList.remove('is-disabled');
-            netSelected.style.color = "#ffffff";
+            // কাস্টম একটিভ ক্লাস যোগ করা হচ্ছে যা Tailwind ওভাররাইড করতে পারবে না
+            netSelected.classList.remove('custom-disabled');
+            netSelected.classList.add('custom-active');
             netSelected.innerHTML = `<span class="selected-value-container" style="color: #ffffff;">${placeholderEl.innerText}</span>`;
             selectedNetworkIndex = "";
             
@@ -393,6 +406,7 @@
                 item.className = "dropdown-option";
                 item.innerHTML = `<span>${net.name}</span>`;
                 item.onclick = function(e) { 
+                    e.preventDefault();
                     e.stopPropagation();
                     selectNetwork(index, net.name); 
                 };
@@ -426,7 +440,8 @@
             const netBtn = document.getElementById('networkSelected');
             netBtn.innerHTML = `<span class="selected-value-container" style="color: #64748b;">Select Option</span>`;
             netBtn.classList.remove('open');
-            netBtn.classList.add('is-disabled');
+            netBtn.classList.remove('custom-active');
+            netBtn.classList.add('custom-disabled');
             
             document.getElementById('displayArea').style.display = 'none';
             
@@ -480,7 +495,7 @@
             }, 2500);
         }
 
-        // গ্লোবাল ক্লিকের বাগ সম্পূর্ণ রিমুভ করা হয়েছে
+        // কাস্টম ড্রপডাউনের বাইরের ক্লিক হ্যান্ডলিং
         window.onclick = function(event) {
             if (!event.target.closest('.custom-dropdown')) {
                 const assetOpts = document.getElementById('assetDropdownOptions');
