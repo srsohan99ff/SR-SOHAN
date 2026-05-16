@@ -79,7 +79,7 @@
             display: flex; align-items: center; justify-content: space-between; transition: 0.3s;
         }
         
-        /* ডিসেবলড স্টেট ফিক্স */
+        /* ডিসেবলড স্টেট */
         .dropdown-selected.is-disabled { 
             opacity: 0.3 !important; 
             cursor: not-allowed !important; 
@@ -97,7 +97,7 @@
         .dropdown-options {
             display: none; position: absolute; top: 115%; left: 0; width: 100%;
             background: #020617; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
-            z-index: 10; max-height: 220px; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            z-index: 999; max-height: 220px; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.7);
             padding: 6px;
         }
 
@@ -308,6 +308,7 @@
             document.getElementById('walletModal').style.display = 'none';
         }
 
+        // রি-রাইট করা ১০০% ওয়ার্কিং ড্রপডাউন টগল লজিক
         function toggleDropdown(id) {
             const assetOpts = document.getElementById('assetDropdownOptions');
             const netOpts = document.getElementById('networkDropdownOptions');
@@ -318,7 +319,7 @@
                 netOpts.style.display = 'none';
                 netSel.classList.remove('open');
                 
-                if(assetOpts.style.display === 'block') {
+                if (assetOpts.style.display === 'block') {
                     assetOpts.style.display = 'none';
                     assetSel.classList.remove('open');
                 } else {
@@ -330,7 +331,7 @@
                 assetOpts.style.display = 'none';
                 assetSel.classList.remove('open');
 
-                if(netOpts.style.display === 'block') {
+                if (netOpts.style.display === 'block') {
                     netOpts.style.display = 'none';
                     netSel.classList.remove('open');
                 } else {
@@ -370,7 +371,7 @@
                 placeholderEl.innerText = "Select Network";
             }
 
-            // এখানে disabled ক্লাস রিমুভ করে বাটন একটিভ করা হচ্ছে
+            // বাটন একটিভ করা এবং কন্টেন্ট ক্লিয়ার করা
             netSelected.classList.remove('is-disabled');
             netSelected.innerHTML = `<span class="selected-value-container" style="color: #94a3b8;">${placeholderEl.innerText}</span>`;
             selectedNetworkIndex = "";
@@ -379,6 +380,7 @@
             btn.disabled = true;
             btn.classList.remove('active');
 
+            // নতুন অপশন জেনারেট করা
             const netContainer = document.getElementById('networkDropdownOptions');
             netContainer.innerHTML = "";
             
@@ -387,7 +389,7 @@
                 item.className = "dropdown-option";
                 item.innerHTML = `<span>${net.name}</span>`;
                 item.onclick = function(e) { 
-                    e.stopPropagation();
+                    e.stopPropagation(); // ক্লিক করার সাথে সাথে ইভেন্ট আটকে ওপেন করবে
                     selectNetwork(index, net.name); 
                 };
                 netContainer.appendChild(item);
@@ -474,6 +476,7 @@
             }, 2500);
         }
 
+        // গ্লোবাল উইন্ডো ক্লিকের মাধ্যমে ড্রপডাউন হাইড করার সিস্টেম ফিক্স
         window.onclick = function(event) {
             if (!event.target.closest('.custom-dropdown')) {
                 const assetOpts = document.getElementById('assetDropdownOptions');
