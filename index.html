@@ -31,40 +31,9 @@
         
         .main-container { width: 100%; max-width: 400px; text-align: center; }
 
-        .main-logo {
-            width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 20px;
-            border: 2px solid var(--border-color);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-        }
-
-        .stylish-name {
-            font-family: 'Syncopate', sans-serif; font-size: 1.6rem; letter-spacing: 4px; margin-bottom: 25px; color: var(--text-dark);
-        }
-
-        .btn-container { display: flex; flex-direction: column; gap: 12px; width: 100%; }
-
-        .contact-btn {
-            display: flex; align-items: center; justify-content: center;
-            padding: 15px; border-radius: 14px; color: white; font-weight: 700;
-            text-decoration: none; transition: 0.3s;
-        }
-        
-        .wallet-btn {
-            background: #000000;
-            cursor: pointer; width: 100%; margin-top: 5px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-        .wallet-btn:hover { background: #1a1a1a; }
-
-        /* গেটওয়ে মডাল */
-        .modal {
-            display: none; position: fixed; inset: 0; 
-            background: rgba(0, 0, 0, 0.4); z-index: 100;
-            align-items: center; justify-content: center; backdrop-filter: blur(4px);
-        }
-
-        .modal-content {
-            background: var(--card-bg); width: 95%; max-width: 390px;
+        /* ক্রিপ্টোমাসের মত ক্লিন লাইট থিম কার্ড */
+        .gateway-card {
+            background: var(--card-bg); width: 100%;
             padding: 24px; border-radius: 24px; border: 1px solid var(--border-color);
             text-align: left; box-shadow: 0 20px 40px rgba(0,0,0,0.06);
             display: flex; flex-direction: column; position: relative;
@@ -178,7 +147,7 @@
         /* প্রসিড বাটন */
         .proceed-btn-style {
             padding: 14px 20px; border-radius: 12px; font-weight: 700; color: #8e949f; 
-            width: 54%; display: flex; align-items: center; justify-content: center; background: #eeeeee; border: none;
+            width: 100%; display: flex; align-items: center; justify-content: center; background: #eeeeee; border: none;
             cursor: not-allowed; transition: all 0.2s ease;
         }
         
@@ -244,22 +213,7 @@
     </div>
 
     <div class="main-container">
-        <div class="main-logo">
-            <img src="https://i.ibb.co.com/Y409z5jC/logo.png" style="width:100%; height:100%; border-radius:50%;" alt="SR SOHAN">
-        </div>
-
-        <h1 class="stylish-name">ᏚR SOHAN</h1>
-
-        <div class="btn-container">
-            <div onclick="openWallet()" class="contact-btn wallet-btn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M21 18v1c0 1.105-.895 2-2 2H5c-1.105 0-2-.895-2-2V5c0-1.105.895-2 2-2h14c1.105 0 2 .895 2 2v1h-9c-1.105 0-2 .895-2 2v8c0 1.105.895 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.828 0-1.5-.672-1.5-1.5s.672-1.5 1.5-1.5 1.5.672 1.5 1.5-.672 1.5-1.5 1.5z"/></svg>
-                &nbsp;GET ADDRESS
-            </div>
-        </div>
-    </div>
-
-    <div id="walletModal" class="modal">
-        <div class="modal-content">
+        <div class="gateway-card">
             <h2 class="step-title">ᏚR SOHAN PAY</h2>
             
             <div id="selectionArea">
@@ -310,8 +264,7 @@
                 </div>
             </div>
             
-            <div id="actionButtons" style="margin-top: 20px; display: flex; justify-content: space-between; gap: 10px;">
-                <button id="closeBtn" onclick="closeWallet()" style="border: 1px solid var(--border-color); padding:10px 20px; border-radius:12px; font-weight: 600; color: #475569; width: 40%; text-align: center; background: #f8fafc;">Close</button>
+            <div id="actionButtons" style="margin-top: 20px;">
                 <button id="proceedBtn" onclick="startLoadingProcess()" class="proceed-btn-style" disabled>
                     <div id="btnLoader" class="btn-spinner"></div>
                     <span id="btnText">Proceed to the payment</span>
@@ -375,15 +328,6 @@
         let selectedNetworkIndex = "";
         let currentSheetType = ""; 
 
-        function openWallet() {
-            resetWalletModal();
-            document.getElementById('walletModal').style.display = 'flex';
-        }
-
-        function closeWallet() {
-            document.getElementById('walletModal').style.display = 'none';
-        }
-
         // বটম শীট ড্রপডাউন ওপেন করা
         function openDropdownSheet(type) {
             if (type === 'network' && document.getElementById('networkSelected').classList.contains('custom-disabled')) {
@@ -395,7 +339,7 @@
             const sheetTitle = document.getElementById('sheetTitle');
             const searchInput = document.getElementById('sheetSearchInput');
             
-            searchInput.value = ""; // সার্চ ইনপুট রিসেট
+            searchInput.value = ""; 
             overlay.style.display = 'flex';
             
             if (type === 'currency') {
@@ -436,7 +380,7 @@
                         const item = document.createElement('div');
                         item.className = "dropdown-option";
                         
-                        // BSC (BEP-20) বা পপুলার চয়েসের পাশে সবুজ ব্যাজ যুক্ত করার এক্সাক্ট ডিজাইন
+                        // BSC (BEP-20) বা পপুলার চয়েসের পাশে সবুজ ব্যাজ যুক্ত করা
                         let badgeHTML = net.isPopular ? `<span class="popular-badge">Popular choice</span>` : '';
                         
                         item.innerHTML = `
@@ -452,7 +396,6 @@
             }
         }
 
-        // সার্চ ফিল্টারিং ফাংশন
         function filterDropdownOptions() {
             const filter = document.getElementById('sheetSearchInput').value.toLowerCase();
             const options = document.getElementById('sheetOptionsList').getElementsByClassName('dropdown-option');
@@ -496,42 +439,15 @@
             btn.classList.add('active');
         }
 
-        function resetWalletModal() {
-            selectedAsset = "";
-            selectedNetworkIndex = "";
-            document.getElementById('selectionArea').style.display = 'block';
-            document.getElementById('subSelectLabel').innerText = "Network";
-            
-            document.getElementById('assetSelected').innerHTML = `<span class="selected-value-container" style="color: #64748b;">Select currency</span>`;
-            
-            const netBtn = document.getElementById('networkSelected');
-            netBtn.innerHTML = `<span id="networkTextPlaceholder" style="color: #94a3b8;">Select network</span>`;
-            netBtn.classList.add('custom-disabled');
-            
-            document.getElementById('displayArea').style.display = 'none';
-            
-            const actionArea = document.getElementById('actionButtons');
-            actionArea.innerHTML = `
-                <button id="closeBtn" onclick="closeWallet()" style="border: 1px solid var(--border-color); padding:10px 20px; border-radius:12px; font-weight: 600; color: #475569; width: 40%; text-align: center; background: #f8fafc;">Close</button>
-                <button id="proceedBtn" onclick="startLoadingProcess()" class="proceed-btn-style" disabled>
-                    <div id="btnLoader" class="btn-spinner"></div>
-                    <span id="btnText">Proceed to the payment</span>
-                </button>
-            `;
-        }
-
         function startLoadingProcess() {
             if(selectedAsset === "" || selectedNetworkIndex === "") return;
             
             const btn = document.getElementById('proceedBtn');
             const loader = document.getElementById('btnLoader');
             const btnText = document.getElementById('btnText');
-            const closeBtn = document.getElementById('closeBtn');
             
             btn.disabled = true;
             btn.classList.remove('active'); 
-            closeBtn.disabled = true;
-            closeBtn.style.opacity = "0.3";
             
             btnText.innerText = ""; 
             loader.style.display = 'block';
@@ -556,9 +472,30 @@
                 document.getElementById('displayArea').style.display = 'block';
                 
                 document.getElementById('actionButtons').innerHTML = `
-                    <button onclick="closeWallet()" style="background: #000000; padding:14px 0; border-radius:12px; font-weight: 700; color: #fff; width: 100%; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.15);">DONE</button>
+                    <button onclick="resetToInitialState()" style="background: #000000; padding:14px 0; border-radius:12px; font-weight: 700; color: #fff; width: 100%; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.15); cursor: pointer;">DONE</button>
                 `;
             }, 2500);
+        }
+
+        function resetToInitialState() {
+            selectedAsset = "";
+            selectedNetworkIndex = "";
+            document.getElementById('selectionArea').style.display = 'block';
+            document.getElementById('subSelectLabel').innerText = "Network";
+            document.getElementById('assetSelected').innerHTML = `<span class="selected-value-container" style="color: #64748b;">Select currency</span>`;
+            
+            const netBtn = document.getElementById('networkSelected');
+            netBtn.innerHTML = `<span id="networkTextPlaceholder" style="color: #94a3b8;">Select network</span>`;
+            netBtn.classList.add('custom-disabled');
+            
+            document.getElementById('displayArea').style.display = 'none';
+            
+            document.getElementById('actionButtons').innerHTML = `
+                <button id="proceedBtn" onclick="startLoadingProcess()" class="proceed-btn-style" disabled>
+                    <div id="btnLoader" class="btn-spinner"></div>
+                    <span id="btnText">Proceed to the payment</span>
+                </button>
+            `;
         }
 
         function copyText(elementId) {
