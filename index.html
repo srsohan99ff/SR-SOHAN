@@ -9,15 +9,15 @@
     <style>
         :root {
             --primary-blue: #2563eb;
-            --light-bg: #f8fafc;
+            --main-bg: #f8fafc;
             --card-bg: #ffffff;
-            --glass-border: rgba(0, 0, 0, 0.08);
-            --text-main: #0f172a;
-            --text-sub: #475569;
+            --border-color: #e2e8f0;
+            --text-dark: #000000;
+            --text-gray: #64748b;
         }
 
         body {
-            background: radial-gradient(circle at top, #e2e8f0 0%, #f1f5f9 100%);
+            background-color: var(--main-bg);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -26,185 +26,212 @@
             margin: 0;
             padding: 20px;
             font-family: 'Rajdhani', sans-serif;
-            color: var(--text-main);
+            color: var(--text-dark);
         }
         
         .main-container { width: 100%; max-width: 400px; text-align: center; }
 
         .main-logo {
             width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 20px;
-            border: 3px solid var(--primary-blue);
-            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.15);
+            border: 2px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
         }
 
         .stylish-name {
-            font-family: 'Syncopate', sans-serif; font-size: 1.6rem; letter-spacing: 4px; margin-bottom: 25px; color: var(--text-main);
+            font-family: 'Syncopate', sans-serif; font-size: 1.6rem; letter-spacing: 4px; margin-bottom: 25px; color: var(--text-dark);
         }
 
         .btn-container { display: flex; flex-direction: column; gap: 12px; width: 100%; }
 
         .contact-btn {
             display: flex; align-items: center; justify-content: center;
-            padding: 15px; border-radius: 12px; color: white; font-weight: 700;
-            text-decoration: none; transition: 0.3s; border: 1px solid rgba(0, 0, 0, 0.05);
+            padding: 15px; border-radius: 14px; color: white; font-weight: 700;
+            text-decoration: none; transition: 0.3s;
         }
         
         .wallet-btn {
-            background: linear-gradient(90deg, #2563eb, #1d4ed8);
+            background: #000000;
             cursor: pointer; width: 100%; margin-top: 5px;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
+        .wallet-btn:hover { background: #1a1a1a; }
 
-        /* গেটওয়ে মডাল (লাইট মোড) */
+        /* গেটওয়ে মডাল */
         .modal {
             display: none; position: fixed; inset: 0; 
-            background: rgba(15, 23, 42, 0.3); z-index: 100;
-            align-items: center; justify-content: center; backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.4); z-index: 100;
+            align-items: center; justify-content: center; backdrop-filter: blur(4px);
         }
 
         .modal-content {
-            background: var(--card-bg); width: 95%; max-width: 380px;
-            padding: 22px; border-radius: 24px; border: 1px solid rgba(0,0,0,0.05);
-            text-align: left; box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-            display: flex; flex-direction: column;
+            background: var(--card-bg); width: 95%; max-width: 390px;
+            padding: 24px; border-radius: 24px; border: 1px solid var(--border-color);
+            text-align: left; box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+            display: flex; flex-direction: column; position: relative;
         }
 
-        .step-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 5px; color: var(--text-main); text-align: center; }
+        .step-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 15px; color: var(--text-dark); text-align: center; }
 
-        /* ড্রপডাউন UI */
+        /* ড্রপডাউন সিলেক্টর বক্স (প্রধান স্ক্রিন) */
         .custom-dropdown {
-            position: relative; width: 100%; margin-bottom: 15px; user-select: none;
+            position: relative; width: 100%; margin-bottom: 18px; user-select: none;
         }
 
         .dropdown-selected {
-            background: #f1f5f9; color: var(--text-main); padding: 14px; border-radius: 12px;
-            border: 1px solid var(--glass-border); font-weight: 600; cursor: pointer;
-            display: flex; align-items: center; justify-content: space-between; transition: 0.3s;
+            background: #ffffff; color: var(--text-dark); padding: 14px 16px; border-radius: 12px;
+            border: 1.5px solid var(--border-color); font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; justify-content: space-between; transition: 0.2s;
         }
+        .dropdown-selected:hover { border-color: #cbd5e1; }
         
         .dropdown-selected.custom-disabled { 
-            opacity: 0.5 !important; 
+            opacity: 1 !important; 
             cursor: not-allowed !important;
-            background: #e2e8f0 !important;
+            background: #f8fafc !important;
             color: #94a3b8 !important;
-            border-color: rgba(0,0,0,0.02) !important;
+            border-color: #e2e8f0 !important;
         }
 
         .dropdown-selected::after {
             content: ""; border-left: 5px solid transparent; border-right: 5px solid transparent;
-            border-top: 5px solid #64748b; transition: 0.3s; margin-left: 10px;
+            border-top: 5px solid #000000; transition: 0.3s; margin-left: 10px;
         }
         .dropdown-selected.open::after { transform: rotate(180deg); }
 
-        .dropdown-options {
-            display: none; position: absolute; top: 115%; left: 0; width: 100%;
-            background: #ffffff; border: 1px solid rgba(0,0,0,0.08); border-radius: 12px;
-            z-index: 99999; max-height: 220px; overflow-y: auto; box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            padding: 6px;
+        /* ক্রিপ্টোমাসের মতো বটম ড্রপডাউন মডাল ওভারলে */
+        .dropdown-overlay {
+            display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.4); z-index: 200;
+            align-items: flex-end; justify-content: center;
+        }
+        
+        /* ক্রিপ্টোমাসের মতো পপ-আপ ড্রপডাউন শিট */
+        .dropdown-sheet {
+            background: #ffffff; width: 100%; max-width: 400px;
+            border-top-left-radius: 24px; border-top-right-radius: 24px;
+            padding: 20px; box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
+            max-height: 80vh; display: flex; flex-direction: column;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .sheet-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        .sheet-title { font-size: 1.25rem; font-weight: 700; color: #000000; }
+        
+        /* কালো ক্রসের বাটন */
+        .sheet-close-btn {
+            background: none; border: none; cursor: pointer; padding: 4px; color: #000000;
+            transition: transform 0.2s;
+        }
+        .sheet-close-btn:hover { transform: scale(1.1); }
+
+        /* সার্চ বার */
+        .search-container {
+            position: relative; margin-bottom: 16px;
+        }
+        .search-input {
+            width: 100%; background: #f1f5f9; border: none; padding: 12px 16px 12px 42px;
+            border-radius: 12px; font-size: 0.95rem; color: #000; outline: none;
+            font-weight: 600;
+        }
+        .search-input::placeholder { color: #94a3b8; font-weight: 500; }
+        .search-icon {
+            position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+            color: #94a3b8; pointer-events: none;
+        }
+
+        /* অপশন লিস্ট */
+        .options-list-container {
+            overflow-y: auto; flex-grow: 1; padding-bottom: 10px;
         }
 
         .dropdown-option {
-            padding: 10px 12px; cursor: pointer; display: flex; align-items: center; gap: 14px;
-            transition: 0.2s; color: var(--text-sub); font-weight: 600; border-radius: 8px;
+            padding: 14px 8px; cursor: pointer; display: flex; align-items: center;
+            justify-content: space-between; transition: 0.2s; color: #000000;
+            font-weight: 600; font-size: 1.05rem; border-bottom: 1px solid #f1f5f9;
         }
-        .dropdown-option:hover { background: #f1f5f9; color: var(--text-main); }
+        .dropdown-option:last-child { border-bottom: none; }
+        .dropdown-option:hover { background: #f8fafc; }
 
-        .selected-value-container { display: flex; align-items: center; gap: 14px; width: 100%; }
-        
-        .crypto-image-logo {
-            width: 24px; height: 24px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
+        .option-left-content { display: flex; align-items: center; gap: 14px; }
+
+        /* সবুজ পপুলার চয়েস ব্যাজ */
+        .popular-badge {
+            background: #e8f7ee; color: #10b981; font-size: 0.75rem; font-weight: 700;
+            padding: 4px 10px; border-radius: 20px; letter-spacing: 0.3px;
         }
+
+        .selected-value-container { display: flex; align-items: center; gap: 14px; width: 100%; font-size: 0.95rem; }
+        .crypto-image-logo { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
 
         .info-tag {
-            background: rgba(37, 99, 235, 0.08); color: var(--primary-blue);
-            padding: 6px 12px; border-radius: 8px; font-weight: 600;
-            display: inline-flex; align-items: center; gap: 6px; font-size: 0.9rem; margin-bottom: 20px;
+            background: #eff6ff; color: #2563eb; padding: 6px 14px; border-radius: 20px; font-weight: 600;
+            display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; margin-bottom: 20px; border: 1px solid #dbeafe;
         }
 
+        /* প্রসিড বাটন */
         .proceed-btn-style {
-            padding: 14px 20px; border-radius: 12px; font-weight: 700; color: #94a3b8; 
-            width: 54%; display: flex; align-items: center; justify-content: center;
-            background: #e2e8f0; border: 1px solid rgba(0,0,0,0.02);
-            cursor: not-allowed; transition: all 0.3s ease; opacity: 0.7;
+            padding: 14px 20px; border-radius: 12px; font-weight: 700; color: #8e949f; 
+            width: 54%; display: flex; align-items: center; justify-content: center; background: #eeeeee; border: none;
+            cursor: not-allowed; transition: all 0.2s ease;
         }
         
         .proceed-btn-style.active {
-            background: var(--primary-blue); color: #fff; cursor: pointer; opacity: 1;
-            border-color: transparent; box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
+            background: #000000; color: #fff; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
         .payment-details-card {
-            background: #f8fafc; border: 1px dashed rgba(0,0,0,0.15);
-            padding: 15px; border-radius: 14px; margin-top: 5px;
+            background: #f8fafc; border: 1.5px dashed var(--border-color); padding: 16px; border-radius: 14px; margin-top: 5px;
         }
 
         .detail-row { margin-bottom: 12px; }
         .detail-row:last-child { margin-bottom: 0; }
-        .detail-label { font-size: 0.85rem; color: var(--text-sub); font-weight: 600; margin-bottom: 4px; display: block; }
+        .detail-label { font-size: 0.85rem; color: var(--text-gray); font-weight: 700; margin-bottom: 6px; display: block; }
         
         .copy-field {
-            background: #ffffff; border: 1px solid var(--glass-border);
-            padding: 12px; border-radius: 12px; display: flex; align-items: center;
-            justify-content: space-between; font-family: monospace; font-size: 0.85rem; word-break: break-all;
+            background: #ffffff; border: 1px solid var(--border-color); padding: 12px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: space-between; font-family: monospace; font-size: 0.85rem; word-break: break-all; color: var(--text-dark);
         }
 
         .inline-copy-btn {
-            display: flex; align-items: center; justify-content: center;
-            color: var(--primary-blue); background: rgba(37, 99, 235, 0.05);
-            border: 1px solid rgba(37, 99, 235, 0.1);
-            width: 34px; height: 34px; border-radius: 8px;
-            cursor: pointer; transition: all 0.2s ease; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center; color: #2563eb; background: #eff6ff; border: 1px solid #dbeafe;
+            width: 34px; height: 34px; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; flex-shrink: 0;
         }
-        .inline-copy-btn:hover {
-            background: rgba(37, 99, 235, 0.12); border-color: rgba(37, 99, 235, 0.3);
-        }
-        
-        .inline-copy-btn.copied {
-            background: rgba(16, 185, 129, 0.15) !important;
-            border-color: rgb(16, 185, 129) !important;
-            color: rgb(16, 185, 129) !important;
-        }
+        .inline-copy-btn:hover { background: #dbeafe; }
+        .inline-copy-btn.copied { background: #d1fae5 !important; border-color: #10b981 !important; color: #059669 !important; }
 
         .qr-box {
-            margin: 5px auto 15px; width: 160px; height: 160px;
-            background: white; padding: 10px; border-radius: 14px;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e2e8f0;
+            margin: 5px auto 15px; width: 160px; height: 160px; background: white; padding: 10px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04); border: 1px solid var(--border-color);
         }
-        
-        .qr-box img { width: 100% !important; height: 100% !important; object-fit: contain !important; border-radius: 0% !important; }
+        .qr-box img { width: 100% !important; height: 100% !important; object-fit: contain !important; }
 
-        .social-support-container {
-            margin-top: 20px; text-align: center; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 15px;
-        }
-        .support-title { font-size: 0.95rem; font-weight: 700; color: #64748b; margin-bottom: 12px; letter-spacing: 1px; text-transform: uppercase; }
-        .social-icons-row { display: flex; justify-content: center; gap: 16px; }
+        .social-support-container { margin-top: 24px; text-align: center; border-top: 1px solid var(--border-color); padding-top: 15px; }
+        .support-title { font-size: 0.85rem; font-weight: 700; color: var(--text-gray); margin-bottom: 14px; letter-spacing: 1px; }
+        .social-icons-row { display: flex; justify-content: center; gap: 14px; }
         
         .social-circle-btn {
-            width: 44px; height: 44px; border-radius: 50%; background: #ffffff; 
-            display: flex; align-items: center; justify-content: center; color: #475569;
-            transition: all 0.3s ease; border: 1px solid rgba(0,0,0,0.08);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+            width: 42px; height: 42px; border-radius: 50%; background: #000000; display: flex; align-items: center; justify-content: center; color: #fff; transition: all 0.3s ease;
         }
-        .social-circle-btn.telegram:hover { background: #0088cc; color: #fff; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 136, 204, 0.3); }
-        .social-circle-btn.whatsapp:hover { background: #22c55e; color: #fff; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3); }
+        .social-circle-btn.telegram:hover { background: #0088cc; transform: translateY(-2px); }
+        .social-circle-btn.whatsapp:hover { background: #22c55e; transform: translateY(-2px); }
 
         .btn-spinner {
-            display: none; width: 22px; height: 22px;
-            border: 3px solid rgba(0, 0, 0, 0.1);
-            border-left-color: var(--primary-blue); border-radius: 50%;
-            animation: btnSpin 0.7s linear infinite;
+            display: none; width: 20px; height: 20px; border: 3px solid rgba(0, 0, 0, 0.1); border-left-color: #000000; border-radius: 50%; animation: btnSpin 0.7s linear infinite;
         }
+        .proceed-btn-style.active .btn-spinner { border-color: rgba(255,255,255,0.3); border-left-color: #fff; }
         @keyframes btnSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .top-notification {
-            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
-            background: #ffffff; border: 1px solid #10b981; color: #0f172a;
-            padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 0.95rem;
-            display: flex; align-items: center; gap: 8px; z-index: 9999;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05); opacity: 0;
-            transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+            position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: #ffffff; border: 1px solid #10b981; color: #000000;
+            padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; z-index: 9999;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08); opacity: 0; transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
         }
         .top-notification.show { top: 25px; opacity: 1; }
     </style>
@@ -239,33 +266,30 @@
                 <div style="text-align: center;">
                     <div class="info-tag">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                        &nbsp;Select payment method
+                        Select payment method
                     </div>
                 </div>
                 
-                <label class="detail-label">Payment Method</label>
+                <label class="detail-label">Currency</label>
                 <div class="custom-dropdown">
-                    <div class="dropdown-selected" id="assetSelected" onclick="toggleDropdown('assetDropdownOptions', event)">
-                        <span class="selected-value-container" style="color: #64748b;">Select Method</span>
+                    <div class="dropdown-selected" id="assetSelected" onclick="openDropdownSheet('currency')">
+                        <span class="selected-value-container" style="color: #64748b;">Select currency</span>
                     </div>
-                    <div class="dropdown-options" id="assetDropdownOptions"></div>
                 </div>
 
-                <label class="detail-label" id="subSelectLabel">Account Type / Network</label>
+                <label class="detail-label" id="subSelectLabel">Network</label>
                 <div class="custom-dropdown">
-                    <div class="dropdown-selected custom-disabled" id="networkSelected" onclick="toggleDropdown('networkDropdownOptions', event)">
-                        <span id="networkTextPlaceholder" style="color: #94a3b8; font-weight: 600;">Select Option</span>
+                    <div class="dropdown-selected custom-disabled" id="networkSelected" onclick="openDropdownSheet('network')">
+                        <span id="networkTextPlaceholder" style="color: #94a3b8; font-weight: 600;">Select network</span>
                     </div>
-                    <div class="dropdown-options" id="networkDropdownOptions"></div>
                 </div>
             </div>
 
             <div id="displayArea" style="display: none;">
                 <div class="payment-details-card">
-                    
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px; background: #ffffff; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px; background: #ffffff; padding: 10px; border-radius: 12px; border: 1px solid var(--border-color);">
                         <span id="networkLogo"></span>
-                        <span id="networkNameText" style="font-weight: 700; color: var(--primary-blue); font-size: 0.95rem;"></span>
+                        <span id="networkNameText" style="font-weight: 700; color: #000000; font-size: 0.95rem;"></span>
                     </div>
 
                     <div class="detail-row">
@@ -277,7 +301,7 @@
                     <div class="detail-row" style="margin-top: 10px;">
                         <span class="detail-label" id="finalDataLabel">Number / Address</span>
                         <div class="copy-field" style="margin-top: 6px;">
-                            <span id="addrText" style="width: 82%; color: var(--text-main);">LOADING...</span>
+                            <span id="addrText" style="width: 82%; color: var(--text-dark);">LOADING...</span>
                             <span id="copyBtnEl" class="inline-copy-btn" onclick="copyText('addrText')">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                             </span>
@@ -287,27 +311,45 @@
             </div>
             
             <div id="actionButtons" style="margin-top: 20px; display: flex; justify-content: space-between; gap: 10px;">
-                <button id="closeBtn" onclick="closeWallet()" style="border: 1px solid rgba(0,0,0,0.08); padding:10px 20px; border-radius:12px; font-weight: 600; color: #64748b; width: 40%; text-align: center; background: #f1f5f9;">Close</button>
+                <button id="closeBtn" onclick="closeWallet()" style="border: 1px solid var(--border-color); padding:10px 20px; border-radius:12px; font-weight: 600; color: #475569; width: 40%; text-align: center; background: #f8fafc;">Close</button>
                 <button id="proceedBtn" onclick="startLoadingProcess()" class="proceed-btn-style" disabled>
                     <div id="btnLoader" class="btn-spinner"></div>
-                    <span id="btnText">Proceed</span>
+                    <span id="btnText">Proceed to the payment</span>
                 </button>
             </div>
 
             <div class="social-support-container">
-                <div class="support-title">SOHAN WALLETS</div>
+                <div class="support-title">Please contact us if you have any questions</div>
                 <div class="social-icons-row">
                     <a href="https://t.me/srsohan99ff" target="_blank" class="social-circle-btn telegram">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
-                        </svg>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
                     </a>
                     <a href="https://wa.me/8801329365319" target="_blank" class="social-circle-btn whatsapp">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.5-5.729-1.447L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.42 9.864-9.852.002-2.632-1.023-5.105-2.887-6.97C16.577 1.917 14.101.892 11.47.89 6.037.89 1.612 5.31 1.608 10.741c-.001 1.682.449 3.32 1.302 4.773L1.87 20.354l5.106-1.34c-.11.06-.21.11-.328.14zM17.65 14.4c-.32-.16-1.89-.93-2.185-1.04-.3-.11-.51-.16-.72.16-.21.32-.82 1.04-1.01 1.25-.19.21-.38.24-.7.08-.32-.16-1.35-.5-2.57-1.59-.95-.85-1.6-1.9-1.78-2.22-.19-.32-.02-.49.14-.65.15-.14.32-.37.48-.56.16-.18.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.72-1.73-.99-2.37-.26-.64-.53-.55-.72-.56l-.61-.01c-.21 0-.56.08-.85.4-.3.32-1.15 1.13-1.15 2.75 0 1.62 1.18 3.19 1.35 3.41.17.22 2.33 3.56 5.65 5 .79.34 1.41.55 1.89.7.8.25 1.53.22 2.11.13.65-.1 1.89-.77 2.15-1.48.27-.71.27-1.32.19-1.45-.08-.14-.3-.22-.62-.38z"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.5-5.729-1.447L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.42 9.864-9.852.002-2.632-1.023-5.105-2.887-6.97C16.577 1.917 14.101.892 11.47.89 6.037.89 1.612 5.31 1.608 10.741c-.001 1.682.449 3.32 1.302 4.773L1.87 20.354l5.106-1.34c-.11.06-.21.11-.328.14zM17.65 14.4c-.32-.16-1.89-.93-2.185-1.04-.3-.11-.51-.16-.72.16-.21.32-.82 1.04-1.01 1.25-.19.21-.38.24-.7.08-.32-.16-1.35-.5-2.57-1.59-.95-.85-1.6-1.9-1.78-2.22-.19-.32-.02-.49.14-.65.15-.14.32-.37.48-.56.16-.18.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.72-1.73-.99-2.37-.26-.64-.53-.55-.72-.56l-.61-.01c-.21 0-.56.08-.85.4-.3.32-1.15 1.13-1.15 2.75 0 1.62 1.18 3.19 1.35 3.41.17.22 2.33 3.56 5.65 5 .79.34 1.41.55 1.89.7.8.25 1.53.22 2.11.13.65-.1 1.89-.77 2.15-1.48.27-.71.27-1.32.19-1.45-.08-.14-.3-.22-.62-.38z"/></svg>
                     </a>
                 </div>
             </div>
+        </div>
+    </div>
 
+    <div id="dropdownOverlay" class="dropdown-overlay" onclick="closeDropdownSheet()">
+        <div class="dropdown-sheet" onclick="event.stopPropagation()">
+            <div class="sheet-header">
+                <span id="sheetTitle" class="sheet-title">Select network</span>
+                <button class="sheet-close-btn" onclick="closeDropdownSheet()">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            
+            <div class="search-container">
+                <span class="search-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </span>
+                <input type="text" id="sheetSearchInput" class="search-input" placeholder="Search" oninput="filterDropdownOptions()">
+            </div>
+
+            <div class="options-list-container" id="sheetOptionsList">
+                </div>
         </div>
     </div>
 
@@ -320,104 +362,134 @@
         };
 
         const walletData = {
-            bkash: [{ name: "Personal Account", logoKey: "bKash", address: "01329365319", qr: "https://i.ibb.co.com/4g1Xr8BP/1164.jpg" }],
-            nagad: [{ name: "Personal Account", logoKey: "Nagad", address: "01329365319", qr: "https://i.ibb.co.com/ksqxHvm8/image.png" }],
+            bkash: [{ name: "Personal Account", logoKey: "bKash", address: "01329365319", qr: "https://i.ibb.co.com/4g1Xr8BP/1164.jpg", isPopular: true }],
+            nagad: [{ name: "Personal Account", logoKey: "Nagad", address: "01329365319", qr: "https://i.ibb.co.com/ksqxHvm8/image.png", isPopular: true }],
             usdt: [
-                { name: "BSC (BEP20)", logoKey: "USDT", address: "0x829f5ddbf2e7df26559a86c61837eb59fc491c13", qr: "https://i.ibb.co.com/ynCSX0Wf/1155.jpg" },
-                { name: "TRX (TRC20)", logoKey: "USDT", address: "TY7NYcRGVyqG3ECNnRb7MqSZnKxDPyhx8L", qr: "https://i.ibb.co.com/VcZfSztd/image.png" }
+                { name: "BSC (BEP-20)", logoKey: "USDT", address: "0x829f5ddbf2e7df26559a86c61837eb59fc491c13", qr: "https://i.ibb.co.com/ynCSX0Wf/1155.jpg", isPopular: true },
+                { name: "TRON (TRC-20)", logoKey: "USDT", address: "TY7NYcRGVyqG3ECNnRb7MqSZnKxDPyhx8L", qr: "https://i.ibb.co.com/VcZfSztd/image.png", isPopular: false }
             ],
-            ltc: [{ name: "LTC (Litecoin)", logoKey: "LTC", address: "LRETuh12SFWUmXREKsUfELV1qgPqvcv854", qr: "https://i.ibb.co.com/HpzL6HLj/image.png" }]
+            ltc: [{ name: "LTC (Litecoin)", logoKey: "LTC", address: "LRETuh12SFWUmXREKsUfELV1qgPqvcv854", qr: "https://i.ibb.co.com/HpzL6HLj/image.png", isPopular: false }]
         };
 
         let selectedAsset = "";
         let selectedNetworkIndex = "";
+        let currentSheetType = ""; 
 
         function openWallet() {
-            resetWalletModal(); // মডাল খোলার সাথে সাথেই আগে সব ক্লিন করবে
+            resetWalletModal();
             document.getElementById('walletModal').style.display = 'flex';
-            initAssetDropdown();
         }
 
         function closeWallet() {
             document.getElementById('walletModal').style.display = 'none';
         }
 
-        function toggleDropdown(id, event) {
-            if (event) event.stopPropagation();
+        // বটম শীট ড্রপডাউন ওপেন করা
+        function openDropdownSheet(type) {
+            if (type === 'network' && document.getElementById('networkSelected').classList.contains('custom-disabled')) {
+                return;
+            }
             
-            const assetOpts = document.getElementById('assetDropdownOptions');
-            const netOpts = document.getElementById('networkDropdownOptions');
-            const assetSel = document.getElementById('assetSelected');
-            const netSel = document.getElementById('networkSelected');
+            currentSheetType = type;
+            const overlay = document.getElementById('dropdownOverlay');
+            const sheetTitle = document.getElementById('sheetTitle');
+            const searchInput = document.getElementById('sheetSearchInput');
+            
+            searchInput.value = ""; // সার্চ ইনপুট রিসেট
+            overlay.style.display = 'flex';
+            
+            if (type === 'currency') {
+                sheetTitle.innerText = "Select currency";
+            } else {
+                sheetTitle.innerText = (selectedAsset === 'bKash' || selectedAsset === 'Nagad') ? "Select account type" : "Select network";
+            }
+            
+            renderSheetOptions();
+        }
 
-            if (id === 'assetDropdownOptions') {
-                netOpts.style.display = 'none';
-                netSel.classList.remove('open');
-                assetOpts.style.display = (assetOpts.style.display === 'block') ? 'none' : 'block';
-                assetSel.classList.toggle('open');
-            } else if (id === 'networkDropdownOptions') {
-                if (netSel.classList.contains('custom-disabled')) return;
-                assetOpts.style.display = 'none';
-                assetSel.classList.remove('open');
-                netOpts.style.display = (netOpts.style.display === 'block') ? 'none' : 'block';
-                netSel.classList.toggle('open');
+        function closeDropdownSheet() {
+            document.getElementById('dropdownOverlay').style.display = 'none';
+        }
+
+        // ড্রপডাউন অপশনগুলো রেন্ডার করা
+        function renderSheetOptions() {
+            const container = document.getElementById('sheetOptionsList');
+            container.innerHTML = "";
+            
+            if (currentSheetType === 'currency') {
+                const currencies = ['bKash', 'Nagad', 'USDT', 'LTC'];
+                currencies.forEach(asset => {
+                    const item = document.createElement('div');
+                    item.className = "dropdown-option";
+                    item.innerHTML = `
+                        <div class="option-left-content">
+                            ${logos[asset]} <span>${asset}</span>
+                        </div>
+                    `;
+                    item.onclick = () => selectAsset(asset);
+                    container.appendChild(item);
+                });
+            } else if (currentSheetType === 'network') {
+                const dataKey = selectedAsset.toLowerCase();
+                if (walletData[dataKey]) {
+                    walletData[dataKey].forEach((net, index) => {
+                        const item = document.createElement('div');
+                        item.className = "dropdown-option";
+                        
+                        // BSC (BEP-20) বা পপুলার চয়েসের পাশে সবুজ ব্যাজ যুক্ত করার এক্সাক্ট ডিজাইন
+                        let badgeHTML = net.isPopular ? `<span class="popular-badge">Popular choice</span>` : '';
+                        
+                        item.innerHTML = `
+                            <div class="option-left-content">
+                                ${logos[net.logoKey]} <span>${net.name}</span>
+                            </div>
+                            ${badgeHTML}
+                        `;
+                        item.onclick = () => selectNetwork(index, net.name, net.logoKey);
+                        container.appendChild(item);
+                    });
+                }
             }
         }
 
-        function initAssetDropdown() {
-            const container = document.getElementById('assetDropdownOptions');
-            container.innerHTML = `
-                <div class="dropdown-option" onclick="selectAsset('bKash', event)">${logos.bKash} <span>bKash</span></div>
-                <div class="dropdown-option" onclick="selectAsset('Nagad', event)">${logos.Nagad} <span>Nagad</span></div>
-                <div class="dropdown-option" onclick="selectAsset('USDT', event)">${logos.USDT} <span>USDT</span></div>
-                <div class="dropdown-option" onclick="selectAsset('LTC', event)">${logos.LTC} <span>LTC</span></div>
-            `;
+        // সার্চ ফিল্টারিং ফাংশন
+        function filterDropdownOptions() {
+            const filter = document.getElementById('sheetSearchInput').value.toLowerCase();
+            const options = document.getElementById('sheetOptionsList').getElementsByClassName('dropdown-option');
+            
+            for (let i = 0; i < options.length; i++) {
+                const text = options[i].innerText || options[i].textContent;
+                if (text.toLowerCase().indexOf(filter) > -1) {
+                    options[i].style.display = "";
+                } else {
+                    options[i].style.display = "none";
+                }
+            }
         }
 
-        function selectAsset(asset, event) {
-            if (event) event.stopPropagation();
-            
+        function selectAsset(asset) {
             selectedAsset = asset;
-            document.getElementById('assetSelected').innerHTML = `<div class="selected-value-container">${logos[asset]} <span style="color: var(--text-main);">${asset}</span></div>`;
-            document.getElementById('assetDropdownOptions').style.display = 'none';
-            document.getElementById('assetSelected').classList.remove('open');
+            document.getElementById('assetSelected').innerHTML = `<div class="selected-value-container">${logos[asset]} <span style="color: var(--text-dark);">${asset}</span></div>`;
+            closeDropdownSheet();
 
             const labelEl = document.getElementById('subSelectLabel');
-            const placeholderText = (asset === 'bKash' || asset === 'Nagad') ? "Select Account" : "Select Network";
-            labelEl.innerText = (asset === 'bKash' || asset === 'Nagad') ? "Account Type" : "Select Network";
+            const placeholderText = (asset === 'bKash' || asset === 'Nagad') ? "Select Account" : "Select network";
+            labelEl.innerText = (asset === 'bKash' || asset === 'Nagad') ? "Account Type" : "Network";
 
             const netSelected = document.getElementById('networkSelected');
             netSelected.classList.remove('custom-disabled');
-            netSelected.innerHTML = `<span id="networkTextPlaceholder" style="color: var(--text-main) !important; font-weight: 600;">${placeholderText}</span>`;
+            netSelected.innerHTML = `<span id="networkTextPlaceholder" style="color: var(--text-dark) !important; font-weight: 600;">${placeholderText}</span>`;
             
             selectedNetworkIndex = "";
             const btn = document.getElementById('proceedBtn');
             btn.disabled = true;
             btn.classList.remove('active');
-
-            const netContainer = document.getElementById('networkDropdownOptions');
-            netContainer.innerHTML = "";
-            
-            const dataKey = asset.toLowerCase();
-            if(walletData[dataKey]) {
-                walletData[dataKey].forEach((net, index) => {
-                    const item = document.createElement('div');
-                    item.className = "dropdown-option";
-                    item.innerHTML = `${logos[net.logoKey]} <span>${net.name}</span>`;
-                    item.onclick = function(e) { 
-                        e.stopPropagation();
-                        selectNetwork(index, net.name, net.logoKey); 
-                    };
-                    netContainer.appendChild(item);
-                });
-            }
         }
 
         function selectNetwork(index, name, logoKey) {
             selectedNetworkIndex = index;
-            document.getElementById('networkSelected').innerHTML = `<div class="selected-value-container">${logos[logoKey]} <span style="color: var(--text-main);">${name}</span></div>`;
-            document.getElementById('networkDropdownOptions').style.display = 'none';
-            document.getElementById('networkSelected').classList.remove('open');
+            document.getElementById('networkSelected').innerHTML = `<div class="selected-value-container">${logos[logoKey]} <span style="color: var(--text-dark);">${name}</span></div>`;
+            closeDropdownSheet();
 
             const btn = document.getElementById('proceedBtn');
             btn.disabled = false;
@@ -428,24 +500,22 @@
             selectedAsset = "";
             selectedNetworkIndex = "";
             document.getElementById('selectionArea').style.display = 'block';
-            document.getElementById('subSelectLabel').innerText = "Account Type / Network";
+            document.getElementById('subSelectLabel').innerText = "Network";
             
-            document.getElementById('assetSelected').innerHTML = `<span class="selected-value-container" style="color: #64748b;">Select Method</span>`;
-            document.getElementById('assetSelected').classList.remove('open');
+            document.getElementById('assetSelected').innerHTML = `<span class="selected-value-container" style="color: #64748b;">Select currency</span>`;
             
             const netBtn = document.getElementById('networkSelected');
-            netBtn.innerHTML = `<span id="networkTextPlaceholder" style="color: #94a3b8;">Select Option</span>`;
-            netBtn.classList.remove('open');
+            netBtn.innerHTML = `<span id="networkTextPlaceholder" style="color: #94a3b8;">Select network</span>`;
             netBtn.classList.add('custom-disabled');
             
             document.getElementById('displayArea').style.display = 'none';
             
             const actionArea = document.getElementById('actionButtons');
             actionArea.innerHTML = `
-                <button id="closeBtn" onclick="closeWallet()" style="border: 1px solid rgba(0,0,0,0.08); padding:10px 20px; border-radius:12px; font-weight: 600; color: #64748b; width: 40%; text-align: center; background: #f1f5f9;">Close</button>
+                <button id="closeBtn" onclick="closeWallet()" style="border: 1px solid var(--border-color); padding:10px 20px; border-radius:12px; font-weight: 600; color: #475569; width: 40%; text-align: center; background: #f8fafc;">Close</button>
                 <button id="proceedBtn" onclick="startLoadingProcess()" class="proceed-btn-style" disabled>
                     <div id="btnLoader" class="btn-spinner"></div>
-                    <span id="btnText">Proceed</span>
+                    <span id="btnText">Proceed to the payment</span>
                 </button>
             `;
         }
@@ -486,18 +556,9 @@
                 document.getElementById('displayArea').style.display = 'block';
                 
                 document.getElementById('actionButtons').innerHTML = `
-                    <button onclick="closeWallet()" style="background: var(--primary-blue); padding:14px 0; border-radius:12px; font-weight: 700; color: #fff; width: 100%; text-align: center; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.35);">DONE</button>
+                    <button onclick="closeWallet()" style="background: #000000; padding:14px 0; border-radius:12px; font-weight: 700; color: #fff; width: 100%; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.15);">DONE</button>
                 `;
             }, 2500);
-        }
-
-        window.onclick = function(event) {
-            if (!event.target.closest('.custom-dropdown')) {
-                document.getElementById('assetDropdownOptions').style.display = 'none';
-                document.getElementById('networkDropdownOptions').style.display = 'none';
-                document.getElementById('assetSelected').classList.remove('open');
-                document.getElementById('networkSelected').classList.remove('open');
-            }
         }
 
         function copyText(elementId) {
