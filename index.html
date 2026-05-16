@@ -109,8 +109,9 @@
 
         .selected-value-container { display: flex; align-items: center; gap: 14px; width: 100%; }
         
+        /* ড্রপডাউন এবং হেডার লোগো সাইজ */
         .crypto-image-logo {
-            width: 24px; height: 24px; border-radius: 6px; object-fit: contain; flex-shrink: 0;
+            width: 24px; height: 24px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
         }
 
         .info-tag {
@@ -163,18 +164,20 @@
             color: rgb(16, 185, 129) !important;
         }
 
+        /* কিউআর বক্সের জন্য ফিক্সড স্টাইল (যাতে ইমেজ না ফাটে) */
         .qr-box {
             margin: 5px auto 15px; width: 160px; height: 160px;
             background: white; padding: 10px; border-radius: 14px;
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
         
         .qr-box img {
-            width: 100%; height: 100%; object-fit: contain; image-rendering: -webkit-optimize-contrast;
+            width: 100% !important; height: 100% !important; object-fit: contain !important;
+            border-radius: 0% !important;
         }
 
-        /* সোশ্যাল সাপোর্ট সেকশন স্টাইল (সবসময় নিচে থাকবে) */
+        /* সোশ্যাল সাপোর্ট সেকশন (মডাল ওপেন হলেই সবসময় নিচে থাকবে) */
         .social-support-container {
             margin-top: 20px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px;
         }
@@ -309,18 +312,16 @@
     </div>
 
     <script>
-        // ছোট গোল আইকন ড্রপডাউনের জন্য (হাই রেজুলেশন)
         const logos = {
-            bKash: `<img src="https://assets.bka.sh/images/bKash-Logo.png" class="crypto-image-logo" alt="bKash" onerror="this.src='https://i.ibb.co.com/4g1Xr8BP/1164.jpg'">`,
-            Nagad: `<img src="https://download.logo.wine/logo/Nagad/Nagad-Logo.wine.png" class="crypto-image-logo" style="border-radius:0; object-fit:contain;" alt="Nagad" onerror="this.src='https://i.ibb.co.com/ksqxHvm8/image.png'">`,
+            bKash: `<img src="https://i.ibb.co.com/4g1Xr8BP/1164.jpg" class="crypto-image-logo" alt="bKash">`,
+            Nagad: `<img src="https://i.ibb.co.com/ksqxHvm8/image.png" class="crypto-image-logo" alt="Nagad">`,
             USDT: `<img src="https://i.ibb.co.com/MDXfJt8R/1153.png" class="crypto-image-logo" alt="USDT">`,
             LTC: `<img src="https://i.ibb.co.com/S7J570W0/1154.png" class="crypto-image-logo" alt="LTC">`
         };
 
-        // ফাইনাল বড় কিউআর বক্সের ইমেজ ডেটা (যা একদম ক্রিস্প এবং ক্লিয়ার দেখাবে)
         const walletData = {
-            bkash: [{ name: "Personal Account", logoKey: "bKash", address: "01329365319", qr: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/BKash_Logo.svg/512px-BKash_Logo.svg.png" }],
-            nagad: [{ name: "Personal Account", logoKey: "Nagad", address: "01329365319", qr: "https://vignette.wikia.nocookie.net/logopedia/images/b/b3/Nagad_Logo.png/revision/latest?cb=20200806173000" }],
+            bkash: [{ name: "Personal Account", logoKey: "bKash", address: "01329365319", qr: "https://i.ibb.co.com/4g1Xr8BP/1164.jpg" }],
+            nagad: [{ name: "Personal Account", logoKey: "Nagad", address: "01329365319", qr: "https://i.ibb.co.com/ksqxHvm8/image.png" }],
             usdt: [
                 { name: "BSC (BEP20)", logoKey: "USDT", address: "0x829f5ddbf2e7df26559a86c61837eb59fc491c13", qr: "https://i.ibb.co.com/ynCSX0Wf/1155.jpg" },
                 { name: "TRX (TRC20)", logoKey: "USDT", address: "TY7NYcRGVyqG3ECNnRb7MqSZnKxDPyhx8L", qr: "https://i.ibb.co.com/VcZfSztd/image.png" }
