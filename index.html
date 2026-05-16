@@ -47,7 +47,6 @@
             text-decoration: none; transition: 0.3s; border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
-        /* গেট অ্যাড্রেস বাটন স্টাইল */
         .wallet-btn {
             background: linear-gradient(90deg, #2563eb, #1d4ed8);
             cursor: pointer; width: 100%; margin-top: 5px;
@@ -104,11 +103,7 @@
         .selected-value-container { display: flex; align-items: center; gap: 14px; }
         
         .crypto-image-logo {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            object-fit: cover;
-            flex-shrink: 0;
+            width: 24px; height: 24px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
         }
 
         .info-tag {
@@ -117,7 +112,6 @@
             display: inline-flex; align-items: center; gap: 6px; font-size: 0.9rem; margin-bottom: 20px;
         }
 
-        /* কন্ট্রোল বাটন */
         .proceed-btn-style {
             padding: 14px 20px; border-radius: 12px; font-weight: 700; color: #64748b; 
             width: 54%; display: flex; align-items: center; justify-content: center;
@@ -130,7 +124,6 @@
             border-color: transparent; box-shadow: 0 4px 20px rgba(37, 99, 235, 0.4);
         }
 
-        /* পেমেন্ট কার্ড */
         .payment-details-card {
             background: #020617; border: 1px dashed rgba(255,255,255,0.15);
             padding: 15px; border-radius: 14px; margin-top: 5px;
@@ -146,7 +139,6 @@
             justify-content: space-between; font-family: monospace; font-size: 0.85rem; word-break: break-all;
         }
 
-        /* প্রফেশনাল কপি বাটন */
         .inline-copy-btn {
             display: flex; align-items: center; justify-content: center;
             color: #60a5fa; background: rgba(59, 130, 246, 0.08);
@@ -155,9 +147,7 @@
             cursor: pointer; transition: all 0.2s ease; flex-shrink: 0;
         }
         .inline-copy-btn:hover {
-            background: rgba(59, 130, 246, 0.16);
-            border-color: rgba(59, 130, 246, 0.4);
-            color: #93c5fd;
+            background: rgba(59, 130, 246, 0.16); border-color: rgba(59, 130, 246, 0.4); color: #93c5fd;
         }
         
         .inline-copy-btn.copied {
@@ -172,7 +162,6 @@
             display: flex; align-items: center; justify-content: center;
         }
 
-        /* স্পিন লোডার */
         .btn-spinner {
             display: none; width: 22px; height: 22px;
             border: 3px solid rgba(255, 255, 255, 0.2);
@@ -181,32 +170,16 @@
         }
         @keyframes btnSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* টপ নোটিফিকেশন ব্যানার */
         .top-notification {
-            position: fixed;
-            top: -100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #0f172a;
-            border: 1px solid #10b981;
-            color: #ffffff;
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            z-index: 9999;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
-            opacity: 0;
+            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
+            background: #0f172a; border: 1px solid #10b981; color: #ffffff;
+            padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 0.95rem;
+            display: flex; align-items: center; gap: 8px; z-index: 9999;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6); opacity: 0;
             transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
         }
         
-        .top-notification.show {
-            top: 25px;
-            opacity: 1;
-        }
+        .top-notification.show { top: 25px; opacity: 1; }
     </style>
 </head>
 <body>
@@ -244,7 +217,7 @@
                 </div>
                 
                 <label class="detail-label">Payment Method</label>
-                <div class="custom-dropdown" id="assetDropdownWrapper">
+                <div class="custom-dropdown">
                     <div class="dropdown-selected" id="assetSelected" onclick="toggleDropdown('assetDropdownOptions')">
                         <span class="selected-value-container">Select Method</span>
                     </div>
@@ -252,7 +225,7 @@
                 </div>
 
                 <label class="detail-label" id="subSelectLabel">Account Type / Network</label>
-                <div class="custom-dropdown" id="networkDropdownWrapper">
+                <div class="custom-dropdown">
                     <div class="dropdown-selected disabled" id="networkSelected" onclick="toggleDropdown('networkDropdownOptions')">
                         <span class="selected-value-container" id="subSelectPlaceholder">Select Option</span>
                     </div>
@@ -306,19 +279,13 @@
         };
 
         const walletData = {
-            bKash: [
-                { name: "Personal Account", address: "01329365319", qr: "https://i.ibb.co.com/4g1Xr8BP/1164.jpg" }
-            ],
-            Nagad: [
-                { name: "Personal Account", address: "01329365319", qr: "https://i.ibb.co.com/ksqxHvm8/image.png" }
-            ],
+            bKash: [{ name: "Personal Account", address: "01329365319", qr: "https://i.ibb.co.com/4g1Xr8BP/1164.jpg" }],
+            Nagad: [{ name: "Personal Account", address: "01329365319", qr: "https://i.ibb.co.com/ksqxHvm8/image.png" }],
             USDT: [
                 { name: "BSC (BEP20)", address: "0x829f5ddbf2e7df26559a86c61837eb59fc491c13", qr: "https://i.ibb.co.com/ynCSX0Wf/1155.jpg" },
                 { name: "TRX (TRC20)", address: "TY7NYcRGVyqG3ECNnRb7MqSZnKxDPyhx8L", qr: "https://i.ibb.co.com/VcZfSztd/image.png" }
             ],
-            LTC: [
-                { name: "LTC (Litecoin)", address: "LRETuh12SFWUmXREKsUfELV1qgPqvcv854", qr: "https://i.ibb.co.com/HpzL6HLj/image.png" }
-            ]
+            LTC: [{ name: "LTC (Litecoin)", address: "LRETuh12SFWUmXREKsUfELV1qgPqvcv854", qr: "https://i.ibb.co.com/HpzL6HLj/image.png" }]
         };
 
         let selectedAsset = "";
@@ -336,10 +303,10 @@
 
         function toggleDropdown(id) {
             const el = document.getElementById(id);
-            if (!el) return;
             const trigger = el.previousElementSibling;
             if (trigger.classList.contains('disabled')) return;
 
+            // অন্য ড্রপডাউন বন্ধ করা
             if (id === 'assetDropdownOptions') {
                 document.getElementById('networkDropdownOptions').style.display = 'none';
                 document.getElementById('networkSelected').classList.remove('open');
@@ -360,18 +327,10 @@
         function initAssetDropdown() {
             const container = document.getElementById('assetDropdownOptions');
             container.innerHTML = `
-                <div class="dropdown-option" onclick="selectAsset('bKash')">
-                    ${logos.bKash} <span>bKash</span>
-                </div>
-                <div class="dropdown-option" onclick="selectAsset('Nagad')">
-                    ${logos.Nagad} <span>Nagad</span>
-                </div>
-                <div class="dropdown-option" onclick="selectAsset('USDT')">
-                    ${logos.USDT} <span>USDT</span>
-                </div>
-                <div class="dropdown-option" onclick="selectAsset('LTC')">
-                    ${logos.LTC} <span>LTC</span>
-                </div>
+                <div class="dropdown-option" onclick="selectAsset('bKash')">${logos.bKash} <span>bKash</span></div>
+                <div class="dropdown-option" onclick="selectAsset('Nagad')">${logos.Nagad} <span>Nagad</span></div>
+                <div class="dropdown-option" onclick="selectAsset('USDT')">${logos.USDT} <span>USDT</span></div>
+                <div class="dropdown-option" onclick="selectAsset('LTC')">${logos.LTC} <span>LTC</span></div>
             `;
         }
 
@@ -388,7 +347,7 @@
             const placeholderEl = document.getElementById('subSelectPlaceholder');
             const netSelected = document.getElementById('networkSelected');
 
-            // বিকাশ বা নগদ হলে "Account Type" আর ক্রিপ্টো হলে "Select Network" দেখাবে
+            // লজিক চেক ও রিয়েলটাইম টেক্সট পরিবর্তন
             if (asset === 'bKash' || asset === 'Nagad') {
                 labelEl.innerText = "Account Type";
                 placeholderEl.innerText = "Select Account";
@@ -398,7 +357,6 @@
             }
 
             netSelected.classList.remove('disabled', 'has-value');
-            
             selectedNetworkIndex = "";
             
             const btn = document.getElementById('proceedBtn');
@@ -407,11 +365,15 @@
 
             const netContainer = document.getElementById('networkDropdownOptions');
             netContainer.innerHTML = "";
+            
             walletData[asset].forEach((net, index) => {
                 const item = document.createElement('div');
                 item.className = "dropdown-option";
                 item.innerHTML = `${logos[asset]} <span>${net.name}</span>`;
-                item.onclick = function() { selectNetwork(index, net.name); };
+                item.onclick = function(e) { 
+                    e.stopPropagation();
+                    selectNetwork(index, net.name); 
+                };
                 netContainer.appendChild(item);
             });
         }
@@ -434,7 +396,6 @@
             selectedAsset = "";
             selectedNetworkIndex = "";
             document.getElementById('selectionArea').style.display = 'block';
-            
             document.getElementById('subSelectLabel').innerText = "Account Type / Network";
             
             const assetBtn = document.getElementById('assetSelected');
@@ -448,6 +409,7 @@
             
             document.getElementById('displayArea').style.display = 'none';
             
+            // বাটন রিসেট
             const actionArea = document.getElementById('actionButtons');
             actionArea.innerHTML = `
                 <button id="closeBtn" onclick="closeWallet()" style="border: 1px solid rgba(255,255,255,0.08); padding:10px 20px; border-radius:12px; font-weight: 600; color: #94a3b8; width: 40%; text-align: center;">Close</button>
@@ -481,7 +443,7 @@
             document.getElementById('addrText').innerText = netInfo.address;
             document.getElementById('qrImage').src = netInfo.qr;
 
-            // ফাইনাল কপি এরিয়াতে "Recipient's Number" অথবা "Recipient's Wallet Address" ডায়নামিকালি সেট হবে
+            // ফাইনাল কপি স্ক্রিনের কন্ডিশনাল হেডার পরিবর্তন
             const finalDataLabel = document.getElementById('finalDataLabel');
             if (selectedAsset === 'bKash' || selectedAsset === 'Nagad') {
                 finalDataLabel.innerText = "Recipient's Number";
@@ -499,6 +461,7 @@
             }, 2500);
         }
 
+        // গ্লোবাল ক্লিক হ্যান্ডলার ফিক্স
         window.onclick = function(event) {
             if (!event.target.closest('.custom-dropdown')) {
                 const assetOpts = document.getElementById('assetDropdownOptions');
