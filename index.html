@@ -74,13 +74,20 @@
         }
 
         .dropdown-selected {
-            background: #020617; color: #94a3b8; padding: 14px; border-radius: 12px;
+            background: #020617; color: #fff; padding: 14px; border-radius: 12px;
             border: 1px solid var(--glass-border); font-weight: 600; cursor: pointer;
             display: flex; align-items: center; justify-content: space-between; transition: 0.3s;
         }
-        .dropdown-selected.has-value { color: #fff; border-color: rgba(255,255,255,0.15); }
-        .dropdown-selected.disabled { opacity: 0.25; cursor: not-allowed; background: #090f24; }
         
+        /* ডিসেবলড স্টেট ফিক্স */
+        .dropdown-selected.is-disabled { 
+            opacity: 0.3 !important; 
+            cursor: not-allowed !important; 
+            pointer-events: none !important;
+            background: #090f24;
+            color: #64748b;
+        }
+
         .dropdown-selected::after {
             content: ""; border-left: 5px solid transparent; border-right: 5px solid transparent;
             border-top: 5px solid #94a3b8; transition: 0.3s; margin-left: 10px;
@@ -100,7 +107,7 @@
         }
         .dropdown-option:hover { background: rgba(255, 255, 255, 0.05); color: #fff; }
 
-        .selected-value-container { display: flex; align-items: center; gap: 14px; }
+        .selected-value-container { display: flex; align-items: center; gap: 14px; width: 100%; }
         
         .crypto-image-logo {
             width: 24px; height: 24px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
@@ -219,15 +226,15 @@
                 <label class="detail-label">Payment Method</label>
                 <div class="custom-dropdown">
                     <div class="dropdown-selected" id="assetSelected" onclick="toggleDropdown('assetDropdownOptions')">
-                        <span class="selected-value-container">Select Method</span>
+                        <span class="selected-value-container" style="color: #94a3b8;">Select Method</span>
                     </div>
                     <div class="dropdown-options" id="assetDropdownOptions"></div>
                 </div>
 
                 <label class="detail-label" id="subSelectLabel">Account Type / Network</label>
                 <div class="custom-dropdown">
-                    <div class="dropdown-selected disabled" id="networkSelected" onclick="toggleDropdown('networkDropdownOptions')">
-                        <span class="selected-value-container" id="subSelectPlaceholder">Select Option</span>
+                    <div class="dropdown-selected is-disabled" id="networkSelected" onclick="toggleDropdown('networkDropdownOptions')">
+                        <span class="selected-value-container" id="subSelectPlaceholder" style="color: #94a3b8;">Select Option</span>
                     </div>
                     <div class="dropdown-options" id="networkDropdownOptions"></div>
                 </div>
@@ -301,7 +308,6 @@
             document.getElementById('walletModal').style.display = 'none';
         }
 
-        // সম্পূর্ণ ফিক্সড ড্রপডাউন টগল লজিক
         function toggleDropdown(id) {
             const assetOpts = document.getElementById('assetDropdownOptions');
             const netOpts = document.getElementById('networkDropdownOptions');
@@ -320,7 +326,7 @@
                     assetSel.classList.add('open');
                 }
             } else if (id === 'networkDropdownOptions') {
-                if (netSel.classList.contains('disabled')) return;
+                if (netSel.classList.contains('is-disabled')) return;
                 assetOpts.style.display = 'none';
                 assetSel.classList.remove('open');
 
@@ -347,8 +353,7 @@
         function selectAsset(asset) {
             selectedAsset = asset;
             const assetBtn = document.getElementById('assetSelected');
-            assetBtn.innerHTML = `<div class="selected-value-container">${logos[asset]} <span>${asset}</span></div>`;
-            assetBtn.classList.add('has-value');
+            assetBtn.innerHTML = `<div class="selected-value-container">${logos[asset]} <span style="color: #fff;">${asset}</span></div>`;
             
             document.getElementById('assetDropdownOptions').style.display = 'none';
             assetBtn.classList.remove('open');
@@ -357,7 +362,6 @@
             const placeholderEl = document.getElementById('subSelectPlaceholder');
             const netSelected = document.getElementById('networkSelected');
 
-            // টেক্সট রিয়েলটাইম চেঞ্জ কন্ডিশন
             if (asset === 'bKash' || asset === 'Nagad') {
                 labelEl.innerText = "Account Type";
                 placeholderEl.innerText = "Select Account";
@@ -366,8 +370,9 @@
                 placeholderEl.innerText = "Select Network";
             }
 
-            netSelected.classList.remove('disabled', 'has-value');
-            netSelected.innerHTML = `<span class="selected-value-container">${placeholderEl.innerText}</span>`;
+            // এখানে disabled ক্লাস রিমুভ করে বাটন একটিভ করা হচ্ছে
+            netSelected.classList.remove('is-disabled');
+            netSelected.innerHTML = `<span class="selected-value-container" style="color: #94a3b8;">${placeholderEl.innerText}</span>`;
             selectedNetworkIndex = "";
             
             const btn = document.getElementById('proceedBtn');
@@ -380,7 +385,7 @@
             walletData[asset].forEach((net, index) => {
                 const item = document.createElement('div');
                 item.className = "dropdown-option";
-                item.innerHTML = `${logos[asset]} <span>${net.name}</span>`;
+                item.innerHTML = `<span>${net.name}</span>`;
                 item.onclick = function(e) { 
                     e.stopPropagation();
                     selectNetwork(index, net.name); 
@@ -392,8 +397,7 @@
         function selectNetwork(index, name) {
             selectedNetworkIndex = index;
             const netBtn = document.getElementById('networkSelected');
-            netBtn.innerHTML = `<div class="selected-value-container">${logos[selectedAsset]} <span>${name}</span></div>`;
-            netBtn.classList.add('has-value');
+            netBtn.innerHTML = `<div class="selected-value-container"><span style="color: #fff;">${name}</span></div>`;
             
             document.getElementById('networkDropdownOptions').style.display = 'none';
             netBtn.classList.remove('open');
@@ -410,13 +414,13 @@
             document.getElementById('subSelectLabel').innerText = "Account Type / Network";
             
             const assetBtn = document.getElementById('assetSelected');
-            assetBtn.innerHTML = `<span class="selected-value-container">Select Method</span>`;
-            assetBtn.classList.remove('has-value', 'open');
+            assetBtn.innerHTML = `<span class="selected-value-container" style="color: #94a3b8;">Select Method</span>`;
+            assetBtn.classList.remove('open');
             
             const netBtn = document.getElementById('networkSelected');
-            netBtn.innerHTML = `<span class="selected-value-container">Select Option</span>`;
-            netBtn.classList.remove('has-value', 'open');
-            netBtn.classList.add('disabled');
+            netBtn.innerHTML = `<span class="selected-value-container" style="color: #94a3b8;">Select Option</span>`;
+            netBtn.classList.remove('open');
+            netBtn.classList.add('is-disabled');
             
             document.getElementById('displayArea').style.display = 'none';
             
