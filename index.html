@@ -336,6 +336,7 @@
 
         function toggleDropdown(id) {
             const el = document.getElementById(id);
+            if (!el) return;
             const trigger = el.previousElementSibling;
             if (trigger.classList.contains('disabled')) return;
 
@@ -387,7 +388,7 @@
             const placeholderEl = document.getElementById('subSelectPlaceholder');
             const netSelected = document.getElementById('networkSelected');
 
-            // বিকাশ/নগদ বনাম ক্রিপ্টোর জন্য কন্ডিশনাল লেবেল পরিবর্তন
+            // বিকাশ বা নগদ হলে "Account Type" আর ক্রিপ্টো হলে "Select Network" দেখাবে
             if (asset === 'bKash' || asset === 'Nagad') {
                 labelEl.innerText = "Account Type";
                 placeholderEl.innerText = "Select Account";
@@ -480,7 +481,7 @@
             document.getElementById('addrText').innerText = netInfo.address;
             document.getElementById('qrImage').src = netInfo.qr;
 
-            // ফাইনাল স্ক্রিনে কন্ডিশনাল নাম/অ্যাড্রেস লেবেল সেট করা
+            // ফাইনাল কপি এরিয়াতে "Recipient's Number" অথবা "Recipient's Wallet Address" ডায়নামিকালি সেট হবে
             const finalDataLabel = document.getElementById('finalDataLabel');
             if (selectedAsset === 'bKash' || selectedAsset === 'Nagad') {
                 finalDataLabel.innerText = "Recipient's Number";
@@ -500,10 +501,15 @@
 
         window.onclick = function(event) {
             if (!event.target.closest('.custom-dropdown')) {
-                document.getElementById('assetDropdownOptions').style.display = 'none';
-                document.getElementById('networkDropdownOptions').style.display = 'none';
-                document.getElementById('assetSelected').classList.remove('open');
-                document.getElementById('networkSelected').classList.remove('open');
+                const assetOpts = document.getElementById('assetDropdownOptions');
+                const netOpts = document.getElementById('networkDropdownOptions');
+                if(assetOpts) assetOpts.style.display = 'none';
+                if(netOpts) netOpts.style.display = 'none';
+                
+                const assetSel = document.getElementById('assetSelected');
+                const netSel = document.getElementById('networkSelected');
+                if(assetSel) assetSel.classList.remove('open');
+                if(netSel) netSel.classList.remove('open');
             }
         }
 
