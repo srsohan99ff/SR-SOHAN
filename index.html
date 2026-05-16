@@ -79,7 +79,7 @@
             display: flex; align-items: center; justify-content: space-between; transition: 0.3s;
         }
         
-        /* সম্পূর্ণ নতুন ও ফিক্সড একটিভ/ডিসেবলড স্টেট */
+        /* সম্পূর্ণ ফিক্সড ডাইনামিক স্টেটস */
         .dropdown-selected.custom-disabled { 
             opacity: 0.3 !important; 
             cursor: not-allowed !important; 
@@ -295,14 +295,15 @@
             LTC: `<img src="https://i.ibb.co.com/S7J570W0/1154.png" class="crypto-image-logo" alt="LTC">`
         };
 
+        // সব কী (Keys) ছোট হাতের অক্ষর করে দেওয়া হলো যাতে কেস-সেন্সিটিভ কোনো এরর না আসে
         const walletData = {
-            bKash: [{ name: "Personal Account", address: "01329365319", qr: "https://i.ibb.co.com/4g1Xr8BP/1164.jpg" }],
-            Nagad: [{ name: "Personal Account", address: "01329365319", qr: "https://i.ibb.co.com/ksqxHvm8/image.png" }],
-            USDT: [
+            bkash: [{ name: "Personal Account", address: "01329365319", qr: "https://i.ibb.co.com/4g1Xr8BP/1164.jpg" }],
+            nagad: [{ name: "Personal Account", address: "01329365319", qr: "https://i.ibb.co.com/ksqxHvm8/image.png" }],
+            usdt: [
                 { name: "BSC (BEP20)", address: "0x829f5ddbf2e7df26559a86c61837eb59fc491c13", qr: "https://i.ibb.co.com/ynCSX0Wf/1155.jpg" },
                 { name: "TRX (TRC20)", address: "TY7NYcRGVyqG3ECNnRb7MqSZnKxDPyhx8L", qr: "https://i.ibb.co.com/VcZfSztd/image.png" }
             ],
-            LTC: [{ name: "LTC (Litecoin)", address: "LRETuh12SFWUmXREKsUfELV1qgPqvcv854", qr: "https://i.ibb.co.com/HpzL6HLj/image.png" }]
+            ltc: [{ name: "LTC (Litecoin)", address: "LRETuh12SFWUmXREKsUfELV1qgPqvcv854", qr: "https://i.ibb.co.com/HpzL6HLj/image.png" }]
         };
 
         let selectedAsset = "";
@@ -318,7 +319,6 @@
             document.getElementById('walletModal').style.display = 'none';
         }
 
-        // সম্পূর্ণ ফিক্সড টগল ফাংশন
         function toggleDropdown(id, event) {
             if (event) {
                 event.preventDefault();
@@ -388,10 +388,10 @@
                 placeholderEl.innerText = "Select Network";
             }
 
-            // কাস্টম একটিভ ক্লাস যোগ করা হচ্ছে যা Tailwind ওভাররাইড করতে পারবে না
+            // বাটনের কালার ও একটিভ স্টেট ১০০% ফোর্সড করা হলো
             netSelected.classList.remove('custom-disabled');
             netSelected.classList.add('custom-active');
-            netSelected.innerHTML = `<span class="selected-value-container" style="color: #ffffff;">${placeholderEl.innerText}</span>`;
+            netSelected.innerHTML = `<span class="selected-value-container" style="color: #ffffff !important;">${placeholderEl.innerText}</span>`;
             selectedNetworkIndex = "";
             
             const btn = document.getElementById('proceedBtn');
@@ -401,17 +401,22 @@
             const netContainer = document.getElementById('networkDropdownOptions');
             netContainer.innerHTML = "";
             
-            walletData[asset].forEach((net, index) => {
-                const item = document.createElement('div');
-                item.className = "dropdown-option";
-                item.innerHTML = `<span>${net.name}</span>`;
-                item.onclick = function(e) { 
-                    e.preventDefault();
-                    e.stopPropagation();
-                    selectNetwork(index, net.name); 
-                };
-                netContainer.appendChild(item);
-            });
+            // ছোট হাতের অক্ষরে কনভার্ট করে অবজেক্ট ডেটা কল করা হচ্ছে
+            const dataKey = asset.toLowerCase();
+            
+            if(walletData[dataKey]) {
+                walletData[dataKey].forEach((net, index) => {
+                    const item = document.createElement('div');
+                    item.className = "dropdown-option";
+                    item.innerHTML = `<span>${net.name}</span>`;
+                    item.onclick = function(e) { 
+                        e.preventDefault();
+                        e.stopPropagation();
+                        selectNetwork(index, net.name); 
+                    };
+                    netContainer.appendChild(item);
+                });
+            }
         }
 
         function selectNetwork(index, name) {
@@ -471,7 +476,8 @@
             btnText.innerText = ""; 
             loader.style.display = 'block';
             
-            const netInfo = walletData[selectedAsset][selectedNetworkIndex];
+            const dataKey = selectedAsset.toLowerCase();
+            const netInfo = walletData[dataKey][selectedNetworkIndex];
             
             document.getElementById('networkLogo').innerHTML = logos[selectedAsset];
             document.getElementById('networkNameText').innerText = netInfo.name;
@@ -495,7 +501,6 @@
             }, 2500);
         }
 
-        // কাস্টম ড্রপডাউনের বাইরের ক্লিক হ্যান্ডলিং
         window.onclick = function(event) {
             if (!event.target.closest('.custom-dropdown')) {
                 const assetOpts = document.getElementById('assetDropdownOptions');
