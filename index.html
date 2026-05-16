@@ -79,23 +79,13 @@
             display: flex; align-items: center; justify-content: space-between; transition: 0.3s;
         }
         
-        /* সম্পূর্ণ ফিক্সড ডাইনামিক স্টেটস */
+        /* পিওর সিএসএস স্টেট ফিক্স */
         .dropdown-selected.custom-disabled { 
             opacity: 0.3 !important; 
-            cursor: not-allowed !important; 
-            pointer-events: none !important;
+            cursor: not-allowed !important;
             background: #090f24 !important;
             color: #64748b !important;
             border-color: rgba(255,255,255,0.02) !important;
-        }
-
-        .dropdown-selected.custom-active {
-            opacity: 1 !important;
-            cursor: pointer !important;
-            pointer-events: auto !important;
-            background: #020617 !important;
-            color: #ffffff !important;
-            border-color: var(--glass-border) !important;
         }
 
         .dropdown-selected::after {
@@ -244,7 +234,7 @@
                 <label class="detail-label" id="subSelectLabel">Account Type / Network</label>
                 <div class="custom-dropdown">
                     <div class="dropdown-selected custom-disabled" id="networkSelected" onclick="toggleDropdown('networkDropdownOptions', event)">
-                        <span class="selected-value-container" id="subSelectPlaceholder" style="color: #64748b;">Select Option</span>
+                        <span id="networkTextPlaceholder" style="color: #64748b; font-weight: 600;">Select Option</span>
                     </div>
                     <div class="dropdown-options" id="networkDropdownOptions"></div>
                 </div>
@@ -295,7 +285,6 @@
             LTC: `<img src="https://i.ibb.co.com/S7J570W0/1154.png" class="crypto-image-logo" alt="LTC">`
         };
 
-        // সব কী (Keys) ছোট হাতের অক্ষর করে দেওয়া হলো যাতে কেস-সেন্সিটিভ কোনো এরর না আসে
         const walletData = {
             bkash: [{ name: "Personal Account", address: "01329365319", qr: "https://i.ibb.co.com/4g1Xr8BP/1164.jpg" }],
             nagad: [{ name: "Personal Account", address: "01329365319", qr: "https://i.ibb.co.com/ksqxHvm8/image.png" }],
@@ -320,10 +309,7 @@
         }
 
         function toggleDropdown(id, event) {
-            if (event) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
+            if (event) event.stopPropagation();
             
             const assetOpts = document.getElementById('assetDropdownOptions');
             const netOpts = document.getElementById('networkDropdownOptions');
@@ -333,26 +319,14 @@
             if (id === 'assetDropdownOptions') {
                 netOpts.style.display = 'none';
                 netSel.classList.remove('open');
-                
-                if (assetOpts.style.display === 'block') {
-                    assetOpts.style.display = 'none';
-                    assetSel.classList.remove('open');
-                } else {
-                    assetOpts.style.display = 'block';
-                    assetSel.classList.add('open');
-                }
+                assetOpts.style.display = (assetOpts.style.display === 'block') ? 'none' : 'block';
+                assetSel.classList.toggle('open');
             } else if (id === 'networkDropdownOptions') {
-                if (netSel.classList.contains('custom-disabled')) return;
+                if (netSel.classList.contains('custom-disabled')) return; // ডিসেবল থাকলে ক্লিক ইগনোর করবে
                 assetOpts.style.display = 'none';
                 assetSel.classList.remove('open');
-
-                if (netOpts.style.display === 'block') {
-                    netOpts.style.display = 'none';
-                    netSel.classList.remove('open');
-                } else {
-                    netOpts.style.display = 'block';
-                    netSel.classList.add('open');
-                }
+                netOpts.style.display = (netOpts.style.display === 'block') ? 'none' : 'block';
+                netSel.classList.toggle('open');
             }
         }
 
@@ -370,47 +344,35 @@
             if (event) event.stopPropagation();
             
             selectedAsset = asset;
-            const assetBtn = document.getElementById('assetSelected');
-            assetBtn.innerHTML = `<div class="selected-value-container">${logos[asset]} <span style="color: #fff;">${asset}</span></div>`;
-            
+            document.getElementById('assetSelected').innerHTML = `<div class="selected-value-container">${logos[asset]} <span style="color: #fff;">${asset}</span></div>`;
             document.getElementById('assetDropdownOptions').style.display = 'none';
-            assetBtn.classList.remove('open');
+            document.getElementById('assetSelected').classList.remove('open');
 
             const labelEl = document.getElementById('subSelectLabel');
-            const placeholderEl = document.getElementById('subSelectPlaceholder');
+            const placeholderText = (asset === 'bKash' || asset === 'Nagad') ? "Select Account" : "Select Network";
+            labelEl.innerText = (asset === 'bKash' || asset === 'Nagad') ? "Account Type" : "Select Network";
+
+            // বাটন আনলক এবং টেক্সট সম্পূর্ণ হোয়াইট বা একটিভ কালার করা
             const netSelected = document.getElementById('networkSelected');
-
-            if (asset === 'bKash' || asset === 'Nagad') {
-                labelEl.innerText = "Account Type";
-                placeholderEl.innerText = "Select Account";
-            } else {
-                labelEl.innerText = "Select Network";
-                placeholderEl.innerText = "Select Network";
-            }
-
-            // বাটনের কালার ও একটিভ স্টেট ১০০% ফোর্সড করা হলো
             netSelected.classList.remove('custom-disabled');
-            netSelected.classList.add('custom-active');
-            netSelected.innerHTML = `<span class="selected-value-container" style="color: #ffffff !important;">${placeholderEl.innerText}</span>`;
-            selectedNetworkIndex = "";
+            netSelected.innerHTML = `<span id="networkTextPlaceholder" style="color: #ffffff !important; font-weight: 600;">${placeholderText}</span>`;
             
+            selectedNetworkIndex = "";
             const btn = document.getElementById('proceedBtn');
             btn.disabled = true;
             btn.classList.remove('active');
 
+            // অপশন লিস্ট তৈরি করা হচ্ছে
             const netContainer = document.getElementById('networkDropdownOptions');
             netContainer.innerHTML = "";
             
-            // ছোট হাতের অক্ষরে কনভার্ট করে অবজেক্ট ডেটা কল করা হচ্ছে
             const dataKey = asset.toLowerCase();
-            
             if(walletData[dataKey]) {
                 walletData[dataKey].forEach((net, index) => {
                     const item = document.createElement('div');
                     item.className = "dropdown-option";
                     item.innerHTML = `<span>${net.name}</span>`;
                     item.onclick = function(e) { 
-                        e.preventDefault();
                         e.stopPropagation();
                         selectNetwork(index, net.name); 
                     };
@@ -421,11 +383,9 @@
 
         function selectNetwork(index, name) {
             selectedNetworkIndex = index;
-            const netBtn = document.getElementById('networkSelected');
-            netBtn.innerHTML = `<div class="selected-value-container"><span style="color: #fff;">${name}</span></div>`;
-            
+            document.getElementById('networkSelected').innerHTML = `<div class="selected-value-container"><span style="color: #fff;">${name}</span></div>`;
             document.getElementById('networkDropdownOptions').style.display = 'none';
-            netBtn.classList.remove('open');
+            document.getElementById('networkSelected').classList.remove('open');
 
             const btn = document.getElementById('proceedBtn');
             btn.disabled = false;
@@ -438,14 +398,12 @@
             document.getElementById('selectionArea').style.display = 'block';
             document.getElementById('subSelectLabel').innerText = "Account Type / Network";
             
-            const assetBtn = document.getElementById('assetSelected');
-            assetBtn.innerHTML = `<span class="selected-value-container" style="color: #94a3b8;">Select Method</span>`;
-            assetBtn.classList.remove('open');
+            document.getElementById('assetSelected').innerHTML = `<span class="selected-value-container" style="color: #94a3b8;">Select Method</span>`;
+            document.getElementById('assetSelected').classList.remove('open');
             
             const netBtn = document.getElementById('networkSelected');
-            netBtn.innerHTML = `<span class="selected-value-container" style="color: #64748b;">Select Option</span>`;
+            netBtn.innerHTML = `<span id="networkTextPlaceholder" style="color: #64748b;">Select Option</span>`;
             netBtn.classList.remove('open');
-            netBtn.classList.remove('custom-active');
             netBtn.classList.add('custom-disabled');
             
             document.getElementById('displayArea').style.display = 'none';
@@ -503,15 +461,10 @@
 
         window.onclick = function(event) {
             if (!event.target.closest('.custom-dropdown')) {
-                const assetOpts = document.getElementById('assetDropdownOptions');
-                const netOpts = document.getElementById('networkDropdownOptions');
-                if(assetOpts) assetOpts.style.display = 'none';
-                if(netOpts) netOpts.style.display = 'none';
-                
-                const assetSel = document.getElementById('assetSelected');
-                const netSel = document.getElementById('networkSelected');
-                if(assetSel) assetSel.classList.remove('open');
-                if(netSel) netSel.classList.remove('open');
+                document.getElementById('assetDropdownOptions').style.display = 'none';
+                document.getElementById('networkDropdownOptions').style.display = 'none';
+                document.getElementById('assetSelected').classList.remove('open');
+                document.getElementById('networkSelected').classList.remove('open');
             }
         }
 
