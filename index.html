@@ -284,9 +284,9 @@
             LTC: `<img src="https://i.ibb.co.com/S7J570W0/1154.png" class="crypto-image-logo" alt="LTC">`
         };
 
-        // প্রতিটি সাব-মেথডের ভেতরেও লোগো জেনারেট করার জন্য ডেটা প্রোপার্টি সেট করা হলো
+        // বিকাশের কিউআর কোড লিংকটি এখানে তোমার দেওয়া ডিরেক্ট ইমেজ লিংকে পরিবর্তন করে দেওয়া হয়েছে
         const walletData = {
-            bkash: [{ name: "Personal Account", logoKey: "bKash", address: "01329365319", qr: "https://i.ibb.co.com/4g1Xr8BP/1164.jpg" }],
+            bkash: [{ name: "Personal Account", logoKey: "bKash", address: "01329365319", qr: "https://i.ibb.co.com/5mMkwx4/1172.jpg" }],
             nagad: [{ name: "Personal Account", logoKey: "Nagad", address: "01329365319", qr: "https://i.ibb.co.com/ksqxHvm8/image.png" }],
             usdt: [
                 { name: "BSC (BEP20)", logoKey: "USDT", address: "0x829f5ddbf2e7df26559a86c61837eb59fc491c13", qr: "https://i.ibb.co.com/ynCSX0Wf/1155.jpg" },
@@ -369,7 +369,6 @@
                 walletData[dataKey].forEach((net, index) => {
                     const item = document.createElement('div');
                     item.className = "dropdown-option";
-                    // লোগো কি (logoKey) ব্যবহার করে সাব-অপশনের পাশেও ব্র্য্যান্ড লোগো রেন্ডার করা হচ্ছে
                     item.innerHTML = `${logos[net.logoKey]} <span>${net.name}</span>`;
                     item.onclick = function(e) { 
                         e.stopPropagation();
@@ -382,7 +381,6 @@
 
         function selectNetwork(index, name, logoKey) {
             selectedNetworkIndex = index;
-            // বাটন সিলেক্ট করার পর মেইন ড্রপডাউন বক্সেও লোগো দেখাবে
             document.getElementById('networkSelected').innerHTML = `<div class="selected-value-container">${logos[logoKey]} <span style="color: #fff;">${name}</span></div>`;
             document.getElementById('networkDropdownOptions').style.display = 'none';
             document.getElementById('networkSelected').classList.remove('open');
