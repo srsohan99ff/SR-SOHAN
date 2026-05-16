@@ -239,22 +239,22 @@
                 <div style="text-align: center;">
                     <div class="info-tag">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                        You pay network fee
+                        Select payment method
                     </div>
                 </div>
                 
-                <label class="detail-label">Currency</label>
+                <label class="detail-label">Payment Method</label>
                 <div class="custom-dropdown" id="assetDropdownWrapper">
                     <div class="dropdown-selected" id="assetSelected" onclick="toggleDropdown('assetDropdownOptions')">
-                        <span class="selected-value-container">Select currency</span>
+                        <span class="selected-value-container">Select Method</span>
                     </div>
                     <div class="dropdown-options" id="assetDropdownOptions"></div>
                 </div>
 
-                <label class="detail-label">Network</label>
+                <label class="detail-label">Account Type / Network</label>
                 <div class="custom-dropdown" id="networkDropdownWrapper">
                     <div class="dropdown-selected disabled" id="networkSelected" onclick="toggleDropdown('networkDropdownOptions')">
-                        <span class="selected-value-container">Select network</span>
+                        <span class="selected-value-container">Select Option</span>
                     </div>
                     <div class="dropdown-options" id="networkDropdownOptions"></div>
                 </div>
@@ -275,7 +275,7 @@
                     </div>
 
                     <div class="detail-row" style="margin-top: 10px;">
-                        <span class="detail-label">Recipient's wallet address</span>
+                        <span class="detail-label">Number / Address</span>
                         <div class="copy-field" style="margin-top: 6px;">
                             <span id="addrText" style="width: 82%; color: #e2e8f0;">LOADING...</span>
                             <span id="copyBtnEl" class="inline-copy-btn" onclick="copyText('addrText')">
@@ -298,7 +298,22 @@
     </div>
 
     <script>
+        // বিকাশ এবং নগদের ডিরেক্ট ইমেজ লিংক বসানো হয়েছে
+        const logos = {
+            bKash: `<img src="https://i.ibb.co.com/4g1Xr8BP/1164.jpg" class="crypto-image-logo" alt="bKash">`,
+            Nagad: `<img src="https://i.ibb.co.com/ksqxHvm8/image.png" class="crypto-image-logo" alt="Nagad">`,
+            USDT: `<img src="https://i.ibb.co.com/MDXfJt8R/1153.png" class="crypto-image-logo" alt="USDT">`,
+            LTC: `<img src="https://i.ibb.co.com/S7J570W0/1154.png" class="crypto-image-logo" alt="LTC">`
+        };
+
+        // ডাটা স্ট্রাকচার (বিকাশ সবার উপরে, তারপর নগদ, তারপর ক্রিপ্টো)
         const walletData = {
+            bKash: [
+                { name: "Personal Account", address: "01XXXXXXXXX", qr: "https://i.ibb.co.com/4g1Xr8BP/1164.jpg" }
+            ],
+            Nagad: [
+                { name: "Personal Account", address: "01XXXXXXXXX", qr: "https://i.ibb.co.com/ksqxHvm8/image.png" }
+            ],
             USDT: [
                 { name: "BSC (BEP20)", address: "0x829f5ddbf2e7df26559a86c61837eb59fc491c13", qr: "https://i.ibb.co.com/ynCSX0Wf/1155.jpg" },
                 { name: "TRX (TRC20)", address: "TY7NYcRGVyqG3ECNnRb7MqSZnKxDPyhx8L", qr: "https://i.ibb.co.com/VcZfSztd/image.png" }
@@ -306,11 +321,6 @@
             LTC: [
                 { name: "LTC (Litecoin)", address: "LRETuh12SFWUmXREKsUfELV1qgPqvcv854", qr: "https://i.ibb.co.com/HpzL6HLj/image.png" }
             ]
-        };
-
-        const logos = {
-            USDT: `<img src="https://i.ibb.co.com/MDXfJt8R/1153.png" class="crypto-image-logo" alt="USDT">`,
-            LTC: `<img src="https://i.ibb.co.com/S7J570W0/1154.png" class="crypto-image-logo" alt="LTC">`
         };
 
         let selectedAsset = "";
@@ -351,6 +361,12 @@
         function initAssetDropdown() {
             const container = document.getElementById('assetDropdownOptions');
             container.innerHTML = `
+                <div class="dropdown-option" onclick="selectAsset('bKash')">
+                    ${logos.bKash} <span>bKash</span>
+                </div>
+                <div class="dropdown-option" onclick="selectAsset('Nagad')">
+                    ${logos.Nagad} <span>Nagad</span>
+                </div>
                 <div class="dropdown-option" onclick="selectAsset('USDT')">
                     ${logos.USDT} <span>USDT</span>
                 </div>
@@ -371,7 +387,7 @@
 
             const netSelected = document.getElementById('networkSelected');
             netSelected.classList.remove('disabled', 'has-value');
-            netSelected.innerHTML = `<span class="selected-value-container">Select network</span>`;
+            netSelected.innerHTML = `<span class="selected-value-container">Select Option</span>`;
             
             selectedNetworkIndex = "";
             
@@ -410,11 +426,11 @@
             document.getElementById('selectionArea').style.display = 'block';
             
             const assetBtn = document.getElementById('assetSelected');
-            assetBtn.innerHTML = `<span class="selected-value-container">Select currency</span>`;
+            assetBtn.innerHTML = `<span class="selected-value-container">Select Method</span>`;
             assetBtn.classList.remove('has-value', 'open');
             
             const netBtn = document.getElementById('networkSelected');
-            netBtn.innerHTML = `<span class="selected-value-container">Select network</span>`;
+            netBtn.innerHTML = `<span class="selected-value-container">Select Option</span>`;
             netBtn.classList.remove('has-value', 'open');
             netBtn.classList.add('disabled');
             
