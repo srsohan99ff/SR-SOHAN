@@ -301,26 +301,36 @@
             document.getElementById('walletModal').style.display = 'none';
         }
 
+        // সম্পূর্ণ ফিক্সড ড্রপডাউন টগল লজিক
         function toggleDropdown(id) {
-            const el = document.getElementById(id);
-            const trigger = el.previousElementSibling;
-            if (trigger.classList.contains('disabled')) return;
+            const assetOpts = document.getElementById('assetDropdownOptions');
+            const netOpts = document.getElementById('networkDropdownOptions');
+            const assetSel = document.getElementById('assetSelected');
+            const netSel = document.getElementById('networkSelected');
 
-            // অন্য ড্রপডাউন বন্ধ করা
             if (id === 'assetDropdownOptions') {
-                document.getElementById('networkDropdownOptions').style.display = 'none';
-                document.getElementById('networkSelected').classList.remove('open');
-            } else {
-                document.getElementById('assetDropdownOptions').style.display = 'none';
-                document.getElementById('assetSelected').classList.remove('open');
-            }
+                netOpts.style.display = 'none';
+                netSel.classList.remove('open');
+                
+                if(assetOpts.style.display === 'block') {
+                    assetOpts.style.display = 'none';
+                    assetSel.classList.remove('open');
+                } else {
+                    assetOpts.style.display = 'block';
+                    assetSel.classList.add('open');
+                }
+            } else if (id === 'networkDropdownOptions') {
+                if (netSel.classList.contains('disabled')) return;
+                assetOpts.style.display = 'none';
+                assetSel.classList.remove('open');
 
-            if (el.style.display === 'block') {
-                el.style.display = 'none';
-                trigger.classList.remove('open');
-            } else {
-                el.style.display = 'block';
-                trigger.classList.add('open');
+                if(netOpts.style.display === 'block') {
+                    netOpts.style.display = 'none';
+                    netSel.classList.remove('open');
+                } else {
+                    netOpts.style.display = 'block';
+                    netSel.classList.add('open');
+                }
             }
         }
 
@@ -347,7 +357,7 @@
             const placeholderEl = document.getElementById('subSelectPlaceholder');
             const netSelected = document.getElementById('networkSelected');
 
-            // লজিক চেক ও রিয়েলটাইম টেক্সট পরিবর্তন
+            // টেক্সট রিয়েলটাইম চেঞ্জ কন্ডিশন
             if (asset === 'bKash' || asset === 'Nagad') {
                 labelEl.innerText = "Account Type";
                 placeholderEl.innerText = "Select Account";
@@ -357,6 +367,7 @@
             }
 
             netSelected.classList.remove('disabled', 'has-value');
+            netSelected.innerHTML = `<span class="selected-value-container">${placeholderEl.innerText}</span>`;
             selectedNetworkIndex = "";
             
             const btn = document.getElementById('proceedBtn');
@@ -409,7 +420,6 @@
             
             document.getElementById('displayArea').style.display = 'none';
             
-            // বাটন রিসেট
             const actionArea = document.getElementById('actionButtons');
             actionArea.innerHTML = `
                 <button id="closeBtn" onclick="closeWallet()" style="border: 1px solid rgba(255,255,255,0.08); padding:10px 20px; border-radius:12px; font-weight: 600; color: #94a3b8; width: 40%; text-align: center;">Close</button>
@@ -443,7 +453,6 @@
             document.getElementById('addrText').innerText = netInfo.address;
             document.getElementById('qrImage').src = netInfo.qr;
 
-            // ফাইনাল কপি স্ক্রিনের কন্ডিশনাল হেডার পরিবর্তন
             const finalDataLabel = document.getElementById('finalDataLabel');
             if (selectedAsset === 'bKash' || selectedAsset === 'Nagad') {
                 finalDataLabel.innerText = "Recipient's Number";
@@ -461,7 +470,6 @@
             }, 2500);
         }
 
-        // গ্লোবাল ক্লিক হ্যান্ডলার ফিক্স
         window.onclick = function(event) {
             if (!event.target.closest('.custom-dropdown')) {
                 const assetOpts = document.getElementById('assetDropdownOptions');
