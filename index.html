@@ -9,247 +9,286 @@
     <style>
         :root {
             --primary-blue: #2563eb;
-            --main-bg: #f8fafc;
-            --card-bg: #ffffff;
-            --border-color: #e2e8f0;
-            --text-dark: #000000;
-            --text-gray: #64748b;
+            --dark-bg: #020617;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
         }
 
         body {
-            background-color: var(--main-bg);
-            margin: 0;
-            padding: 0;
-            font-family: 'Rajdhani', sans-serif;
-            color: var(--text-dark);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-        }
-        
-        .main-container { 
-            width: 100%; 
-            max-width: 500px; 
-            background: var(--card-bg);
-            padding: 24px;
-            min-height: 100vh;
+            background: radial-gradient(circle at top, #1e293b 0%, #020617 100%);
             display: flex;
             flex-direction: column;
-            position: relative;
-        }
-
-        /* হেডার সেকশন আইকন সহ */
-        .header-section {
-            display: flex;
             align-items: center;
-            justify-content: space-between;
-            margin-bottom: 25px;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            font-family: 'Rajdhani', sans-serif;
+            color: #f9fafb;
+        }
+        
+        .main-container { width: 100%; max-width: 400px; text-align: center; }
+
+        .main-logo {
+            width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 20px;
+            border: 3px solid var(--primary-blue);
+            box-shadow: 0 0 25px rgba(37, 99, 235, 0.5);
         }
 
-        .step-title { font-size: 1.4rem; font-weight: 700; color: var(--text-dark); margin: 0; }
+        .stylish-name {
+            font-family: 'Syncopate', sans-serif; font-size: 1.6rem; letter-spacing: 4px; margin-bottom: 25px;
+        }
 
-        .header-icons {
-            display: flex;
-            gap: 14px;
-            color: #000000;
+        .btn-container { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+
+        .contact-btn {
+            display: flex; align-items: center; justify-content: center;
+            padding: 15px; border-radius: 12px; color: white; font-weight: 700;
+            text-decoration: none; transition: 0.3s; border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .wallet-btn {
+            background: linear-gradient(90deg, #2563eb, #1d4ed8);
+            cursor: pointer; width: 100%; margin-top: 5px;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        /* গেটওয়ে মডাল */
+        .modal {
+            display: none; position: fixed; inset: 0; 
+            background: rgba(2, 6, 23, 0.96); z-index: 100;
+            align-items: center; justify-content: center; backdrop-filter: blur(12px);
+        }
+
+        .modal-content {
+            background: #0f172a; width: 95%; max-width: 380px;
+            padding: 22px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.05);
+            text-align: left; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            display: flex; flex-direction: column;
             position: relative;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
-        .icon-btn {
-            cursor: pointer;
-            transition: transform 0.2s;
+        /* ক্রিপ্টোমাস লাইট থিম মোড */
+        .modal-content.light-mode {
+            background: #ffffff !important;
+            color: #000000 !important;
         }
-        .icon-btn:hover { transform: scale(1.1); }
+        .modal-content.light-mode .step-title { color: #000000 !important; }
+        .modal-content.light-mode .detail-label { color: #555555 !important; }
+        .modal-content.light-mode .dropdown-selected { background: #ffffff !important; color: #000000 !important; border-color: #cccccc !important; }
+        .modal-content.light-mode .dropdown-options { background: #ffffff !important; border-color: #dddddd !important; }
+        .modal-content.light-mode .dropdown-option { color: #333333 !important; }
+        .modal-content.light-mode .dropdown-option:hover { background: #f0f4f8 !important; color: #000000 !important; }
+        .modal-content.light-mode .info-tag { background: #e6f0fa !important; color: #1e3a8a !important; }
+        .modal-content.light-mode #closeBtn { color: #555555 !important; border-color: #cccccc !important; }
+        .modal-content.light-mode .support-title { color: #666666 !important; }
+        .modal-content.light-mode .social-circle-btn { background: #f1f5f9 !important; color: #333333 !important; border-color: #dddddd !important; }
 
-        /* ল্যাঙ্গুয়েজ ড্রপডাউন বক্স */
-        .lang-dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 30px;
-            right: 0;
-            background: #ffffff;
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            z-index: 500;
-            width: 120px;
-            overflow: hidden;
+        /* হেডার আইকন এবং সেটিংস রোউ */
+        .modal-header-row {
+            display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; position: relative;
         }
-        .lang-opt {
-            padding: 10px 16px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            cursor: pointer;
-            color: #000000;
-            transition: background 0.2s;
-        }
-        .lang-opt:hover { background: #f1f5f9; }
-        .lang-opt.active { color: var(--primary-blue); background: #eff6ff; }
+        .header-icons-right { display: flex; gap: 14px; color: #94a3b8; cursor: pointer; }
+        .modal-content.light-mode .header-icons-right { color: #555555 !important; }
+        .header-icons-right svg:hover { color: #60a5fa; }
 
-        /* ড্রপডাউন সিলেক্টর বক্স (প্রধান স্ক্রিন) */
+        .step-title { font-size: 1.4rem; font-weight: 700; color: #fff; margin: 0; }
+
+        /* ড্রপডাউন UI */
         .custom-dropdown {
-            position: relative; width: 100%; margin-bottom: 18px; user-select: none;
+            position: relative; width: 100%; margin-bottom: 15px; user-select: none;
         }
 
         .dropdown-selected {
-            background: #ffffff; color: var(--text-dark); padding: 14px 16px; border-radius: 12px;
-            border: 1.5px solid var(--border-color); font-weight: 600; cursor: pointer;
-            display: flex; align-items: center; justify-content: space-between; transition: 0.2s;
+            background: #0f172a; color: #fff; padding: 14px; border-radius: 12px;
+            border: 1px solid var(--glass-border); font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; justify-content: space-between; transition: 0.3s;
         }
-        .dropdown-selected:hover { border-color: #cbd5e1; }
         
         .dropdown-selected.custom-disabled { 
-            opacity: 1 !important; 
+            opacity: 0.3 !important; 
             cursor: not-allowed !important;
-            background: #f8fafc !important;
-            color: #94a3b8 !important;
-            border-color: #e2e8f0 !important;
+            background: #090f24 !important;
+            color: #64748b !important;
+            border-color: rgba(255,255,255,0.02) !important;
         }
 
         .dropdown-selected::after {
             content: ""; border-left: 5px solid transparent; border-right: 5px solid transparent;
-            border-top: 5px solid #000000; transition: 0.3s; margin-left: 10px;
+            border-top: 5px solid #94a3b8; transition: 0.3s; margin-left: 10px;
         }
         .dropdown-selected.open::after { transform: rotate(180deg); }
 
-        /* বটম ড্রপডাউন মডাল ওভারলে */
-        .dropdown-overlay {
-            display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.4); z-index: 200;
-            align-items: flex-end; justify-content: center;
-        }
-        
-        /* পপ-আপ ড্রপডাউন শিট */
-        .dropdown-sheet {
-            background: #ffffff; width: 100%; max-width: 500px;
-            border-top-left-radius: 24px; border-top-right-radius: 24px;
-            padding: 20px; box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
-            max-height: 80vh; display: flex; flex-direction: column;
-            animation: slideUp 0.3s ease-out;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
-        }
-
-        .sheet-header {
-            display: flex; align-items: center; justify-content: space-between;
-            margin-bottom: 16px;
-        }
-        .sheet-title { font-size: 1.25rem; font-weight: 700; color: #000000; }
-        
-        .sheet-close-btn {
-            background: none; border: none; cursor: pointer; padding: 4px; color: #000000;
-            transition: transform 0.2s;
-        }
-        .sheet-close-btn:hover { transform: scale(1.1); }
-
-        /* সার্চ বার */
-        .search-container {
-            position: relative; margin-bottom: 16px;
-        }
-        .search-input {
-            width: 100%; background: #f1f5f9; border: none; padding: 12px 16px 12px 42px;
-            border-radius: 12px; font-size: 0.95rem; color: #000; outline: none;
-            font-weight: 600;
-        }
-        .search-input::placeholder { color: #94a3b8; font-weight: 500; }
-        .search-icon {
-            position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-            color: #94a3b8; pointer-events: none;
-        }
-
-        /* অপশন লিস্ট */
-        .options-list-container {
-            overflow-y: auto; flex-grow: 1; padding-bottom: 10px;
+        .dropdown-options {
+            display: none; position: absolute; top: 115%; left: 0; width: 100%;
+            background: #020617; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
+            z-index: 99999; max-height: 220px; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            padding: 6px;
         }
 
         .dropdown-option {
-            padding: 14px 8px; cursor: pointer; display: flex; align-items: center;
-            justify-content: space-between; transition: 0.2s; color: #000000;
-            font-weight: 600; font-size: 1.05rem; border-bottom: 1px solid #f1f5f9;
+            padding: 10px 12px; cursor: pointer; display: flex; align-items: center; gap: 14px;
+            transition: 0.2s; color: #cbd5e1; font-weight: 600; border-radius: 8px;
         }
-        .dropdown-option:last-child { border-bottom: none; }
-        .dropdown-option:hover { background: #f8fafc; }
+        .dropdown-option:hover { background: rgba(255, 255, 255, 0.05); color: #fff; }
 
-        .option-left-content { display: flex; align-items: center; gap: 14px; }
-
-        .popular-badge {
-            background: #e8f7ee; color: #10b981; font-size: 0.75rem; font-weight: 700;
-            padding: 4px 10px; border-radius: 20px; letter-spacing: 0.3px;
+        .selected-value-container { display: flex; align-items: center; gap: 14px; width: 100%; }
+        
+        .crypto-image-logo {
+            width: 24px; height: 24px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
         }
-
-        .selected-value-container { display: flex; align-items: center; gap: 14px; width: 100%; font-size: 0.95rem; }
-        .crypto-image-logo { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
 
         .info-tag {
-            background: #eff6ff; color: #2563eb; padding: 6px 14px; border-radius: 20px; font-weight: 600;
-            display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; margin-bottom: 20px; border: 1px solid #dbeafe;
+            background: rgba(59, 130, 246, 0.1); color: #60a5fa;
+            padding: 6px 12px; border-radius: 8px; font-weight: 600;
+            display: inline-flex; align-items: center; gap: 6px; font-size: 0.9rem; margin-bottom: 20px;
         }
 
-        /* প্রসিড বাটন */
         .proceed-btn-style {
-            padding: 14px 20px; border-radius: 12px; font-weight: 700; color: #8e949f; 
-            width: 100%; display: flex; align-items: center; justify-content: center; background: #eeeeee; border: none;
-            cursor: not-allowed; transition: all 0.2s ease;
+            padding: 14px 20px; border-radius: 12px; font-weight: 700; color: #64748b; 
+            width: 54%; display: flex; align-items: center; justify-content: center;
+            background: #1e293b; border: 1px solid rgba(255,255,255,0.03);
+            cursor: not-allowed; transition: all 0.3s ease; opacity: 0.6;
         }
         
         .proceed-btn-style.active {
-            background: #000000; color: #fff; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            background: var(--primary-blue); color: #fff; cursor: pointer; opacity: 1;
+            border-color: transparent; box-shadow: 0 4px 20px rgba(37, 99, 235, 0.4);
         }
 
+        /* 🖥 ফুল স্ক্রিন অ্যাড্রেস কার্ড (স্টাইল ফিক্স) */
         .payment-details-card {
-            background: #ffffff; border: 1.5px dashed var(--border-color); padding: 16px; border-radius: 14px; margin-top: 5px;
+            background: #ffffff !important; 
+            border: 1px solid #e2e8f0 !important;
+            padding: 24px 20px !important; 
+            border-radius: 20px !important; 
+            margin-top: 5px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+            color: #000000 !important;
+            width: 100% !important;
         }
 
         .detail-row { margin-bottom: 12px; }
         .detail-row:last-child { margin-bottom: 0; }
-        .detail-label { font-size: 0.85rem; color: var(--text-gray); font-weight: 700; margin-bottom: 6px; display: block; }
+        .detail-label { font-size: 0.85rem; color: #94a3b8; font-weight: 600; margin-bottom: 4px; display: block; }
         
         .copy-field {
-            background: #ffffff; border: 1px solid var(--border-color); padding: 12px; border-radius: 12px;
-            display: flex; align-items: center; justify-content: space-between; font-family: monospace; font-size: 0.85rem; word-break: break-all; color: var(--text-dark);
+            background: #f8fafc !important; 
+            border: 1px solid #e2e8f0 !important;
+            padding: 14px 12px; border-radius: 12px; display: flex; align-items: center;
+            justify-content: space-between; font-family: monospace; font-size: 0.85rem; word-break: break-all;
+            color: #000000 !important;
         }
 
         .inline-copy-btn {
-            display: flex; align-items: center; justify-content: center; color: #2563eb; background: #eff6ff; border: 1px solid #dbeafe;
-            width: 34px; height: 34px; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            color: #2563eb; background: #eff6ff;
+            border: 1px solid #dbeafe;
+            width: 36px; height: 36px; border-radius: 8px;
+            cursor: pointer; transition: all 0.2s ease; flex-shrink: 0;
         }
-        .inline-copy-btn:hover { background: #dbeafe; }
-        .inline-copy-btn.copied { background: #d1fae5 !important; border-color: #10b981 !important; color: #059669 !important; }
+        .inline-copy-btn:hover {
+            background: #dbeafe; color: #1e40af;
+        }
+        
+        .inline-copy-btn.copied {
+            background: rgba(16, 185, 129, 0.15) !important;
+            border-color: rgb(16, 185, 129) !important;
+            color: rgb(16, 185, 129) !important;
+        }
 
         .qr-box {
-            margin: 5px auto 15px; width: 160px; height: 160px; background: white; padding: 10px; border-radius: 14px;
-            display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04); border: 1px solid var(--border-color);
+            margin: 5px auto 15px; width: 170px; height: 170px;
+            background: white; padding: 8px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            border: 1px solid #e2e8f0;
         }
-        .qr-box img { width: 100% !important; height: 100% !important; object-fit: contain !important; }
-
-        .bottom-wrapper {
-            margin-top: auto;
-            padding-top: 20px;
+        
+        .qr-box img {
+            width: 100% !important; height: 100% !important; object-fit: contain !important;
         }
 
-        .social-support-container { margin-top: 24px; text-align: center; border-top: 1px solid var(--border-color); padding-top: 15px; }
-        .support-title { font-size: 0.85rem; font-weight: 700; color: var(--text-gray); margin-bottom: 14px; letter-spacing: 1px; }
-        .social-icons-row { display: flex; justify-content: center; gap: 14px; }
+        /* সেটিংস সাব-মেনু পপ-আপ (Cryptomus 1203.jpg স্টাইল) */
+        .settings-popup-panel {
+            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0f172a; border-radius: 24px; z-index: 10000; padding: 25px 22px;
+            flex-direction: column; box-sizing: border-box;
+        }
+        .modal-content.light-mode .settings-popup-panel {
+            background: #ffffff !important; color: #000000 !important;
+        }
+        .settings-popup-header {
+            display: flex; align-items: center; justify-content: flex-end; margin-bottom: 25px;
+        }
+        .settings-row-item {
+            display: flex; align-items: center; justify-content: space-between; padding: 16px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05); cursor: pointer;
+        }
+        .modal-content.light-mode .settings-row-item {
+            border-bottom-color: #eeeeee !important;
+        }
+        .settings-item-left { display: flex; align-items: center; gap: 14px; }
+        .settings-primary-txt { font-weight: 700; font-size: 1.05rem; }
+        .settings-secondary-txt { font-size: 0.85rem; color: #64748b; margin-top: 2px; }
+        
+        /* ভাষা চয়েস সাব-লিস্ট */
+        .lang-sub-options { display: none; margin-top: 5px; background: rgba(0,0,0,0.2); border-radius: 10px; padding: 4px; }
+        .modal-content.light-mode .lang-sub-options { background: #f8fafc !important; }
+        .lang-sub-btn { padding: 10px 14px; font-weight: 700; border-radius: 8px; display: flex; justify-content: space-between; color: #94a3b8; }
+        .modal-content.light-mode .lang-sub-btn { color: #555555 !important; }
+        .lang-sub-btn.active { color: #60a5fa; }
+        .modal-content.light-mode .lang-sub-btn.active { color: #2563eb !important; }
+
+        /* সুইচ টগল ডিজাইন */
+        .switch-toggle {
+            position: relative; inline-size: 44px; block-size: 24px;
+        }
+        .switch-toggle input { opacity: 0; width: 0; height: 0; }
+        .switch-slider {
+            position: absolute; cursor: pointer; inset: 0; background-color: #334155;
+            transition: .3s; border-radius: 24px;
+        }
+        .switch-slider:before {
+            position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px;
+            background-color: white; transition: .3s; border-radius: 50%;
+        }
+        input:checked + .switch-slider { background-color: #22c55e; }
+        input:checked + .switch-slider:before { transform: translateX(20px); }
+
+        /* সোশ্যাল সাপোর্ট সেকশন */
+        .social-support-container {
+            margin-top: 20px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px;
+        }
+        .modal-content.light-mode .social-support-container { border-top-color: #eeeeee !important; }
+        .support-title { font-size: 0.95rem; font-weight: 700; color: #94a3b8; margin-bottom: 12px; letter-spacing: 1px; text-transform: uppercase; }
+        .social-icons-row { display: flex; justify-content: center; gap: 16px; }
         
         .social-circle-btn {
-            width: 42px; height: 42px; border-radius: 50%; background: #000000; display: flex; align-items: center; justify-content: center; color: #fff; transition: all 0.3s ease;
+            width: 44px; height: 44px; border-radius: 50%; background: #1e293b; 
+            display: flex; align-items: center; justify-content: center; color: #fff;
+            transition: all 0.3s ease; border: 1px solid rgba(255,255,255,0.05);
         }
-        .social-circle-btn.telegram:hover { background: #0088cc; transform: translateY(-2px); }
-        .social-circle-btn.whatsapp:hover { background: #22c55e; transform: translateY(-2px); }
+        .social-circle-btn.telegram:hover { background: #0088cc; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 136, 204, 0.4); }
+        .social-circle-btn.whatsapp:hover { background: #22c55e; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4); }
 
         .btn-spinner {
-            display: none; width: 20px; height: 20px; border: 3px solid rgba(0, 0, 0, 0.1); border-left-color: #000000; border-radius: 50%; animation: btnSpin 0.7s linear infinite;
+            display: none; width: 22px; height: 22px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-left-color: #fff; border-radius: 50%;
+            animation: btnSpin 0.7s linear infinite;
         }
-        .proceed-btn-style.active .btn-spinner { border-color: rgba(255,255,255,0.3); border-left-color: #fff; }
         @keyframes btnSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .top-notification {
-            position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: #ffffff; border: 1px solid #10b981; color: #000000;
-            padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; z-index: 9999;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08); opacity: 0; transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
+            background: #0f172a; border: 1px solid #10b981; color: #ffffff;
+            padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 0.95rem;
+            display: flex; align-items: center; gap: 8px; z-index: 999999;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6); opacity: 0;
+            transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
         }
+        
         .top-notification.show { top: 25px; opacity: 1; }
     </style>
 </head>
@@ -257,73 +296,123 @@
 
     <div id="topToast" class="top-notification">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-        <span id="toastText">Copied successfully!</span>
+        <span id="toastMsg">Copied successfully!</span>
     </div>
 
     <div class="main-container">
-        <div class="header-section">
-            <h2 class="step-title">ᏚR SOHAN PAY</h2>
-            <div class="header-section-right header-icons">
-                <svg class="icon-btn" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                <svg class="icon-btn" id="settingsIconBtn" onclick="toggleLangMenu(event)" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                
-                <div id="langDropdown" class="lang-dropdown-menu">
-                    <div class="lang-opt active" id="optEN" onclick="changeLanguage('en')">English</div>
-                    <div class="lang-opt" id="optBN" onclick="changeLanguage('bn')">বাংলা</div>
-                </div>
+        <div class="main-logo">
+            <img src="https://i.ibb.co.com/Y409z5jC/logo.png" style="width:100%; height:100%; border-radius:50%;" alt="SR SOHAN">
+        </div>
+
+        <h1 class="stylish-name">ᏚR SOHAN</h1>
+
+        <div class="btn-container">
+            <div onclick="openWallet()" class="contact-btn wallet-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M21 18v1c0 1.105-.895 2-2 2H5c-1.105 0-2-.895-2-2V5c0-1.105.895-2 2-2h14c1.105 0 2 .895 2 2v1h-9c-1.105 0-2 .895-2 2v8c0 1.105.895 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.828 0-1.5-.672-1.5-1.5s.672-1.5 1.5-1.5 1.5.672 1.5 1.5-.672 1.5-1.5 1.5z"/></svg>
+                &nbsp;<span id="getAddrBtnTxt">GET ADDRESS</span>
             </div>
         </div>
-        
-        <div id="selectionArea">
-            <div style="text-align: center;">
-                <div class="info-tag" id="topInfoTag">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                    <span id="textSelectPayment">Select payment method</span>
+    </div>
+
+    <div id="walletModal" class="modal">
+        <div class="modal-content" id="modalMainContent">
+            
+            <div class="modal-header-row">
+                <div style="width:24px;"></div> <h2 class="step-title">ᏚR SOHAN PAY</h2>
+                <div class="header-icons-right">
+                    <svg onclick="openSettingsPanel()" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                 </div>
             </div>
             
-            <label class="detail-label" id="lblCurrency">Currency</label>
-            <div class="custom-dropdown">
-                <div class="dropdown-selected" id="assetSelected" onclick="openDropdownSheet('currency')">
-                    <span class="selected-value-container" id="currencyPlaceholder" style="color: #64748b;">Select currency</span>
+            <div id="settingsPanel" class="settings-popup-panel">
+                <div class="settings-popup-header">
+                    <svg onclick="closeSettingsPanel()" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="cursor:pointer;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </div>
+                
+                <div class="settings-row-item" onclick="toggleLangSubList()">
+                    <div class="settings-item-left">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                        <div>
+                            <div class="settings-primary-txt" id="setLangTitle">Language</div>
+                            <div class="settings-secondary-txt" id="setLangDesc">Choose your language</div>
+                        </div>
+                    </div>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </div>
+
+                <div id="langSubOptions" class="lang-sub-options">
+                    <div class="lang-sub-btn active" id="btnLangEN" onclick="changeLanguage('en', event)">English <span class="tick">✓</span></div>
+                    <div class="lang-sub-btn" id="btnLangBN" onclick="changeLanguage('bn', event)">বাংলা <span class="tick"></span></div>
+                </div>
+
+                <div class="settings-row-item">
+                    <div class="settings-item-left">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                        <div>
+                            <div class="settings-primary-txt" id="setThemeTitle">Dark theme</div>
+                            <div class="settings-secondary-txt" id="setThemeDesc">Off</div>
+                        </div>
+                    </div>
+                    <label class="switch-toggle">
+                        <input type="checkbox" id="themeToggleCheckbox" onchange="toggleThemeMode(this)">
+                        <span class="switch-slider"></span>
+                    </label>
                 </div>
             </div>
 
-            <label class="detail-label" id="subSelectLabel">Network</label>
-            <div class="custom-dropdown">
-                <div class="dropdown-selected custom-disabled" id="networkSelected" onclick="openDropdownSheet('network')">
-                    <span id="networkTextPlaceholder" style="color: #94a3b8; font-weight: 600;">Select network</span>
-                </div>
-            </div>
-        </div>
-
-        <div id="displayArea" style="display: none;">
-            <div class="payment-details-card">
-                <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px; background: #ffffff; padding: 10px; border-radius: 12px; border: 1px solid var(--border-color);">
-                    <span id="networkLogo"></span>
-                    <span id="networkNameText" style="font-weight: 700; color: #000000; font-size: 0.95rem;"></span>
-                </div>
-
-                <div class="detail-row">
-                    <div class="qr-box">
-                        <img id="qrImage" src="" alt="QR Code">
+            <div id="selectionArea">
+                <div style="text-align: center;">
+                    <div class="info-tag" id="topInfoTag">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                        <span id="textSelectMethod">Select payment method</span>
                     </div>
                 </div>
+                
+                <label class="detail-label" id="lblMethod">Payment Method</label>
+                <div class="custom-dropdown">
+                    <div class="dropdown-selected" id="assetSelected" onclick="toggleDropdown('assetDropdownOptions', event)">
+                        <span class="selected-value-container" id="placeholderAsset" style="color: #94a3b8;">Select Method</span>
+                    </div>
+                    <div class="dropdown-options" id="assetDropdownOptions"></div>
+                </div>
 
-                <div class="detail-row" style="margin-top: 10px;">
-                    <span class="detail-label" id="finalDataLabel">Number / Address</span>
-                    <div class="copy-field" style="margin-top: 6px;">
-                        <span id="addrText" style="width: 82%; color: var(--text-dark);">LOADING...</span>
-                        <span id="copyBtnEl" class="inline-copy-btn" onclick="copyText('addrText')">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                        </span>
+                <label class="detail-label" id="subSelectLabel">Account Type / Network</label>
+                <div class="custom-dropdown">
+                    <div class="dropdown-selected custom-disabled" id="networkSelected" onclick="toggleDropdown('networkDropdownOptions', event)">
+                        <span id="networkTextPlaceholder" style="color: #64748b; font-weight: 600;">Select Option</span>
+                    </div>
+                    <div class="dropdown-options" id="networkDropdownOptions"></div>
+                </div>
+            </div>
+
+            <div id="displayArea" style="display: none; width: 100%;">
+                <div class="payment-details-card">
+                    
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px; background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                        <span id="networkLogo"></span>
+                        <span id="networkNameText" style="font-weight: 700; color: #2563eb; font-size: 0.95rem;"></span>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="qr-box">
+                            <img id="qrImage" src="" alt="QR Code">
+                        </div>
+                    </div>
+
+                    <div class="detail-row" style="margin-top: 10px;">
+                        <span class="detail-label" id="finalDataLabel" style="color:#64748b !important;">Number / Address</span>
+                        <div class="copy-field" style="margin-top: 6px;">
+                            <span id="addrText" style="width: 82%; color: #000000;">LOADING...</span>
+                            <span id="copyBtnEl" class="inline-copy-btn" onclick="copyText('addrText')">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="bottom-wrapper">
-            <div id="actionButtons">
+            
+            <div id="actionButtons" style="margin-top: 20px; display: flex; justify-content: space-between; gap: 10px;">
+                <button id="closeBtn" onclick="closeWallet()" style="border: 1px solid rgba(255,255,255,0.08); padding:10px 20px; border-radius:12px; font-weight: 600; color: #94a3b8; width: 40%; text-align: center;">Close</button>
                 <button id="proceedBtn" onclick="startLoadingProcess()" class="proceed-btn-style" disabled>
                     <div id="btnLoader" class="btn-spinner"></div>
                     <span id="btnText">Proceed</span>
@@ -331,77 +420,67 @@
             </div>
 
             <div class="social-support-container">
-                <div class="support-title" id="textSupportTitle">Please contact us if you have any questions</div>
+                <div class="support-title">SOHAN WALLETS</div>
                 <div class="social-icons-row">
                     <a href="https://t.me/srsohan99ff" target="_blank" class="social-circle-btn telegram">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
+                        </svg>
                     </a>
                     <a href="https://wa.me/8801329365319" target="_blank" class="social-circle-btn whatsapp">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.5-5.729-1.447L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.42 9.864-9.852.002-2.632-1.023-5.105-2.887-6.97C16.577 1.917 14.101.892 11.47.89 6.037.89 1.612 5.31 1.608 10.741c-.001 1.682.449 3.32 1.302 4.773L1.87 20.354l5.106-1.34c-.11.06-.21.11-.328.14zM17.65 14.4c-.32-.16-1.89-.93-2.185-1.04-.3-.11-.51-.16-.72.16-.21.32-.82 1.04-1.01 1.25-.19.21-.38.24-.70.08-.32-.16-1.35-.5-2.57-1.59-.95-.85-1.6-1.9-1.78-2.22-.19-.32-.02-.49.14-.65.15-.14.32-.37.48-.56.16-.18.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.72-1.73-.99-2.37-.26-.64-.53-.55-.72-.56l-.61-.01c-.21 0-.56.08-.85.4-.3.32-1.15 1.13-1.15 2.75 0 1.62 1.18 3.19 1.35 3.41.17.22 2.33 3.56 5.65 5 .79.34 1.41.55 1.89.7.8.25 1.53.22 2.11.13.65-.1 1.89-.77 2.15-1.48.27-.71.27-1.32.19-1.45-.08-.14-.3-.22-.62-.38z"/></svg>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.5-5.729-1.447L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.42 9.864-9.852.002-2.632-1.023-5.105-2.887-6.97C16.577 1.917 14.101.892 11.47.89 6.037.89 1.612 5.31 1.608 10.741c-.001 1.682.449 3.32 1.302 4.773L1.87 20.354l5.106-1.34c-.11.06-.21.11-.328.14zM17.65 14.4c-.32-.16-1.89-.93-2.185-1.04-.3-.11-.51-.16-.72.16-.21.32-.82 1.04-1.01 1.25-.19.21-.38.24-.7.08-.32-.16-1.35-.5-2.57-1.59-.95-.85-1.6-1.9-1.78-2.22-.19-.32-.02-.49.14-.65.15-.14.32-.37.48-.56.16-.18.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.72-1.73-.99-2.37-.26-.64-.53-.55-.72-.56l-.61-.01c-.21 0-.56.08-.85.4-.3.32-1.15 1.13-1.15 2.75 0 1.62 1.18 3.19 1.35 3.41.17.22 2.33 3.56 5.65 5 .79.34 1.41.55 1.89.7.8.25 1.53.22 2.11.13.65-.1 1.89-.77 2.15-1.48.27-.71.27-1.32.19-1.45-.08-.14-.3-.22-.62-.38z"/></svg>
                     </a>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <div id="dropdownOverlay" class="dropdown-overlay" onclick="closeDropdownSheet()">
-        <div class="dropdown-sheet" onclick="event.stopPropagation()">
-            <div class="sheet-header">
-                <span id="sheetTitle" class="sheet-title">Select network</span>
-                <button class="sheet-close-btn" onclick="closeDropdownSheet()">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
-            </div>
-            
-            <div class="search-container">
-                <span class="search-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                </span>
-                <input type="text" id="sheetSearchInput" class="search-input" placeholder="Search" oninput="filterDropdownOptions()">
-            </div>
-
-            <div class="options-list-container" id="sheetOptionsList">
-                </div>
         </div>
     </div>
 
     <script>
-        // ভাষা ডিকশনারি ডেটা
+        // মাল্টি-ল্যাঙ্গুয়েজ ডিকশনারি
         let currentLang = 'en';
-        const languageData = {
+        const langDictionary = {
             en: {
-                selectPayment: "Select payment method",
-                currency: "Currency",
-                network: "Network",
-                selectCurrencyOpt: "Select currency",
-                selectNetworkOpt: "Select network",
-                selectAccountOpt: "Select Account",
+                getAddr: "GET ADDRESS",
+                selectMethod: "Select payment method",
+                lblMethod: "Payment Method",
+                subSelectLabel: "Account Type / Network",
+                placeholderAsset: "Select Method",
+                placeholderNet: "Select Option",
+                selectAccount: "Select Account",
+                selectNetwork: "Select Network",
                 accountType: "Account Type",
+                network: "Network",
+                close: "Close",
                 proceed: "Proceed",
-                contactUs: "Please contact us if you have any questions",
-                copied: "Copied successfully!",
-                search: "Search",
-                popular: "Popular choice",
                 done: "DONE",
                 walletLabel: "Recipient's Wallet Address",
-                numberLabel: "Recipient's Number"
+                numberLabel: "Recipient's Number",
+                copied: "Copied successfully!",
+                setLangTitle: "Language",
+                setLangDesc: "Choose your language",
+                setThemeTitle: "Dark theme"
             },
             bn: {
-                selectPayment: "পেমেন্ট পদ্ধতি নির্বাচন করুন",
-                currency: "কারেন্সি",
-                network: "নেটওয়ার্ক",
-                selectCurrencyOpt: "কারেন্সি সিলেক্ট করুন",
-                selectNetworkOpt: "নেটওয়ার্ক সিলেক্ট করুন",
-                selectAccountOpt: "অ্যাকাউন্ট সিলেক্ট করুন",
+                getAddr: "ঠিকানা পান",
+                selectMethod: "পেমেন্ট পদ্ধতি নির্বাচন করুন",
+                lblMethod: "পেমেন্ট পদ্ধতি",
+                subSelectLabel: "অ্যাকাউন্টের ধরন / নেটওয়ার্ক",
+                placeholderAsset: "পদ্ধতি সিলেক্ট করুন",
+                placeholderNet: "অপশন সিলেক্ট করুন",
+                selectAccount: "অ্যাকাউন্ট সিলেক্ট করুন",
+                selectNetwork: "নেটওয়ার্ক সিলেক্ট করুন",
                 accountType: "অ্যাকাউন্টের ধরন",
+                network: "নেটওয়ার্ক",
+                close: "বন্ধ করুন",
                 proceed: "এগিয়ে যান",
-                contactUs: "আপনার কোনো প্রশ্ন থাকলে আমাদের সাথে যোগাযোগ করুন",
-                copied: "সফলভাবে কপি হয়েছে!",
-                search: "খুঁজুন",
-                popular: "জনপ্রিয় পছন্দ",
                 done: "সম্পন্ন",
                 walletLabel: "প্রাপকের ওয়ালেট অ্যাড্রেস",
-                numberLabel: "প্রাপকের নম্বর"
+                numberLabel: "প্রাপকের নম্বর",
+                copied: "সফলভাবে কপি হয়েছে!",
+                setLangTitle: "ভাষা (Language)",
+                setLangDesc: "আপনার ভাষা সিলেক্ট করুন",
+                setThemeTitle: "ডার্ক থিম"
             }
         };
 
@@ -413,216 +492,245 @@
         };
 
         const walletData = {
-            bkash: [{ name: "Personal Account", logoKey: "bKash", address: "01329365319", qr: "https://i.ibb.co.com/4g1Xr8BP/1164.jpg", isPopular: false }],
-            nagad: [{ name: "Personal Account", logoKey: "Nagad", address: "01329365319", qr: "https://i.ibb.co.com/ksqxHvm8/image.png", isPopular: false }],
+            bkash: [{ name: "Personal Account", logoKey: "bKash", address: "01329365319", qr: "https://i.ibb.co.com/4g1Xr8BP/1164.jpg" }],
+            nagad: [{ name: "Personal Account", logoKey: "Nagad", address: "01329365319", qr: "https://i.ibb.co.com/ksqxHvm8/image.png" }],
             usdt: [
-                { name: "BSC (BEP-20)", logoKey: "USDT", address: "0x829f5ddbf2e7df26559a86c61837eb59fc491c13", qr: "https://i.ibb.co.com/ynCSX0Wf/1155.jpg", isPopular: true },
-                { name: "TRON (TRC-20)", logoKey: "USDT", address: "TY7NYcRGVyqG3ECNnRb7MqSZnKxDPyhx8L", qr: "https://i.ibb.co.com/VcZfSztd/image.png", isPopular: false }
+                { name: "BSC (BEP20)", logoKey: "USDT", address: "0x829f5ddbf2e7df26559a86c61837eb59fc491c13", qr: "https://i.ibb.co.com/ynCSX0Wf/1155.jpg" },
+                { name: "TRX (TRC20)", logoKey: "USDT", address: "TY7NYcRGVyqG3ECNnRb7MqSZnKxDPyhx8L", qr: "https://i.ibb.co.com/VcZfSztd/image.png" }
             ],
-            ltc: [{ name: "LTC (Litecoin)", logoKey: "LTC", address: "LRETuh12SFWUmXREKsUfELV1qgPqvcv854", qr: "https://i.ibb.co.com/HpzL6HLj/image.png", isPopular: false }]
+            ltc: [{ name: "LTC (Litecoin)", logoKey: "LTC", address: "LRETuh12SFWUmXREKsUfELV1qgPqvcv854", qr: "https://i.ibb.co.com/HpzL6HLj/image.png" }]
         };
 
         let selectedAsset = "";
         let selectedNetworkIndex = "";
-        let currentSheetType = ""; 
 
-        // ল্যাঙ্গুয়েজ মেনু টগল ফাংশন
-        function toggleLangMenu(event) {
-            event.stopPropagation();
-            const menu = document.getElementById('langDropdown');
-            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+        // সেটিংস সাব প্যানেল ফাংশনালিটি
+        function openSettingsPanel() {
+            document.getElementById('settingsPanel').style.display = 'flex';
+        }
+        function closeSettingsPanel() {
+            document.getElementById('settingsPanel').style.display = 'none';
+            document.getElementById('langSubOptions').style.display = 'none';
+        }
+        function toggleLangSubList() {
+            const subList = document.getElementById('langSubOptions');
+            subList.style.display = (subList.style.display === 'block') ? 'none' : 'block';
         }
 
-        // ভাষা পরিবর্তন করার মেইন লজিক
-        function changeLanguage(lang) {
+        // ল্যাঙ্গুয়েজ পরিবর্তনের মূল ফাংশন
+        function changeLanguage(lang, event) {
+            if(event) event.stopPropagation();
             currentLang = lang;
-            document.getElementById('langDropdown').style.display = 'none';
             
-            document.getElementById('optEN').classList.remove('active');
-            document.getElementById('optBN').classList.remove('active');
-            if(lang === 'en') document.getElementById('optEN').classList.add('active');
-            if(lang === 'bn') document.getElementById('optBN').classList.add('active');
-
-            // UI আপডেট
-            const dict = languageData[lang];
-            document.getElementById('textSelectPayment').innerText = dict.selectPayment;
-            document.getElementById('lblCurrency').innerText = dict.currency;
-            document.getElementById('textSupportTitle').innerText = dict.contactUs;
-            document.getElementById('sheetSearchInput').placeholder = dict.search;
-            document.getElementById('toastText').innerText = dict.copied;
-
-            // কারেন্সি প্লেসহোল্ডার টেক্সট আপডেট
-            if (!selectedAsset) {
-                document.getElementById('currencyPlaceholder').innerText = dict.selectCurrencyOpt;
-            }
+            // টিক মার্ক এবং একটিভ কালার আপডেট
+            document.getElementById('btnLangEN').classList.remove('active');
+            document.getElementById('btnLangBN').classList.remove('active');
+            document.getElementById('btnLangEN').querySelector('.tick').innerText = '';
+            document.getElementById('btnLangBN').querySelector('.tick').innerText = '';
             
-            // নেটওয়ার্ক লেবেল ও প্লেসহোল্ডার আপডেট
-            const labelEl = document.getElementById('subSelectLabel');
-            if (selectedAsset === 'bKash' || selectedAsset === 'Nagad') {
-                labelEl.innerText = dict.accountType;
-                if(selectedNetworkIndex === "") {
-                    document.getElementById('networkTextPlaceholder').innerText = dict.selectAccountOpt;
-                }
+            if(lang === 'en') {
+                document.getElementById('btnLangEN').classList.add('active');
+                document.getElementById('btnLangEN').querySelector('.tick').innerText = '✓';
             } else {
-                labelEl.innerText = dict.network;
+                document.getElementById('btnLangBN').classList.add('active');
+                document.getElementById('btnLangBN').querySelector('.tick').innerText = '✓';
+            }
+
+            // ডিকশনারি অনুযায়ী অনুবাদ প্রতিস্থাপন
+            const dict = langDictionary[lang];
+            document.getElementById('getAddrBtnTxt').innerText = dict.getAddr;
+            document.getElementById('textSelectMethod').innerText = dict.selectMethod;
+            document.getElementById('lblMethod').innerText = dict.lblMethod;
+            document.getElementById('toastMsg').innerText = dict.copied;
+            
+            document.getElementById('setLangTitle').innerText = dict.setLangTitle;
+            document.getElementById('setLangDesc').innerText = dict.setLangDesc;
+            document.getElementById('setThemeTitle').innerText = dict.setThemeTitle;
+
+            if(!selectedAsset) {
+                document.getElementById('placeholderAsset').innerText = dict.placeholderAsset;
+                document.getElementById('networkTextPlaceholder').innerText = dict.placeholderNet;
+                document.getElementById('subSelectLabel').innerText = dict.subSelectLabel;
+            } else {
+                const labelEl = document.getElementById('subSelectLabel');
+                labelEl.innerText = (selectedAsset === 'bKash' || selectedAsset === 'Nagad') ? dict.accountType : dict.network;
                 if(selectedNetworkIndex === "") {
-                    document.getElementById('networkTextPlaceholder').innerText = dict.selectNetworkOpt;
+                    document.getElementById('networkTextPlaceholder').innerText = (selectedAsset === 'bKash' || selectedAsset === 'Nagad') ? dict.selectAccount : dict.selectNetwork;
                 }
             }
 
-            // প্রসিড বাটন টেক্সট আপডেট
-            const btnTextEl = document.getElementById('btnText');
-            if (btnTextEl) {
-                if (btnTextEl.innerText === "Proceed" || btnTextEl.innerText === "এগিয়ে যান") {
-                    btnTextEl.innerText = dict.proceed;
-                }
+            const closeBtn = document.getElementById('closeBtn');
+            if(closeBtn && closeBtn.innerText !== "DONE" && closeBtn.innerText !== "সম্পন্ন") {
+                closeBtn.innerText = dict.close;
+            }
+            const proceedBtnTxt = document.getElementById('btnText');
+            if(proceedBtnTxt && !document.getElementById('proceedBtn').disabled) {
+                proceedBtnTxt.innerText = dict.proceed;
             }
 
-            // যদি পেমেন্ট ইনফো স্ক্রিন ওপেন থাকে তাহলে লেবেল টেক্সট পরিবর্তন
             const finalDataLabel = document.getElementById('finalDataLabel');
-            if (finalDataLabel && selectedAsset) {
-                if (selectedAsset === 'bKash' || selectedAsset === 'Nagad') {
-                    finalDataLabel.innerText = dict.numberLabel;
-                } else {
-                    finalDataLabel.innerText = dict.walletLabel;
-                }
+            if(finalDataLabel && selectedAsset) {
+                finalDataLabel.innerText = (selectedAsset === 'bKash' || selectedAsset === 'Nagad') ? dict.numberLabel : dict.walletLabel;
             }
         }
 
-        // স্ক্রিনের অন্য কোথাও ক্লিক করলে ভাষা মেনু বন্ধ হবে
-        document.addEventListener('click', function() {
-            document.getElementById('langDropdown').style.display = 'none';
-        });
-
-        function openDropdownSheet(type) {
-            if (type === 'network' && document.getElementById('networkSelected').classList.contains('custom-disabled')) {
-                return;
-            }
+        // লাইট এবং ডার্ক মোড চেঞ্জার ফাংশন
+        function toggleThemeMode(checkbox) {
+            const modalEl = document.getElementById('modalMainContent');
+            const themeDesc = document.getElementById('setThemeDesc');
             
-            currentSheetType = type;
-            const overlay = document.getElementById('dropdownOverlay');
-            const sheetTitle = document.getElementById('sheetTitle');
-            const searchInput = document.getElementById('sheetSearchInput');
-            const dict = languageData[currentLang];
-            
-            searchInput.value = ""; 
-            overlay.style.display = 'flex';
-            
-            if (type === 'currency') {
-                sheetTitle.innerText = dict.selectCurrencyOpt;
+            if(checkbox.checked) {
+                modalEl.classList.add('light-mode');
+                themeDesc.innerText = "On";
             } else {
-                sheetTitle.innerText = (selectedAsset === 'bKash' || selectedAsset === 'Nagad') ? dict.selectAccountOpt : dict.selectNetworkOpt;
-            }
-            
-            renderSheetOptions();
-        }
-
-        function closeDropdownSheet() {
-            document.getElementById('dropdownOverlay').style.display = 'none';
-        }
-
-        function renderSheetOptions() {
-            const container = document.getElementById('sheetOptionsList');
-            container.innerHTML = "";
-            const dict = languageData[currentLang];
-            
-            if (currentSheetType === 'currency') {
-                const currencies = ['bKash', 'Nagad', 'USDT', 'LTC'];
-                currencies.forEach(asset => {
-                    const item = document.createElement('div');
-                    item.className = "dropdown-option";
-                    item.innerHTML = `
-                        <div class="option-left-content">
-                            ${logos[asset]} <span>${asset}</span>
-                        </div>
-                    `;
-                    item.onclick = () => selectAsset(asset);
-                    container.appendChild(item);
-                });
-            } else if (currentSheetType === 'network') {
-                const dataKey = selectedAsset.toLowerCase();
-                if (walletData[dataKey]) {
-                    walletData[dataKey].forEach((net, index) => {
-                        const item = document.createElement('div');
-                        item.className = "dropdown-option";
-                        let badgeHTML = net.isPopular ? `<span class="popular-badge">${dict.popular}</span>` : '';
-                        
-                        item.innerHTML = `
-                            <div class="option-left-content">
-                                ${logos[net.logoKey]} <span>${net.name}</span>
-                            </div>
-                            ${badgeHTML}
-                        `;
-                        item.onclick = () => selectNetwork(index, net.name, net.logoKey);
-                        container.appendChild(item);
-                    });
-                }
+                modalEl.classList.remove('light-mode');
+                themeDesc.innerText = "Off";
             }
         }
 
-        function filterDropdownOptions() {
-            const filter = document.getElementById('sheetSearchInput').value.toLowerCase();
-            const options = document.getElementById('sheetOptionsList').getElementsByClassName('dropdown-option');
+        function openWallet() {
+            resetWalletModal();
+            document.getElementById('walletModal').style.display = 'flex';
+            initAssetDropdown();
+        }
+
+        function closeWallet() {
+            document.getElementById('walletModal').style.display = 'none';
+            closeSettingsPanel();
+        }
+
+        function toggleDropdown(id, event) {
+            if (event) event.stopPropagation();
             
-            for (let i = 0; i < options.length; i++) {
-                const text = options[i].innerText || options[i].textContent;
-                if (text.toLowerCase().indexOf(filter) > -1) {
-                    options[i].style.display = "";
-                } else {
-                    options[i].style.display = "none";
-                }
+            const assetOpts = document.getElementById('assetDropdownOptions');
+            const netOpts = document.getElementById('networkDropdownOptions');
+            const assetSel = document.getElementById('assetSelected');
+            const netSel = document.getElementById('networkSelected');
+
+            if (id === 'assetDropdownOptions') {
+                netOpts.style.display = 'none';
+                netSel.classList.remove('open');
+                assetOpts.style.display = (assetOpts.style.display === 'block') ? 'none' : 'block';
+                assetSel.classList.toggle('open');
+            } else if (id === 'networkDropdownOptions') {
+                if (netSel.classList.contains('custom-disabled')) return;
+                assetOpts.style.display = 'none';
+                assetSel.classList.remove('open');
+                netOpts.style.display = (netOpts.style.display === 'block') ? 'none' : 'block';
+                netSel.classList.toggle('open');
             }
         }
 
-        function selectAsset(asset) {
+        function initAssetDropdown() {
+            const container = document.getElementById('assetDropdownOptions');
+            container.innerHTML = `
+                <div class="dropdown-option" onclick="selectAsset('bKash', event)">${logos.bKash} <span>bKash</span></div>
+                <div class="dropdown-option" onclick="selectAsset('Nagad', event)">${logos.Nagad} <span>Nagad</span></div>
+                <div class="dropdown-option" onclick="selectAsset('USDT', event)">${logos.USDT} <span>USDT</span></div>
+                <div class="dropdown-option" onclick="selectAsset('LTC', event)">${logos.LTC} <span>LTC</span></div>
+            `;
+        }
+
+        function selectAsset(asset, event) {
+            if (event) event.stopPropagation();
+            const dict = langDictionary[currentLang];
+            
             selectedAsset = asset;
-            document.getElementById('assetSelected').innerHTML = `<div class="selected-value-container">${logos[asset]} <span style="color: var(--text-dark);">${asset}</span></div>`;
-            closeDropdownSheet();
+            document.getElementById('assetSelected').innerHTML = `<div class="selected-value-container">${logos[asset]} <span style="color: inherit;">${asset}</span></div>`;
+            document.getElementById('assetDropdownOptions').style.display = 'none';
+            document.getElementById('assetSelected').classList.remove('open');
 
-            const dict = languageData[currentLang];
             const labelEl = document.getElementById('subSelectLabel');
-            const placeholderText = (asset === 'bKash' || asset === 'Nagad') ? dict.selectAccountOpt : dict.selectNetworkOpt;
+            const placeholderText = (asset === 'bKash' || asset === 'Nagad') ? dict.selectAccount : dict.selectNetwork;
             labelEl.innerText = (asset === 'bKash' || asset === 'Nagad') ? dict.accountType : dict.network;
 
             const netSelected = document.getElementById('networkSelected');
             netSelected.classList.remove('custom-disabled');
-            netSelected.innerHTML = `<span id="networkTextPlaceholder" style="color: var(--text-dark) !important; font-weight: 600;">${placeholderText}</span>`;
+            netSelected.innerHTML = `<span id="networkTextPlaceholder" style="color: inherit !important; font-weight: 600;">${placeholderText}</span>`;
             
             selectedNetworkIndex = "";
             const btn = document.getElementById('proceedBtn');
             btn.disabled = true;
             btn.classList.remove('active');
+
+            const netContainer = document.getElementById('networkDropdownOptions');
+            netContainer.innerHTML = "";
+            
+            const dataKey = asset.toLowerCase();
+            if(walletData[dataKey]) {
+                walletData[dataKey].forEach((net, index) => {
+                    const item = document.createElement('div');
+                    item.className = "dropdown-option";
+                    item.innerHTML = `${logos[net.logoKey]} <span>${net.name}</span>`;
+                    item.onclick = function(e) { 
+                        e.stopPropagation();
+                        selectNetwork(index, net.name, net.logoKey); 
+                    };
+                    netContainer.appendChild(item);
+                });
+            }
         }
 
         function selectNetwork(index, name, logoKey) {
             selectedNetworkIndex = index;
-            document.getElementById('networkSelected').innerHTML = `<div class="selected-value-container">${logos[logoKey]} <span style="color: var(--text-dark);">${name}</span></div>`;
-            closeDropdownSheet();
+            document.getElementById('networkSelected').innerHTML = `<div class="selected-value-container">${logos[logoKey]} <span style="color: inherit;">${name}</span></div>`;
+            document.getElementById('networkDropdownOptions').style.display = 'none';
+            document.getElementById('networkSelected').classList.remove('open');
 
             const btn = document.getElementById('proceedBtn');
             btn.disabled = false;
             btn.classList.add('active');
+            document.getElementById('btnText').innerText = langDictionary[currentLang].proceed;
+        }
+
+        function resetWalletModal() {
+            selectedAsset = "";
+            selectedNetworkIndex = "";
+            const dict = langDictionary[currentLang];
             
-            // ভাষা অনুযায়ী বাটন আপডেট
-            document.getElementById('btnText').innerText = languageData[currentLang].proceed;
+            document.getElementById('selectionArea').style.display = 'block';
+            document.getElementById('subSelectLabel').innerText = dict.subSelectLabel;
+            
+            document.getElementById('assetSelected').innerHTML = `<span class="selected-value-container" id="placeholderAsset" style="color: #94a3b8;">${dict.placeholderAsset}</span>`;
+            document.getElementById('assetSelected').classList.remove('open');
+            
+            const netBtn = document.getElementById('networkSelected');
+            netBtn.innerHTML = `<span id="networkTextPlaceholder" style="color: #64748b;">${dict.placeholderNet}</span>`;
+            netBtn.classList.remove('open');
+            netBtn.classList.add('custom-disabled');
+            
+            document.getElementById('displayArea').style.display = 'none';
+            
+            const actionArea = document.getElementById('actionButtons');
+            actionArea.innerHTML = `
+                <button id="closeBtn" onclick="closeWallet()" style="border: 1px solid rgba(255,255,255,0.08); padding:10px 20px; border-radius:12px; font-weight: 600; color: #94a3b8; width: 40%; text-align: center;">${dict.close}</button>
+                <button id="proceedBtn" onclick="startLoadingProcess()" class="proceed-btn-style" disabled>
+                    <div id="btnLoader" class="btn-spinner"></div>
+                    <span id="btnText">${dict.proceed}</span>
+                </button>
+            `;
+            changeLanguage(currentLang);
         }
 
         function startLoadingProcess() {
             if(selectedAsset === "" || selectedNetworkIndex === "") return;
+            const dict = langDictionary[currentLang];
             
             const btn = document.getElementById('proceedBtn');
             const loader = document.getElementById('btnLoader');
             const btnText = document.getElementById('btnText');
+            const closeBtn = document.getElementById('closeBtn');
             
             btn.disabled = true;
             btn.classList.remove('active'); 
+            closeBtn.disabled = true;
+            closeBtn.style.opacity = "0.3";
             
             btnText.innerText = ""; 
             loader.style.display = 'block';
             
             const dataKey = selectedAsset.toLowerCase();
             const netInfo = walletData[dataKey][selectedNetworkIndex];
-            const dict = languageData[currentLang];
             
             document.getElementById('networkLogo').innerHTML = logos[selectedAsset];
             document.getElementById('networkNameText').innerText = netInfo.name;
@@ -641,32 +749,26 @@
                 document.getElementById('displayArea').style.display = 'block';
                 
                 document.getElementById('actionButtons').innerHTML = `
-                    <button onclick="resetToInitialState()" style="background: #000000; padding:14px 0; border-radius:12px; font-weight: 700; color: #fff; width: 100%; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.15); cursor: pointer;">${dict.done}</button>
+                    <button onclick="closeWallet()" style="background: var(--primary-blue); padding:14px 0; border-radius:12px; font-weight: 700; color: #fff; width: 100%; text-align: center; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.45); cursor:pointer;">${dict.done}</button>
                 `;
             }, 2500);
         }
 
-        function resetToInitialState() {
-            selectedAsset = "";
-            selectedNetworkIndex = "";
-            const dict = languageData[currentLang];
-            
-            document.getElementById('selectionArea').style.display = 'block';
-            document.getElementById('subSelectLabel').innerText = dict.network;
-            document.getElementById('assetSelected').innerHTML = `<span class="selected-value-container" id="currencyPlaceholder" style="color: #64748b;">${dict.selectCurrencyOpt}</span>`;
-            
-            const netBtn = document.getElementById('networkSelected');
-            netBtn.innerHTML = `<span id="networkTextPlaceholder" style="color: #94a3b8;">${dict.selectNetworkOpt}</span>`;
-            netBtn.classList.add('custom-disabled');
-            
-            document.getElementById('displayArea').style.display = 'none';
-            
-            document.getElementById('actionButtons').innerHTML = `
-                <button id="proceedBtn" onclick="startLoadingProcess()" class="proceed-btn-style" disabled>
-                    <div id="btnLoader" class="btn-spinner"></div>
-                    <span id="btnText">${dict.proceed}</span>
-                </button>
-            `;
+        window.onclick = function(event) {
+            if (!event.target.closest('.custom-dropdown')) {
+                const assetOpts = document.getElementById('assetDropdownOptions');
+                const netOpts = document.getElementById('networkDropdownOptions');
+                if(assetOpts && netOpts) {
+                    assetOpts.style.display = 'none';
+                    netOpts.style.display = 'none';
+                }
+                const assetSel = document.getElementById('assetSelected');
+                const netSel = document.getElementById('networkSelected');
+                if(assetSel && netSel) {
+                    assetSel.classList.remove('open');
+                    netSel.classList.remove('open');
+                }
+            }
         }
 
         function copyText(elementId) {
@@ -687,8 +789,8 @@
                 toast.classList.remove('show');
             }, 2000);
         }
-        
-        // ডিফল্ট প্রথম ল্যাঙ্গুয়েজ লোড করা
+
+        // লোড হওয়ার সাথে সাথে ডিফল্ট ভাষা সেটআপ
         changeLanguage('en');
     </script>
 </body>
