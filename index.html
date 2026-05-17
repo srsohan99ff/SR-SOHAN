@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ᏚR SOHAN - Official</title>
+    <title>𝐒ᴏʜᴀɴ 𝐏ᴇᴍᴇɴᴛ - Official</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght=700&family=Rajdhani:wght=600;700&display=swap" rel="stylesheet">
     <style>
@@ -25,16 +25,6 @@
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            transition: background-color 0.3s ease;
-        }
-
-        /* ডার্ক মোড ক্লাস */
-        body.dark-mode {
-            --main-bg: #090f1c;
-            --card-bg: #0f172a;
-            --border-color: #1e293b;
-            --text-dark: #ffffff;
-            --text-gray: #94a3b8;
         }
         
         .main-container { 
@@ -46,7 +36,6 @@
             display: flex;
             flex-direction: column;
             position: relative;
-            transition: background 0.3s ease;
         }
 
         /* ফুল স্ক্রিন অ্যাড্রেস ডিসপ্লে মোড (কোনো গ্যাপ বা প্যাডিং থাকবে না) */
@@ -57,19 +46,12 @@
         .header-top-row {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
             margin-bottom: 15px;
             position: relative;
         }
 
-        .step-title { font-size: 1.4rem; font-weight: 700; color: var(--text-dark); margin: 0; }
-        
-        .settings-gear-btn {
-            color: var(--text-gray);
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-        .settings-gear-btn:hover { color: var(--text-dark); }
+        .step-title { font-size: 1.6rem; font-weight: 700; color: var(--text-dark); margin: 0; text-align: center; }
 
         /* ড্রপডাউন সিলেক্টর বক্স */
         .custom-dropdown {
@@ -154,9 +136,8 @@
             background: #eff6ff; color: #2563eb; padding: 6px 14px; border-radius: 20px; font-weight: 600;
             display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; margin-bottom: 20px; border: 1px solid #dbeafe;
         }
-        body.dark-mode .info-tag { background: rgba(37, 99, 235, 0.15); color: #60a5fa; border-color: rgba(37, 99, 235, 0.3); }
 
-        /* প্রসিড বাতন */
+        /* প্রসিড বাটন */
         .proceed-btn-style {
             padding: 14px 20px; border-radius: 12px; font-weight: 700; color: #8e949f; 
             width: 100%; display: flex; align-items: center; justify-content: center; background: #eeeeee; border: none;
@@ -165,7 +146,6 @@
         .proceed-btn-style.active {
             background: #000000; color: #fff; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
-        body.dark-mode .proceed-btn-style.active { background: #ffffff; color: #000000; }
 
         /* 🖥 ফুল স্ক্রিন পেমেন্ট কার্ড লেআউট (কোনো সাইড গ্যাপ থাকবে না) */
         .payment-details-card {
@@ -190,7 +170,6 @@
             display: flex; align-items: center; justify-content: center; color: #2563eb; background: #eff6ff; border: 1px solid #dbeafe;
             width: 38px; height: 38px; border-radius: 8px; cursor: pointer; flex-shrink: 0;
         }
-        body.dark-mode .inline-copy-btn { background: #1e293b; border-color: #334155; color: #60a5fa; }
         .inline-copy-btn.copied { background: #d1fae5 !important; border-color: #10b981 !important; color: #059669 !important; }
 
         /* বড় স্ক্যানার সাইজ বক্স */
@@ -223,106 +202,33 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08); opacity: 0; transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
         }
         .top-notification.show { top: 25px; opacity: 1; }
-
-        /* ⚙️ সেটিংস প্যানেল পপআপ (Cryptomus 1203.jpg স্টাইল) */
-        .settings-popup-sheet {
-            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--card-bg); z-index: 500; padding: 24px; flex-direction: column;
-        }
-        .settings-row-item {
-            display: flex; align-items: center; justify-content: space-between; padding: 16px 0;
-            border-bottom: 1px solid var(--border-color); cursor: pointer;
-        }
-        .settings-item-left { display: flex; align-items: center; gap: 14px; color: var(--text-dark); }
-        .settings-primary-txt { font-weight: 700; font-size: 1.05rem; color: var(--text-dark); }
-        .settings-secondary-txt { font-size: 0.85rem; color: var(--text-gray); margin-top: 2px; }
-
-        /* সুইচ টগল */
-        .switch-toggle { position: relative; width: 44px; height: 24px; }
-        .switch-toggle input { opacity: 0; width: 0; height: 0; }
-        .switch-slider {
-            position: absolute; cursor: pointer; inset: 0; background-color: #cbd5e1; transition: .3s; border-radius: 24px;
-        }
-        body.dark-mode .switch-slider { background-color: #334155; }
-        .switch-slider:before {
-            position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%;
-        }
-        input:checked + .switch-slider { background-color: #10b981; }
-        input:checked + .switch-slider:before { transform: translateX(20px); }
-
-        /* ভাষা সাব-মেনু */
-        .lang-sub-list { display: none; background: var(--main-bg); border-radius: 10px; padding: 4px; margin-top: 4px; }
-        .lang-btn { padding: 10px 14px; font-weight: 700; color: var(--text-gray); display: flex; justify-content: space-between; border-radius: 8px; }
-        .lang-btn.active { color: var(--primary-blue); }
     </style>
 </head>
 <body>
 
     <div id="topToast" class="top-notification">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-        <span id="toastMsg">Copied successfully!</span>
+        <span>Copied successfully!</span>
     </div>
 
     <div class="main-container" id="mainContainer">
         
         <div class="header-top-row" id="mainHeaderRow">
-            <div style="width:24px;"></div>
-            <h2 class="step-title" id="mainTitle">ᏚR SOHAN PAY</h2>
-            <div class="settings-gear-btn" onclick="openSettings()">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-            </div>
-        </div>
-
-        <div id="settingsPanel" class="settings-popup-sheet">
-            <div class="flex items-center justify-between mb-6">
-                <h3 class="text-xl font-bold" id="settingsMenuTitle">Settings</h3>
-                <button class="text-current focus:outline-none" onclick="closeSettings()">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
-            </div>
-
-            <div class="settings-row-item" onclick="toggleLangList()">
-                <div class="settings-item-left">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-                    <div>
-                        <div class="settings-primary-txt" id="langOptTitle">Language</div>
-                        <div class="settings-secondary-txt" id="langOptDesc">Choose your language</div>
-                    </div>
-                </div>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            </div>
-            <div id="langSubList" class="lang-sub-list">
-                <div class="lang-btn active" id="langEn" onclick="selectLanguage('en', event)">English <span>✓</span></div>
-                <div class="lang-btn" id="langBn" onclick="selectLanguage('bn', event)">বাংলা <span></span></div>
-            </div>
-
-            <div class="settings-row-item">
-                <div class="settings-item-left">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-                    <div>
-                        <div class="settings-primary-txt" id="darkOptTitle">Dark theme</div>
-                        <div class="settings-secondary-txt" id="darkOptDesc">Off</div>
-                    </div>
-                </div>
-                <label class="switch-toggle">
-                    <input type="checkbox" id="darkThemeCheckbox" onchange="toggleDarkTheme(this)">
-                    <span class="switch-slider"></span>
-                </label>
-            </div>
+            <h2 class="step-title">𝐒ᴏʜᴀɴ 𝐏ᴇᴍᴇɴᴛ</h2>
         </div>
         
         <div id="selectionArea">
             <div style="text-align: center;">
                 <div class="info-tag">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                    <span id="infoTagText">Select payment method</span>
+                    <span>Select payment method</span>
                 </div>
             </div>
             
-            <label class="detail-label" id="lblCurrency">Currency</label>
+            <label class="detail-label">Currency</label>
             <div class="custom-dropdown">
                 <div class="dropdown-selected" id="assetSelected" onclick="openDropdownSheet('currency')">
-                    <span class="selected-value-container" id="placeholderAsset" style="color: #64748b;">Select currency</span>
+                    <span class="selected-value-container" style="color: #64748b;">Select currency</span>
                 </div>
             </div>
 
@@ -368,7 +274,7 @@
             </div>
 
             <div class="social-support-container" id="socialSupportSection">
-                <div class="support-title" id="supportTitleText">Please contact us if you have any questions</div>
+                <div class="support-title">Please contact us if you have any questions</div>
                 <div class="social-icons-row">
                     <a href="https://t.me/srsohan99ff" target="_blank" class="social-circle-btn telegram">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
@@ -402,28 +308,6 @@
     </div>
 
     <script>
-        let currentLang = 'en';
-        const langData = {
-            en: {
-                title: "ᏚR SOHAN PAY", infoTag: "Select payment method", lblCurrency: "Currency",
-                lblNetwork: "Network", lblAccount: "Account Type", placeholderAsset: "Select currency",
-                placeholderNet: "Select network", placeholderAcc: "Select account type",
-                sheetCurr: "Select currency", sheetNet: "Select network", sheetAcc: "Select account type",
-                proceed: "Proceed", numberLabel: "Recipient's Number", addressLabel: "Recipient's Wallet Address",
-                toastMsg: "Copied successfully!", settingsMenuTitle: "Settings", langOptTitle: "Language",
-                langOptDesc: "Choose your language", darkOptTitle: "Dark theme", supportTitleText: "Please contact us if you have any questions"
-            },
-            bn: {
-                title: "ᏚR SOHAN পে", infoTag: "পেমেন্ট পদ্ধতি নির্বাচন করুন", lblCurrency: "কারেন্সি / মাধ্যম",
-                lblNetwork: "নেটওয়ার্ক", lblAccount: "অ্যাকাউন্টের ধরন", placeholderAsset: "কারেন্সি সিলেক্ট করুন",
-                placeholderNet: "নেটওয়ার্ক সিলেক্ট করুন", placeholderAcc: "অ্যাকাউন্টের ধরন সিলেক্ট করুন",
-                sheetCurr: "কারেন্সি নির্বাচন করুন", sheetNet: "নেটওয়ার্ক নির্বাচন করুন", sheetAcc: "অ্যাকাউন্টের ধরন নির্বাচন করুন",
-                proceed: "এগিয়ে যান", numberLabel: "প্রাপকের নম্বর", addressLabel: "প্রাপকের ওয়ালেট অ্যাড্রেস",
-                toastMsg: "সফলভাবে কপি হয়েছে!", settingsMenuTitle: "সেটিংস", langOptTitle: "ভাষা (Language)",
-                langOptDesc: "আপনার ভাষা নির্বাচন করুন", darkOptTitle: "ডার্ক থিম", supportTitleText: "আপনার কোনো প্রশ্ন থাকলে আমাদের সাথে যোগাযোগ করুন"
-            }
-        };
-
         const logos = {
             bKash: `<img src="https://i.ibb.co.com/4g1Xr8BP/1164.jpg" class="crypto-image-logo" alt="bKash">`,
             Nagad: `<img src="https://i.ibb.co.com/ksqxHvm8/image.png" class="crypto-image-logo" alt="Nagad">`,
@@ -445,76 +329,6 @@
         let selectedNetworkIndex = "";
         let currentSheetType = ""; 
 
-        // সেটিংস ওপেন ও ক্লোজ
-        function openSettings() { document.getElementById('settingsPanel').style.display = 'flex'; }
-        function closeSettings() { 
-            document.getElementById('settingsPanel').style.display = 'none'; 
-            document.getElementById('langSubList').style.display = 'none';
-        }
-        function toggleLangList() {
-            const list = document.getElementById('langSubList');
-            list.style.display = (list.style.display === 'block') ? 'none' : 'block';
-        }
-
-        // ভাষা পরিবর্তন করার রুলস
-        function selectLanguage(lang, e) {
-            e.stopPropagation();
-            currentLang = lang;
-            document.getElementById('langEn').classList.remove('active');
-            document.getElementById('langBn').classList.remove('active');
-            document.getElementById('langEn').querySelector('span').innerText = '';
-            document.getElementById('langBn').querySelector('span').innerText = '';
-
-            if(lang === 'en') {
-                document.getElementById('langEn').classList.add('active');
-                document.getElementById('langEn').querySelector('span').innerText = '✓';
-            } else {
-                document.getElementById('langBn').classList.add('active');
-                document.getElementById('langBn').querySelector('span').innerText = '✓';
-            }
-            updateLanguageUI();
-        }
-
-        function updateLanguageUI() {
-            const trans = langData[currentLang];
-            document.getElementById('mainTitle').innerText = trans.title;
-            document.getElementById('infoTagText').innerText = trans.infoTag;
-            document.getElementById('lblCurrency').innerText = trans.lblCurrency;
-            document.getElementById('toastMsg').innerText = trans.toastMsg;
-            document.getElementById('settingsMenuTitle').innerText = trans.settingsMenuTitle;
-            document.getElementById('langOptTitle').innerText = trans.langOptTitle;
-            document.getElementById('langOptDesc').innerText = trans.langOptDesc;
-            document.getElementById('darkOptTitle').innerText = trans.darkOptTitle;
-            document.getElementById('supportTitleText').innerText = trans.supportTitleText;
-
-            if (!selectedAsset) {
-                document.getElementById('placeholderAsset').innerText = trans.placeholderAsset;
-                document.getElementById('subSelectLabel').innerText = trans.lblNetwork;
-                document.getElementById('networkTextPlaceholder').innerText = trans.placeholderNet;
-            } else {
-                const isFiat = (selectedAsset === 'bKash' || selectedAsset === 'Nagad');
-                document.getElementById('subSelectLabel').innerText = isFiat ? trans.lblAccount : trans.lblNetwork;
-                if (selectedNetworkIndex === "") {
-                    document.getElementById('networkTextPlaceholder').innerText = isFiat ? trans.placeholderAcc : trans.placeholderNet;
-                }
-            }
-            if(document.getElementById('proceedBtn').classList.contains('active')) {
-                document.getElementById('btnText').innerText = trans.proceed;
-            }
-        }
-
-        // থিম পরিবর্তন করার রুলস
-        function toggleDarkTheme(checkbox) {
-            const desc = document.getElementById('darkOptDesc');
-            if (checkbox.checked) {
-                document.body.classList.add('dark-mode');
-                desc.innerText = "On";
-            } else {
-                document.body.classList.remove('dark-mode');
-                desc.innerText = "Off";
-            }
-        }
-
         function openDropdownSheet(type) {
             if (type === 'network' && document.getElementById('networkSelected').classList.contains('custom-disabled')) return;
             
@@ -526,11 +340,10 @@
             searchInput.value = ""; 
             overlay.style.display = 'flex';
             
-            const trans = langData[currentLang];
             if (type === 'currency') {
-                sheetTitle.innerText = trans.sheetCurr;
+                sheetTitle.innerText = "Select currency";
             } else {
-                sheetTitle.innerText = (selectedAsset === 'bKash' || selectedAsset === 'Nagad') ? trans.sheetAcc : trans.sheetNet;
+                sheetTitle.innerText = (selectedAsset === 'bKash' || selectedAsset === 'Nagad') ? "Select account type" : "Select network";
             }
             renderSheetOptions();
         }
@@ -567,16 +380,15 @@
 
         function selectCurrency(asset) {
             selectedAsset = asset;
-            const trans = langData[currentLang];
             document.getElementById('assetSelected').innerHTML = `<div class="selected-value-container">${logos[asset]} <span>${asset}</span></div>`;
             closeDropdownSheet();
 
             const isFiat = (asset === 'bKash' || asset === 'Nagad');
-            document.getElementById('subSelectLabel').innerText = isFiat ? trans.lblAccount : trans.lblNetwork;
+            document.getElementById('subSelectLabel').innerText = isFiat ? "Account Type" : "Network";
 
             const netSelected = document.getElementById('networkSelected');
             netSelected.classList.remove('custom-disabled');
-            netSelected.innerHTML = `<span id="networkTextPlaceholder" style="color: var(--text-dark); font-weight: 600;">${isFiat ? trans.placeholderAcc : trans.placeholderNet}</span>`;
+            netSelected.innerHTML = `<span id="networkTextPlaceholder" style="color: var(--text-dark); font-weight: 600;">${isFiat ? "Select account type" : "Select network"}</span>`;
             
             selectedNetworkIndex = "";
             const btn = document.getElementById('proceedBtn');
@@ -592,7 +404,7 @@
             const btn = document.getElementById('proceedBtn');
             btn.disabled = false;
             btn.classList.add('active');
-            document.getElementById('btnText').innerText = langData[currentLang].proceed;
+            document.getElementById('btnText').innerText = "Proceed";
         }
 
         function filterDropdownOptions() {
@@ -604,7 +416,6 @@
             });
         }
 
-        // লোডিং শেষ হওয়ার সাথে সাথে ফুল স্ক্রিন অ্যাড্রেস প্রদর্শন
         function startLoadingProcess() {
             if(selectedAsset === "" || selectedNetworkIndex === "") return;
             
@@ -624,11 +435,10 @@
             document.getElementById('addrText').innerText = netInfo.address;
             document.getElementById('qrImage').src = netInfo.qr;
 
-            const trans = langData[currentLang];
-            document.getElementById('finalDataLabel').innerText = (selectedAsset === 'bKash' || selectedAsset === 'Nagad') ? trans.numberLabel : trans.addressLabel;
+            document.getElementById('finalDataLabel').innerText = (selectedAsset === 'bKash' || selectedAsset === 'Nagad') ? "Recipient's Number" : "Recipient's Wallet Address";
             
             setTimeout(function() {
-                // দুই পাশের সকল গ্যাপ মুছে মূল বডিকে ফুল স্ক্রিন অ্যাড্রেস মোডে ট্রান্সফর্ম করা
+                // দুই পাশের সকল গ্যাপ মুছে মূল কন্টেইনারকে ফুল স্ক্রিন অ্যাড্রেস মোডে ট্রান্সফর্ম করা
                 document.getElementById('mainContainer').classList.add('fullscreen-address-mode');
                 document.getElementById('bottomWrapper').classList.add('fullscreen-padding');
                 
@@ -637,14 +447,10 @@
                 document.getElementById('socialSupportSection').style.display = 'none';
                 document.getElementById('displayArea').style.display = 'block';
                 
-                // রিলোড ব্যাক বাটন অ্যাড করা
+                // ব্যাক বাটন অ্যাড করা
                 document.getElementById('actionButtons').innerHTML = `
                     <button onclick="location.reload()" style="background: #000000; padding:14px 0; border-radius:12px; font-weight: 700; color: #fff; width: 100%; text-align: center; cursor:pointer;">Back</button>
                 `;
-                if(document.body.classList.contains('dark-mode')) {
-                    document.getElementById('actionButtons').querySelector('button').style.backgroundColor = '#ffffff';
-                    document.getElementById('actionButtons').querySelector('button').style.color = '#000000';
-                }
             }, 1500);
         }
 
@@ -666,9 +472,6 @@
                 toast.classList.remove('show');
             }, 2000);
         }
-
-        // ইনিশিয়াল ল্যাঙ্গুয়েজ লোড
-        updateLanguageUI();
     </script>
 </body>
 </html>
