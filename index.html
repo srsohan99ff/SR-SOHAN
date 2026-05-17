@@ -9,7 +9,8 @@
     <style>
         :root {
             --primary-blue: #2563eb;
-            --main-bg: #ffffff; /* নিখুঁত সাদা ফুল স্ক্রিন ব্যাকগ্রাউন্ড */
+            --main-bg: #f8fafc;
+            --card-bg: #ffffff;
             --border-color: #e2e8f0;
             --text-dark: #000000;
             --text-gray: #64748b;
@@ -26,90 +27,74 @@
             justify-content: center;
         }
         
-        /* ফুল স্ক্রিন কন্টেইনার (কোনো কার্ড বর্ডার বা ব্যাকগ্রাউন্ড শ্যাডো থাকবে না) */
         .main-container { 
             width: 100%; 
-            max-width: 500px; /* মোবাইল স্ক্রিনের জন্য পারফেক্ট রেসপন্সিভ উইথ */
-            padding: 20px 24px;
+            max-width: 500px; 
+            background: var(--card-bg);
+            padding: 24px;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
-            background: #ffffff;
+            position: relative;
         }
 
-        /* ক্রিপ্টোমাসের মতো ক্লিন হেডার */
+        /* হেডার সেকশন আইকন সহ */
         .header-section {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 25px;
-            padding-bottom: 10px;
-        }
-        
-        .step-title { 
-            font-size: 1.5rem; 
-            font-weight: 700; 
-            color: var(--text-dark); 
-            font-family: 'Syncopate', sans-serif;
-            letter-spacing: 1px;
         }
 
-        /* ৫00 USD অ্যামাউন্ট টেক্সট স্টাইল */
-        .amount-title {
-            font-size: 1.8rem;
-            font-weight: 700;
+        .step-title { font-size: 1.4rem; font-weight: 700; color: var(--text-dark); margin: 0; }
+
+        .header-icons {
+            display: flex;
+            gap: 14px;
             color: #000000;
-            margin-bottom: 12px;
-            text-align: left;
+            position: relative;
         }
 
-        /* ব্লু নেটওয়ার্ক ফি ট্যাগ */
-        .info-tag {
-            background: #eff6ff; 
-            color: #2563eb; 
-            padding: 6px 14px; 
-            border-radius: 20px; 
-            font-weight: 600;
-            display: inline-flex; 
-            align-items: center; 
-            gap: 6px; 
-            font-size: 0.9rem; 
-            margin-bottom: 25px; 
-            border: 1px solid #dbeafe;
-            align-self: flex-start;
+        .icon-btn {
+            cursor: pointer;
+            transition: transform 0.2s;
         }
+        .icon-btn:hover { transform: scale(1.1); }
 
-        /* ড্রপডাউন লেবেল */
-        .detail-label { 
-            font-size: 1rem; 
-            color: #000000; 
-            font-weight: 700; 
-            margin-bottom: 8px; 
-            display: block; 
-            text-align: left;
+        /* ল্যাঙ্গুয়েজ ড্রপডাউন বক্স */
+        .lang-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 30px;
+            right: 0;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            z-index: 500;
+            width: 120px;
+            overflow: hidden;
         }
+        .lang-opt {
+            padding: 10px 16px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            color: #000000;
+            transition: background 0.2s;
+        }
+        .lang-opt:hover { background: #f1f5f9; }
+        .lang-opt.active { color: var(--primary-blue); background: #eff6ff; }
 
-        /* প্রধান স্ক্রিনের ইনপুট বক্স/ড্রপডাউন সিলেক্টর */
+        /* ড্রপডাউন সিলেক্টর বক্স (প্রধান স্ক্রিন) */
         .custom-dropdown {
-            position: relative; 
-            width: 100%; 
-            margin-bottom: 20px; 
-            user-select: none;
+            position: relative; width: 100%; margin-bottom: 18px; user-select: none;
         }
 
         .dropdown-selected {
-            background: #ffffff; 
-            color: var(--text-dark); 
-            padding: 16px; 
-            border-radius: 14px;
-            border: 1.5px solid var(--border-color); 
-            font-weight: 600; 
-            cursor: pointer;
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            transition: 0.2s;
-            font-size: 1.05rem;
+            background: #ffffff; color: var(--text-dark); padding: 14px 16px; border-radius: 12px;
+            border: 1.5px solid var(--border-color); font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; justify-content: space-between; transition: 0.2s;
         }
         .dropdown-selected:hover { border-color: #cbd5e1; }
         
@@ -122,39 +107,24 @@
         }
 
         .dropdown-selected::after {
-            content: ""; 
-            border-left: 5px solid transparent; 
-            border-right: 5px solid transparent;
-            border-top: 5px solid #000000; 
-            transition: 0.3s; 
-            margin-left: 10px;
+            content: ""; border-left: 5px solid transparent; border-right: 5px solid transparent;
+            border-top: 5px solid #000000; transition: 0.3s; margin-left: 10px;
         }
         .dropdown-selected.open::after { transform: rotate(180deg); }
 
-        /* বটম মডাল ওভারলে */
+        /* বটম ড্রপডাউন মডাল ওভারলে */
         .dropdown-overlay {
-            display: none; 
-            position: fixed; 
-            inset: 0; 
-            background: rgba(0, 0, 0, 0.4); 
-            z-index: 200;
-            align-items: flex-end; 
-            justify-content: center;
+            display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.4); z-index: 200;
+            align-items: flex-end; justify-content: center;
         }
         
         /* পপ-আপ ড্রপডাউন শিট */
         .dropdown-sheet {
-            background: #ffffff; 
-            width: 100%; 
-            max-width: 500px;
-            border-top-left-radius: 28px; 
-            border-top-right-radius: 28px;
-            padding: 24px; 
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.08);
-            max-height: 85vh; 
-            display: flex; 
-            flex-direction: column;
-            animation: slideUp 0.25s ease-out;
+            background: #ffffff; width: 100%; max-width: 500px;
+            border-top-left-radius: 24px; border-top-right-radius: 24px;
+            padding: 20px; box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
+            max-height: 80vh; display: flex; flex-direction: column;
+            animation: slideUp 0.3s ease-out;
         }
 
         @keyframes slideUp {
@@ -163,113 +133,114 @@
         }
 
         .sheet-header {
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between;
-            margin-bottom: 20px;
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 16px;
         }
-        .sheet-title { font-size: 1.4rem; font-weight: 700; color: #000000; }
+        .sheet-title { font-size: 1.25rem; font-weight: 700; color: #000000; }
         
         .sheet-close-btn {
             background: none; border: none; cursor: pointer; padding: 4px; color: #000000;
             transition: transform 0.2s;
         }
+        .sheet-close-btn:hover { transform: scale(1.1); }
 
         /* সার্চ বার */
         .search-container {
-            position: relative; margin-bottom: 20px;
+            position: relative; margin-bottom: 16px;
         }
         .search-input {
-            width: 100%; background: #f1f5f9; border: none; padding: 14px 16px 14px 44px;
-            border-radius: 14px; font-size: 1rem; color: #000; outline: none;
+            width: 100%; background: #f1f5f9; border: none; padding: 12px 16px 12px 42px;
+            border-radius: 12px; font-size: 0.95rem; color: #000; outline: none;
             font-weight: 600;
         }
         .search-input::placeholder { color: #94a3b8; font-weight: 500; }
         .search-icon {
-            position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+            position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
             color: #94a3b8; pointer-events: none;
         }
 
         /* অপশন লিস্ট */
         .options-list-container {
-            overflow-y: auto; flex-grow: 1; padding-bottom: 15px;
+            overflow-y: auto; flex-grow: 1; padding-bottom: 10px;
         }
 
         .dropdown-option {
-            padding: 16px 8px; cursor: pointer; display: flex; align-items: center;
+            padding: 14px 8px; cursor: pointer; display: flex; align-items: center;
             justify-content: space-between; transition: 0.2s; color: #000000;
-            font-weight: 600; font-size: 1.1rem; border-bottom: 1px solid #f1f5f9;
+            font-weight: 600; font-size: 1.05rem; border-bottom: 1px solid #f1f5f9;
         }
         .dropdown-option:last-child { border-bottom: none; }
         .dropdown-option:hover { background: #f8fafc; }
 
-        .option-left-content { display: flex; align-items: center; gap: 16px; }
+        .option-left-content { display: flex; align-items: center; gap: 14px; }
 
-        /* সবুজ পপুলার চয়েস ব্যাজ */
         .popular-badge {
-            background: #e8f7ee; color: #10b981; font-size: 0.8rem; font-weight: 700;
-            padding: 4px 12px; border-radius: 20px; letter-spacing: 0.3px;
+            background: #e8f7ee; color: #10b981; font-size: 0.75rem; font-weight: 700;
+            padding: 4px 10px; border-radius: 20px; letter-spacing: 0.3px;
         }
 
-        .selected-value-container { display: flex; align-items: center; gap: 14px; width: 100%; font-size: 1rem; }
-        .crypto-image-logo { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+        .selected-value-container { display: flex; align-items: center; gap: 14px; width: 100%; font-size: 0.95rem; }
+        .crypto-image-logo { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
 
-        /* প্রধান প্রসিড বাটনটি একদম ফুল স্ক্রিনের নিচে সেট করার জন্য */
-        .bottom-action-wrapper {
-            margin-top: auto; /* এটিকে স্ক্রিনের একদম নিচে পুশ করবে */
-            padding-top: 30px;
-            padding-bottom: 10px;
+        .info-tag {
+            background: #eff6ff; color: #2563eb; padding: 6px 14px; border-radius: 20px; font-weight: 600;
+            display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; margin-bottom: 20px; border: 1px solid #dbeafe;
         }
 
+        /* প্রসিড বাটন */
         .proceed-btn-style {
-            padding: 16px 20px; border-radius: 14px; font-weight: 700; color: #8e949f; 
+            padding: 14px 20px; border-radius: 12px; font-weight: 700; color: #8e949f; 
             width: 100%; display: flex; align-items: center; justify-content: center; background: #eeeeee; border: none;
-            cursor: not-allowed; transition: all 0.2s ease; font-size: 1.1rem;
+            cursor: not-allowed; transition: all 0.2s ease;
         }
         
         .proceed-btn-style.active {
-            background: #000000; color: #fff; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            background: #000000; color: #fff; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
-        /* পেমেন্ট সাকসেস/ডিসপ্লে এরিয়া কন্টেন্ট */
         .payment-details-card {
-            background: #ffffff; padding: 10px 0; border-radius: 14px; margin-top: 5px;
+            background: #ffffff; border: 1.5px dashed var(--border-color); padding: 16px; border-radius: 14px; margin-top: 5px;
         }
 
-        .detail-row { margin-bottom: 16px; }
+        .detail-row { margin-bottom: 12px; }
         .detail-row:last-child { margin-bottom: 0; }
+        .detail-label { font-size: 0.85rem; color: var(--text-gray); font-weight: 700; margin-bottom: 6px; display: block; }
         
         .copy-field {
-            background: #ffffff; border: 1.5px solid var(--border-color); padding: 14px; border-radius: 14px;
-            display: flex; align-items: center; justify-content: space-between; font-family: monospace; font-size: 0.95rem; word-break: break-all; color: var(--text-dark);
+            background: #ffffff; border: 1px solid var(--border-color); padding: 12px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: space-between; font-family: monospace; font-size: 0.85rem; word-break: break-all; color: var(--text-dark);
         }
 
         .inline-copy-btn {
             display: flex; align-items: center; justify-content: center; color: #2563eb; background: #eff6ff; border: 1px solid #dbeafe;
-            width: 36px; height: 36px; border-radius: 10px; cursor: pointer; transition: all 0.2s ease; flex-shrink: 0;
+            width: 34px; height: 34px; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; flex-shrink: 0;
         }
         .inline-copy-btn:hover { background: #dbeafe; }
         .inline-copy-btn.copied { background: #d1fae5 !important; border-color: #10b981 !important; color: #059669 !important; }
 
         .qr-box {
-            margin: 10px auto 20px; width: 180px; height: 180px; background: white; padding: 10px; border-radius: 16px;
-            display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); border: 1px solid var(--border-color);
+            margin: 5px auto 15px; width: 160px; height: 160px; background: white; padding: 10px; border-radius: 14px;
+            display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04); border: 1px solid var(--border-color);
         }
         .qr-box img { width: 100% !important; height: 100% !important; object-fit: contain !important; }
 
-        /* ফুটার সেকশন */
-        .social-support-container { margin-top: 25px; text-align: center; border-top: 1px solid var(--border-color); padding-top: 20px; }
-        .support-title { font-size: 0.9rem; font-weight: 700; color: var(--text-gray); margin-bottom: 16px; }
-        .social-icons-row { display: flex; justify-content: center; gap: 16px; }
+        .bottom-wrapper {
+            margin-top: auto;
+            padding-top: 20px;
+        }
+
+        .social-support-container { margin-top: 24px; text-align: center; border-top: 1px solid var(--border-color); padding-top: 15px; }
+        .support-title { font-size: 0.85rem; font-weight: 700; color: var(--text-gray); margin-bottom: 14px; letter-spacing: 1px; }
+        .social-icons-row { display: flex; justify-content: center; gap: 14px; }
         
         .social-circle-btn {
-            width: 44px; height: 44px; border-radius: 50%; background: #000000; display: flex; align-items: center; justify-content: center; color: #fff; transition: all 0.3s ease;
+            width: 42px; height: 42px; border-radius: 50%; background: #000000; display: flex; align-items: center; justify-content: center; color: #fff; transition: all 0.3s ease;
         }
         .social-circle-btn.telegram:hover { background: #0088cc; transform: translateY(-2px); }
         .social-circle-btn.whatsapp:hover { background: #22c55e; transform: translateY(-2px); }
 
         .btn-spinner {
-            display: none; width: 22px; height: 22px; border: 3px solid rgba(0, 0, 0, 0.1); border-left-color: #000000; border-radius: 50%; animation: btnSpin 0.7s linear infinite;
+            display: none; width: 20px; height: 20px; border: 3px solid rgba(0, 0, 0, 0.1); border-left-color: #000000; border-radius: 50%; animation: btnSpin 0.7s linear infinite;
         }
         .proceed-btn-style.active .btn-spinner { border-color: rgba(255,255,255,0.3); border-left-color: #fff; }
         @keyframes btnSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -286,31 +257,35 @@
 
     <div id="topToast" class="top-notification">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-        Copied successfully!
+        <span id="toastText">Copied successfully!</span>
     </div>
 
     <div class="main-container">
-        
         <div class="header-section">
             <h2 class="step-title">ᏚR SOHAN PAY</h2>
-            <div style="display: flex; gap: 15px; color: #000;">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <div class="header-section-right header-icons">
+                <svg class="icon-btn" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                <svg class="icon-btn" id="settingsIconBtn" onclick="toggleLangMenu(event)" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                
+                <div id="langDropdown" class="lang-dropdown-menu">
+                    <div class="lang-opt active" id="optEN" onclick="changeLanguage('en')">English</div>
+                    <div class="lang-opt" id="optBN" onclick="changeLanguage('bn')">বাংলা</div>
+                </div>
             </div>
         </div>
-
-        <div class="amount-title" id="mainAmountLabel">500 USD</div>
         
-        <div class="info-tag">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-            You pay network fee
-        </div>
-
         <div id="selectionArea">
-            <label class="detail-label">Currency</label>
+            <div style="text-align: center;">
+                <div class="info-tag" id="topInfoTag">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                    <span id="textSelectPayment">Select payment method</span>
+                </div>
+            </div>
+            
+            <label class="detail-label" id="lblCurrency">Currency</label>
             <div class="custom-dropdown">
                 <div class="dropdown-selected" id="assetSelected" onclick="openDropdownSheet('currency')">
-                    <span class="selected-value-container" style="color: #64748b;">Select currency</span>
+                    <span class="selected-value-container" id="currencyPlaceholder" style="color: #64748b;">Select currency</span>
                 </div>
             </div>
 
@@ -324,9 +299,9 @@
 
         <div id="displayArea" style="display: none;">
             <div class="payment-details-card">
-                <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px; background: #ffffff; padding: 12px; border-radius: 14px; border: 1.5px solid var(--border-color);">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 15px; background: #ffffff; padding: 10px; border-radius: 12px; border: 1px solid var(--border-color);">
                     <span id="networkLogo"></span>
-                    <span id="networkNameText" style="font-weight: 700; color: #000000; font-size: 1rem;"></span>
+                    <span id="networkNameText" style="font-weight: 700; color: #000000; font-size: 0.95rem;"></span>
                 </div>
 
                 <div class="detail-row">
@@ -338,7 +313,7 @@
                 <div class="detail-row" style="margin-top: 10px;">
                     <span class="detail-label" id="finalDataLabel">Number / Address</span>
                     <div class="copy-field" style="margin-top: 6px;">
-                        <span id="addrText" style="width: 82%; color: var(--text-dark); font-weight: 600;">LOADING...</span>
+                        <span id="addrText" style="width: 82%; color: var(--text-dark);">LOADING...</span>
                         <span id="copyBtnEl" class="inline-copy-btn" onclick="copyText('addrText')">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                         </span>
@@ -347,22 +322,22 @@
             </div>
         </div>
         
-        <div class="bottom-action-wrapper">
+        <div class="bottom-wrapper">
             <div id="actionButtons">
                 <button id="proceedBtn" onclick="startLoadingProcess()" class="proceed-btn-style" disabled>
                     <div id="btnLoader" class="btn-spinner"></div>
-                    <span id="btnText">Proceed to the payment</span>
+                    <span id="btnText">Proceed</span>
                 </button>
             </div>
 
             <div class="social-support-container">
-                <div class="support-title">Please contact us if you have any questions</div>
+                <div class="support-title" id="textSupportTitle">Please contact us if you have any questions</div>
                 <div class="social-icons-row">
                     <a href="https://t.me/srsohan99ff" target="_blank" class="social-circle-btn telegram">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
                     </a>
                     <a href="https://wa.me/8801329365319" target="_blank" class="social-circle-btn whatsapp">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.5-5.729-1.447L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.42 9.864-9.852.002-2.632-1.023-5.105-2.887-6.97C16.577 1.917 14.101.892 11.47.89 6.037.89 1.612 5.31 1.608 10.741c-.001 1.682.449 3.32 1.302 4.773L1.87 20.354l5.106-1.34c-.11.06-.21.11-.328.14zM17.65 14.4c-.32-.16-1.89-.93-2.185-1.04-.3-.11-.51-.16-.72.16-.21.32-.82 1.04-1.01 1.25-.19.21-.38.24-.7.08-.32-.16-1.35-.5-2.57-1.59-.95-.85-1.6-1.9-1.78-2.22-.19-.32-.02-.49.14-.65.15-.14.32-.37.48-.56.16-.18.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.72-1.73-.99-2.37-.26-.64-.53-.55-.72-.56l-.61-.01c-.21 0-.56.08-.85.4-.3.32-1.15 1.13-1.15 2.75 0 1.62 1.18 3.19 1.35 3.41.17.22 2.33 3.56 5.65 5 .79.34 1.41.55 1.89.7.8.25 1.53.22 2.11.13.65-.1 1.89-.77 2.15-1.48.27-.71.27-1.32.19-1.45-.08-.14-.3-.22-.62-.38z"/></svg>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.513 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.5-5.729-1.447L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.42 9.864-9.852.002-2.632-1.023-5.105-2.887-6.97C16.577 1.917 14.101.892 11.47.89 6.037.89 1.612 5.31 1.608 10.741c-.001 1.682.449 3.32 1.302 4.773L1.87 20.354l5.106-1.34c-.11.06-.21.11-.328.14zM17.65 14.4c-.32-.16-1.89-.93-2.185-1.04-.3-.11-.51-.16-.72.16-.21.32-.82 1.04-1.01 1.25-.19.21-.38.24-.70.08-.32-.16-1.35-.5-2.57-1.59-.95-.85-1.6-1.9-1.78-2.22-.19-.32-.02-.49.14-.65.15-.14.32-.37.48-.56.16-.18.21-.32.32-.53.11-.21.05-.4-.03-.56-.08-.16-.72-1.73-.99-2.37-.26-.64-.53-.55-.72-.56l-.61-.01c-.21 0-.56.08-.85.4-.3.32-1.15 1.13-1.15 2.75 0 1.62 1.18 3.19 1.35 3.41.17.22 2.33 3.56 5.65 5 .79.34 1.41.55 1.89.7.8.25 1.53.22 2.11.13.65-.1 1.89-.77 2.15-1.48.27-.71.27-1.32.19-1.45-.08-.14-.3-.22-.62-.38z"/></svg>
                     </a>
                 </div>
             </div>
@@ -374,7 +349,7 @@
             <div class="sheet-header">
                 <span id="sheetTitle" class="sheet-title">Select network</span>
                 <button class="sheet-close-btn" onclick="closeDropdownSheet()">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             </div>
             
@@ -391,6 +366,45 @@
     </div>
 
     <script>
+        // ভাষা ডিকশনারি ডেটা
+        let currentLang = 'en';
+        const languageData = {
+            en: {
+                selectPayment: "Select payment method",
+                currency: "Currency",
+                network: "Network",
+                selectCurrencyOpt: "Select currency",
+                selectNetworkOpt: "Select network",
+                selectAccountOpt: "Select Account",
+                accountType: "Account Type",
+                proceed: "Proceed",
+                contactUs: "Please contact us if you have any questions",
+                copied: "Copied successfully!",
+                search: "Search",
+                popular: "Popular choice",
+                done: "DONE",
+                walletLabel: "Recipient's Wallet Address",
+                numberLabel: "Recipient's Number"
+            },
+            bn: {
+                selectPayment: "পেমেন্ট পদ্ধতি নির্বাচন করুন",
+                currency: "কারেন্সি",
+                network: "নেটওয়ার্ক",
+                selectCurrencyOpt: "কারেন্সি সিলেক্ট করুন",
+                selectNetworkOpt: "নেটওয়ার্ক সিলেক্ট করুন",
+                selectAccountOpt: "অ্যাকাউন্ট সিলেক্ট করুন",
+                accountType: "অ্যাকাউন্টের ধরন",
+                proceed: "এগিয়ে যান",
+                contactUs: "আপনার কোনো প্রশ্ন থাকলে আমাদের সাথে যোগাযোগ করুন",
+                copied: "সফলভাবে কপি হয়েছে!",
+                search: "খুঁজুন",
+                popular: "জনপ্রিয় পছন্দ",
+                done: "সম্পন্ন",
+                walletLabel: "প্রাপকের ওয়ালেট অ্যাড্রেস",
+                numberLabel: "প্রাপকের নম্বর"
+            }
+        };
+
         const logos = {
             bKash: `<img src="https://i.ibb.co.com/4g1Xr8BP/1164.jpg" class="crypto-image-logo" alt="bKash">`,
             Nagad: `<img src="https://i.ibb.co.com/ksqxHvm8/image.png" class="crypto-image-logo" alt="Nagad">`,
@@ -412,6 +426,74 @@
         let selectedNetworkIndex = "";
         let currentSheetType = ""; 
 
+        // ল্যাঙ্গুয়েজ মেনু টগল ফাংশন
+        function toggleLangMenu(event) {
+            event.stopPropagation();
+            const menu = document.getElementById('langDropdown');
+            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+        }
+
+        // ভাষা পরিবর্তন করার মেইন লজিক
+        function changeLanguage(lang) {
+            currentLang = lang;
+            document.getElementById('langDropdown').style.display = 'none';
+            
+            document.getElementById('optEN').classList.remove('active');
+            document.getElementById('optBN').classList.remove('active');
+            if(lang === 'en') document.getElementById('optEN').classList.add('active');
+            if(lang === 'bn') document.getElementById('optBN').classList.add('active');
+
+            // UI আপডেট
+            const dict = languageData[lang];
+            document.getElementById('textSelectPayment').innerText = dict.selectPayment;
+            document.getElementById('lblCurrency').innerText = dict.currency;
+            document.getElementById('textSupportTitle').innerText = dict.contactUs;
+            document.getElementById('sheetSearchInput').placeholder = dict.search;
+            document.getElementById('toastText').innerText = dict.copied;
+
+            // কারেন্সি প্লেসহোল্ডার টেক্সট আপডেট
+            if (!selectedAsset) {
+                document.getElementById('currencyPlaceholder').innerText = dict.selectCurrencyOpt;
+            }
+            
+            // নেটওয়ার্ক লেবেল ও প্লেসহোল্ডার আপডেট
+            const labelEl = document.getElementById('subSelectLabel');
+            if (selectedAsset === 'bKash' || selectedAsset === 'Nagad') {
+                labelEl.innerText = dict.accountType;
+                if(selectedNetworkIndex === "") {
+                    document.getElementById('networkTextPlaceholder').innerText = dict.selectAccountOpt;
+                }
+            } else {
+                labelEl.innerText = dict.network;
+                if(selectedNetworkIndex === "") {
+                    document.getElementById('networkTextPlaceholder').innerText = dict.selectNetworkOpt;
+                }
+            }
+
+            // প্রসিড বাটন টেক্সট আপডেট
+            const btnTextEl = document.getElementById('btnText');
+            if (btnTextEl) {
+                if (btnTextEl.innerText === "Proceed" || btnTextEl.innerText === "এগিয়ে যান") {
+                    btnTextEl.innerText = dict.proceed;
+                }
+            }
+
+            // যদি পেমেন্ট ইনফো স্ক্রিন ওপেন থাকে তাহলে লেবেল টেক্সট পরিবর্তন
+            const finalDataLabel = document.getElementById('finalDataLabel');
+            if (finalDataLabel && selectedAsset) {
+                if (selectedAsset === 'bKash' || selectedAsset === 'Nagad') {
+                    finalDataLabel.innerText = dict.numberLabel;
+                } else {
+                    finalDataLabel.innerText = dict.walletLabel;
+                }
+            }
+        }
+
+        // স্ক্রিনের অন্য কোথাও ক্লিক করলে ভাষা মেনু বন্ধ হবে
+        document.addEventListener('click', function() {
+            document.getElementById('langDropdown').style.display = 'none';
+        });
+
         function openDropdownSheet(type) {
             if (type === 'network' && document.getElementById('networkSelected').classList.contains('custom-disabled')) {
                 return;
@@ -421,14 +503,15 @@
             const overlay = document.getElementById('dropdownOverlay');
             const sheetTitle = document.getElementById('sheetTitle');
             const searchInput = document.getElementById('sheetSearchInput');
+            const dict = languageData[currentLang];
             
             searchInput.value = ""; 
             overlay.style.display = 'flex';
             
             if (type === 'currency') {
-                sheetTitle.innerText = "Select currency";
+                sheetTitle.innerText = dict.selectCurrencyOpt;
             } else {
-                sheetTitle.innerText = (selectedAsset === 'bKash' || selectedAsset === 'Nagad') ? "Select account type" : "Select network";
+                sheetTitle.innerText = (selectedAsset === 'bKash' || selectedAsset === 'Nagad') ? dict.selectAccountOpt : dict.selectNetworkOpt;
             }
             
             renderSheetOptions();
@@ -441,6 +524,7 @@
         function renderSheetOptions() {
             const container = document.getElementById('sheetOptionsList');
             container.innerHTML = "";
+            const dict = languageData[currentLang];
             
             if (currentSheetType === 'currency') {
                 const currencies = ['bKash', 'Nagad', 'USDT', 'LTC'];
@@ -461,7 +545,7 @@
                     walletData[dataKey].forEach((net, index) => {
                         const item = document.createElement('div');
                         item.className = "dropdown-option";
-                        let badgeHTML = net.isPopular ? `<span class="popular-badge">Popular choice</span>` : '';
+                        let badgeHTML = net.isPopular ? `<span class="popular-badge">${dict.popular}</span>` : '';
                         
                         item.innerHTML = `
                             <div class="option-left-content">
@@ -495,9 +579,10 @@
             document.getElementById('assetSelected').innerHTML = `<div class="selected-value-container">${logos[asset]} <span style="color: var(--text-dark);">${asset}</span></div>`;
             closeDropdownSheet();
 
+            const dict = languageData[currentLang];
             const labelEl = document.getElementById('subSelectLabel');
-            const placeholderText = (asset === 'bKash' || asset === 'Nagad') ? "Select Account" : "Select network";
-            labelEl.innerText = (asset === 'bKash' || asset === 'Nagad') ? "Account Type" : "Network";
+            const placeholderText = (asset === 'bKash' || asset === 'Nagad') ? dict.selectAccountOpt : dict.selectNetworkOpt;
+            labelEl.innerText = (asset === 'bKash' || asset === 'Nagad') ? dict.accountType : dict.network;
 
             const netSelected = document.getElementById('networkSelected');
             netSelected.classList.remove('custom-disabled');
@@ -517,6 +602,9 @@
             const btn = document.getElementById('proceedBtn');
             btn.disabled = false;
             btn.classList.add('active');
+            
+            // ভাষা অনুযায়ী বাটন আপডেট
+            document.getElementById('btnText').innerText = languageData[currentLang].proceed;
         }
 
         function startLoadingProcess() {
@@ -534,6 +622,7 @@
             
             const dataKey = selectedAsset.toLowerCase();
             const netInfo = walletData[dataKey][selectedNetworkIndex];
+            const dict = languageData[currentLang];
             
             document.getElementById('networkLogo').innerHTML = logos[selectedAsset];
             document.getElementById('networkNameText').innerText = netInfo.name;
@@ -542,20 +631,17 @@
 
             const finalDataLabel = document.getElementById('finalDataLabel');
             if (selectedAsset === 'bKash' || selectedAsset === 'Nagad') {
-                finalDataLabel.innerText = "Recipient's Number";
+                finalDataLabel.innerText = dict.numberLabel;
             } else {
-                finalDataLabel.innerText = "Recipient's Wallet Address";
+                finalDataLabel.innerText = dict.walletLabel;
             }
             
             setTimeout(function() {
-                // ১202.jpg স্ক্রিনশটের মতো অ্যামাউন্টের নিচে মেথড ও নেটওয়ার্ক টেক্সট ডাইনামিক করা
-                document.getElementById('mainAmountLabel').innerHTML = `500 USD <br><span style="font-size: 1.15rem; color: #555; font-weight: 600;">500.00 ${selectedAsset} / Network · ${netInfo.name.split(' ')[0]}</span>`;
-                
                 document.getElementById('selectionArea').style.display = 'none';
                 document.getElementById('displayArea').style.display = 'block';
                 
                 document.getElementById('actionButtons').innerHTML = `
-                    <button onclick="resetToInitialState()" style="background: #000000; padding:16px 0; border-radius:14px; font-weight: 700; color: #fff; width: 100%; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.15); cursor: pointer; font-size: 1.1rem;">DONE</button>
+                    <button onclick="resetToInitialState()" style="background: #000000; padding:14px 0; border-radius:12px; font-weight: 700; color: #fff; width: 100%; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.15); cursor: pointer;">${dict.done}</button>
                 `;
             }, 2500);
         }
@@ -563,13 +649,14 @@
         function resetToInitialState() {
             selectedAsset = "";
             selectedNetworkIndex = "";
-            document.getElementById('mainAmountLabel').innerText = "500 USD";
+            const dict = languageData[currentLang];
+            
             document.getElementById('selectionArea').style.display = 'block';
-            document.getElementById('subSelectLabel').innerText = "Network";
-            document.getElementById('assetSelected').innerHTML = `<span class="selected-value-container" style="color: #64748b;">Select currency</span>`;
+            document.getElementById('subSelectLabel').innerText = dict.network;
+            document.getElementById('assetSelected').innerHTML = `<span class="selected-value-container" id="currencyPlaceholder" style="color: #64748b;">${dict.selectCurrencyOpt}</span>`;
             
             const netBtn = document.getElementById('networkSelected');
-            netBtn.innerHTML = `<span id="networkTextPlaceholder" style="color: #94a3b8;">Select network</span>`;
+            netBtn.innerHTML = `<span id="networkTextPlaceholder" style="color: #94a3b8;">${dict.selectNetworkOpt}</span>`;
             netBtn.classList.add('custom-disabled');
             
             document.getElementById('displayArea').style.display = 'none';
@@ -577,7 +664,7 @@
             document.getElementById('actionButtons').innerHTML = `
                 <button id="proceedBtn" onclick="startLoadingProcess()" class="proceed-btn-style" disabled>
                     <div id="btnLoader" class="btn-spinner"></div>
-                    <span id="btnText">Proceed to the payment</span>
+                    <span id="btnText">${dict.proceed}</span>
                 </button>
             `;
         }
@@ -600,6 +687,9 @@
                 toast.classList.remove('show');
             }, 2000);
         }
+        
+        // ডিফল্ট প্রথম ল্যাঙ্গুয়েজ লোড করা
+        changeLanguage('en');
     </script>
 </body>
 </html>
